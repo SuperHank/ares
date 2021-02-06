@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class RouteConfig {
 
+    /**
+     * 手动指定路由规则
+     *
+     * @param builder
+     * @return
+     */
     @Bean
     public RouteLocator settlementRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes().route(
