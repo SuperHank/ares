@@ -3,7 +3,7 @@
 #### ares-eureka-server 注册中心
 
 - [x] 注册中心基本功能
-- [ ] 注册中心集群
+- [x] 注册中心集群
 
 #### ares-gateway
 

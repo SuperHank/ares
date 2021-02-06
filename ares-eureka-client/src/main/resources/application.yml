@@ -1,8 +1,6 @@
 spring:
   application:
     name: ares-eureka-client
-server:
-  port: 8081
 eureka:
   instance:
     hostname: localhost
@@ -10,4 +8,22 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8080/eureka/
+      defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/,http://localhost:8002/eureka/
+
+---
+spring:
+  profiles: dev
+server:
+  port: 8010
+
+---
+spring:
+  profiles: test
+server:
+  port: 8011
+
+---
+spring:
+  profiles: prod
+server:
+  port: 8012

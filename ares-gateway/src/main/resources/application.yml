@@ -8,13 +8,9 @@ spring:
           enabled: true
       routes:
         - id: route-eureka-client
-          uri: http://localhost:8081
+          uri: http://localhost:8010
           predicates:
             - Path=/eureka-client/**
-server:
-  port: 8082
-  servlet:
-    context-path: /
 eureka:
   instance:
     hostname: localhost
@@ -22,4 +18,22 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8080/eureka/
+      defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/,http://localhost:8002/eureka/
+
+---
+spring:
+  profiles: dev
+server:
+  port: 8020
+
+---
+spring:
+  profiles: test
+server:
+  port: 8021
+
+---
+spring:
+  profiles: prod
+server:
+  port: 8022
