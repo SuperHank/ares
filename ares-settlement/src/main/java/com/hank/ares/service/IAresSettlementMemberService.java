@@ -1,7 +1,7 @@
 package com.hank.ares.service;
 
-import com.hank.ares.model.auto.AresSettlementMember;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hank.ares.model.AresSettlementMember;
 
 /**
  * <p>

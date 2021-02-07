@@ -1,7 +1,7 @@
 package com.hank.ares.mapper;
 
-import com.hank.ares.model.AresSettlementMember;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hank.ares.model.AresSettlementMember;
 
 /**
  * <p>

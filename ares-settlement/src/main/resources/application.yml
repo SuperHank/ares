@@ -14,13 +14,12 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/,http://localhost:8002/eureka/
-
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  mapper-locations: classpath:mapper/**/*Mapper.xml
   global-config:
     # 逻辑删除配置
     db-config:
@@ -28,6 +27,9 @@ mybatis-plus:
       logic-not-delete-value: 1
       # 删除后
       logic-delete-value: -1
+server:
+  servlet:
+    context-path: /settlement
 ---
 spring:
   profiles: dev

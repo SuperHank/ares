@@ -1,9 +1,9 @@
 package com.hank.ares.service.impl;
 
-import com.hank.ares.model.auto.AresSettlementMember;
-import com.hank.ares.mapper.auto.AresSettlementMemberMapper;
-import com.hank.ares.service.IAresSettlementMemberService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hank.ares.mapper.AresSettlementMemberMapper;
+import com.hank.ares.model.AresSettlementMember;
+import com.hank.ares.service.IAresSettlementMemberService;
 import org.springframework.stereotype.Service;
 
 /**
