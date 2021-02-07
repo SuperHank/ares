@@ -8,6 +8,10 @@
   SpringCloud + MybatisPlus + Dynamic-DataSource
 ````
 
+#### swagger地址
+
+- http://localhost:8010/swagger-ui
+
 #### 各服务端口
 
 - eureka-server:8000-8009
