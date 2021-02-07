@@ -11,6 +11,10 @@ spring:
           uri: lb://ARES-EUREKA-CLIENT
           predicates:
             - Path=/eureka-client/**
+        - id: settlement
+          uri: lb://ARES-SETTLEMENT
+          predicates:
+            - Path=/settlement/**
 eureka:
   instance:
     hostname: localhost
