@@ -8,7 +8,7 @@ spring:
           enabled: true
       routes:
         - id: route-eureka-client
-          uri: http://localhost:8010
+          uri: lb://ARES-EUREKA-CLIENT
           predicates:
             - Path=/eureka-client/**
 eureka:

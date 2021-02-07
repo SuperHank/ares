@@ -2,12 +2,11 @@
 
 #### ares-eureka-server 注册中心
 
-- [x] 注册中心基本功能
 - [x] 注册中心集群
 
 #### ares-gateway
 
-- [ ] 负载均衡
+- [x] 负载均衡
 - [ ] 动态增删改路由规则
 - [ ] 认证&权限模块（Spring Security）
 - [ ] 熔断模块（Hystrix）
