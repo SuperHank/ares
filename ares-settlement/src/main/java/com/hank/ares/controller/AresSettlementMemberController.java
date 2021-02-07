@@ -1,8 +1,10 @@
 package com.hank.ares.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hank.ares.model.AddSettlementMemberReqDto;
 import com.hank.ares.model.AresSettlementMember;
+import com.hank.ares.model.Result;
 import com.hank.ares.service.IAresSettlementMemberService;
 import com.hank.ares.util.CommonUtil;
 import io.swagger.annotations.ApiModel;
@@ -10,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -44,5 +43,14 @@ public class AresSettlementMemberController {
         insertDo.setCreater(prifile);
         boolean save = settlementMemberService.save(insertDo);
         return save ? "保存成功" : "保存失败";
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("查询会员")
+    private Result get(@PathVariable("id") Long id) {
+        QueryWrapper<AresSettlementMember> query = new QueryWrapper<>();
+        query.eq("ID", id);
+        AresSettlementMember settlementMember = settlementMemberService.getOne(query);
+        return Result.success(settlementMember);
     }
 }
