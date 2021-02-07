@@ -1,6 +1,11 @@
 spring:
   application:
     name: ares-settlement
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/ares_settlement?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
 eureka:
   instance:
     hostname: localhost
@@ -10,6 +15,19 @@ eureka:
     service-url:
       defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/,http://localhost:8002/eureka/
 
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  global-config:
+    # 逻辑删除配置
+    db-config:
+      # 删除前
+      logic-not-delete-value: 1
+      # 删除后
+      logic-delete-value: -1
 ---
 spring:
   profiles: dev
