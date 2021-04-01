@@ -11,7 +11,7 @@ eureka:
       defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/,http://localhost:8002/eureka/
 server:
   servlet:
-    context-path: eureka-client
+    context-path: /eureka-client
 ---
 spring:
   profiles: dev
