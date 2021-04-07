@@ -1,6 +1,11 @@
 spring:
   application:
-    name: ares-eureka-client
+    name: ares-order
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/ares_order?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
 eureka:
   instance:
     hostname: localhost
@@ -11,21 +16,21 @@ eureka:
       defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/,http://localhost:8003/eureka/
 server:
   servlet:
-    context-path: /eureka-client
+    context-path: /order
 ---
 spring:
   profiles: dev
 server:
-  port: 8010
+  port: 8040
 
 ---
 spring:
   profiles: test
 server:
-  port: 8011
+  port: 8041
 
 ---
 spring:
   profiles: prod
 server:
-  port: 8012
+  port: 8042

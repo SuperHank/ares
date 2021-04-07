@@ -4,7 +4,10 @@ import com.hank.ares.model.dto.SingleAddReqDto;
 
 import java.net.URISyntaxException;
 
-public interface IRouteService {
+/**
+ * 动态路由服务
+ */
+public interface IDynamicRouteService {
     /**
      * 单条添加
      *

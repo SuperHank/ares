@@ -6,7 +6,7 @@ spring:
     name: ares-eureka-server
 ---
 server:
-  port: 8000
+  port: 8001
 spring:
   profiles: dev
 eureka:
@@ -14,11 +14,11 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/
+      defaultZone: http://localhost:8002/eureka/,http://localhost:8003/eureka/
 
 ---
 server:
-  port: 8001
+  port: 8002
 spring:
   profiles: test
 eureka:
@@ -26,11 +26,11 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8000/eureka/,http://localhost:8002/eureka/
+      defaultZone: http://localhost:8001/eureka/,http://localhost:8003/eureka/
 
 ---
 server:
-  port: 8002
+  port: 8003
 spring:
   profiles: prod
 eureka:
@@ -38,4 +38,4 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/
+      defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/

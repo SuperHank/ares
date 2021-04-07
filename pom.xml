@@ -13,6 +13,7 @@
         <module>ares-gateway</module>
         <module>ares-settlement</module>
         <module>ares-common</module>
+        <module>ares-order</module>
     </modules>
     <packaging>pom</packaging>
     <parent>

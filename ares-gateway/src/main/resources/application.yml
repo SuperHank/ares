@@ -11,10 +11,16 @@ spring:
           uri: lb://ARES-EUREKA-CLIENT
           predicates:
             - Path=/eureka-client/**
-        - id: settlement
+        - id: route-settlement
           uri: lb://ARES-SETTLEMENT
           predicates:
             - Path=/settlement/**
+        - id: route-order
+          uri: lb://ARES-ORDER
+          predicates:
+            - Path=/order/**
+            - Query=token
+            - Method=GET
 eureka:
   instance:
     hostname: localhost
@@ -22,7 +28,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8000/eureka/,http://localhost:8001/eureka/,http://localhost:8002/eureka/
+      defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/,http://localhost:8003/eureka/
 
 ---
 spring:
