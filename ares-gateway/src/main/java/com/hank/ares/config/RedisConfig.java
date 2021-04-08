@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
  * Redis配置
  */
 @Configuration
-public class RedicConfig {
+public class RedisConfig {
     @Bean
     @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {

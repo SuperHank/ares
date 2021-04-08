@@ -7,21 +7,17 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-  #      routes:
-  #        - id: route-eureka-client
-  #          uri: lb://ARES-EUREKA-CLIENT
-  #          predicates:
-  #            - Path=/eureka-client/**
-  #        - id: route-settlement
-  #          uri: lb://ARES-SETTLEMENT
-  #          predicates:
-  #            - Path=/settlement/**
-  #        - id: route-order
-  #          uri: lb://ARES-ORDER
-  #          predicates:
-  #            - Path=/order/**
-  #            - Query=token
-  #            - Method=GET
+      routes:
+        - id: route-order-service
+          uri: lb://ARES-ORDER
+          predicates:
+            - Path=/order/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1 # 令牌桶每秒填充速率
+                redis-rate-limiter.burstCapacity: 2 # 令牌桶容量
+                key-resolver: "#{@pathKeyResolver}" # 使用SpEL表达式按名称引用Bean
   redis:
     port: 6379
     database: 0
