@@ -17,7 +17,7 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 1 # 令牌桶每秒填充速率
                 redis-rate-limiter.burstCapacity: 2 # 令牌桶容量
-                key-resolver: "#{@pathKeyResolver}" # 使用SpEL表达式按名称引用Bean
+                key-resolver: "#{@parameterKeyResolver}" # 使用SpEL表达式按名称引用Bean
   redis:
     port: 6379
     database: 0
