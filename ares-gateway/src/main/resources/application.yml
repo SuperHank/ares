@@ -6,21 +6,35 @@ spring:
       discovery:
         locator:
           enabled: true
-      routes:
-        - id: route-eureka-client
-          uri: lb://ARES-EUREKA-CLIENT
-          predicates:
-            - Path=/eureka-client/**
-        - id: route-settlement
-          uri: lb://ARES-SETTLEMENT
-          predicates:
-            - Path=/settlement/**
-        - id: route-order
-          uri: lb://ARES-ORDER
-          predicates:
-            - Path=/order/**
-            - Query=token
-            - Method=GET
+          lower-case-service-id: true
+  #      routes:
+  #        - id: route-eureka-client
+  #          uri: lb://ARES-EUREKA-CLIENT
+  #          predicates:
+  #            - Path=/eureka-client/**
+  #        - id: route-settlement
+  #          uri: lb://ARES-SETTLEMENT
+  #          predicates:
+  #            - Path=/settlement/**
+  #        - id: route-order
+  #          uri: lb://ARES-ORDER
+  #          predicates:
+  #            - Path=/order/**
+  #            - Query=token
+  #            - Method=GET
+  redis:
+    port: 6379
+    database: 0
+    host: localhost
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000ms
+
 eureka:
   instance:
     hostname: localhost
