@@ -48,7 +48,7 @@ public class GatewayConfiguration {
                 }});
         ApiDefinition api2 = new ApiDefinition("api-ares-settlement")
                 .setPredicateItems(new HashSet<ApiPredicateItem>() {{
-                    add(new ApiPathPredicateItem().setPattern("/settlement/settlement/hello")
+                    add(new ApiPathPredicateItem().setPattern("/settlement/**")
                             .setMatchStrategy(SentinelGatewayConstants.URL_MATCH_STRATEGY_PREFIX));
                 }});
         definitions.add(api1);
