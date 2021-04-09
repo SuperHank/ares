@@ -31,35 +31,24 @@ public class GatewayConfiguration {
         this.serverCodecConfigurer = serverCodecConfigurer;
     }
 
-    /*@Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public SentinelGatewayBlockExceptionHandler sentinelGatewayBlockExceptionHandler() {
-        return new SentinelGatewayBlockExceptionHandler(viewResolvers, serverCodecConfigurer);
-    }
-
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    @Primary
-    public GlobalFilter customSentinelGatewayFilter() {
-        return new SentinelGatewayFilter();
-    }*/
-
     @PostConstruct
     public void doInit() {
-//        initCustomizedApis();
+        // 先加载自定义Api分组
+        initCustomizedApis();
+        // 再加载路由规则
         initGatewayRules();
     }
 
     private void initCustomizedApis() {
         Set<ApiDefinition> definitions = new HashSet<>();
-        ApiDefinition api1 = new ApiDefinition("ares-order-api")
+        ApiDefinition api1 = new ApiDefinition("api-ares-order")
                 .setPredicateItems(new HashSet<ApiPredicateItem>() {{
-                    add(new ApiPathPredicateItem().setPattern("/order/**")
+                    add(new ApiPathPredicateItem().setPattern("/order/order/hello")
                             .setMatchStrategy(SentinelGatewayConstants.URL_MATCH_STRATEGY_PREFIX));
                 }});
-        ApiDefinition api2 = new ApiDefinition("ares-settlement-api")
+        ApiDefinition api2 = new ApiDefinition("api-ares-settlement")
                 .setPredicateItems(new HashSet<ApiPredicateItem>() {{
-                    add(new ApiPathPredicateItem().setPattern("/**")
+                    add(new ApiPathPredicateItem().setPattern("/settlement/settlement/hello")
                             .setMatchStrategy(SentinelGatewayConstants.URL_MATCH_STRATEGY_PREFIX));
                 }});
         definitions.add(api1);
@@ -70,15 +59,27 @@ public class GatewayConfiguration {
     private void initGatewayRules() {
         Set<GatewayFlowRule> rules = new HashSet<>();
         /**
-         * resource：资源名称，可以是网关中ruoute名称或者用户自定义的API分组名称
+         * resource：资源名称，可以是网关中route名称或者用户自定义的API分组名称
          * count：限流阈值
          * intervalSec：统计时间窗口，单位是秒 默认是1秒
          */
+
+        //  网关route名称
         rules.add(new GatewayFlowRule("ares-order")
                 .setCount(3) // 限流阈值
                 .setIntervalSec(10) // 统计时间窗口，单位是秒 默认是1秒
         );
         rules.add(new GatewayFlowRule("ares-settlement")
+                .setCount(5) // 限流阈值
+                .setIntervalSec(10) // 统计时间窗口，单位是秒 默认是1秒
+        );
+
+        // 自定义API分组名称
+        rules.add(new GatewayFlowRule("api-ares-order")
+                .setCount(3) // 限流阈值
+                .setIntervalSec(10) // 统计时间窗口，单位是秒 默认是1秒
+        );
+        rules.add(new GatewayFlowRule("api-ares-settlement")
                 .setCount(5) // 限流阈值
                 .setIntervalSec(10) // 统计时间窗口，单位是秒 默认是1秒
         );
