@@ -16,4 +16,9 @@ public class OrderController {
     private String hello() {
         return String.format("request to order-%s", currentEnvironment);
     }
+
+    @GetMapping("index")
+    private String index() {
+        return String.format("order-%s index", currentEnvironment);
+    }
 }

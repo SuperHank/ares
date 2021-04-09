@@ -8,7 +8,7 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: route-order-service
+        - id: ares-order
           uri: lb://ARES-ORDER
           predicates:
             - Path=/order/**
@@ -18,18 +18,29 @@ spring:
                 redis-rate-limiter.replenishRate: 1 # 令牌桶每秒填充速率
                 redis-rate-limiter.burstCapacity: 2 # 令牌桶容量
                 key-resolver: "#{@parameterKeyResolver}" # 使用SpEL表达式按名称引用Bean
-  redis:
-    port: 6379
-    database: 0
-    host: localhost
-    password:
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1ms
-        max-idle: 8
-        min-idle: 0
-    timeout: 5000ms
+        - id: ares-settlement
+          uri: lb://ARES-SETTLEMENT
+          predicates:
+            - Path=/settlement/**
+
+    redis:
+      port: 6379
+      database: 0
+      host: localhost
+      password:
+      jedis:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+      timeout: 5000ms
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+      filter:
+        enabled: false
+      eager: true
 
 eureka:
   instance:
@@ -39,21 +50,35 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/,http://localhost:8003/eureka/
-
+server:
+  servlet:
+    context-path: /ares-gateway
 ---
 spring:
   profiles: dev
+  cloud:
+    sentinel:
+      transport:
+        port: 8090
 server:
   port: 8020
 
 ---
 spring:
   profiles: test
+  cloud:
+    sentinel:
+      transport:
+        port: 8090
 server:
   port: 8021
 
 ---
 spring:
   profiles: prod
+  cloud:
+    sentinel:
+      transport:
+        port: 8090
 server:
   port: 8022
