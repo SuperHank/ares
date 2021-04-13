@@ -1,5 +1,8 @@
 package com.hank.ares.controller;
 
+import com.hank.ares.enums.RabbitExchangeEnum;
+import com.hank.ares.enums.RabbitQueueEnum;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,8 @@ public class OrderController {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @GetMapping("hello")
     private String hello() {
@@ -29,7 +34,8 @@ public class OrderController {
     }
 
     @GetMapping("settlementHello")
-    private String settlementhello(){
-        return restTemplate.getForObject("http://ARES-SETTLEMENT/settlement/settlement/hello",String.class);
+    private String settlementhello() {
+        rabbitTemplate.convertAndSend(RabbitExchangeEnum.TEST.getExchangeName(), RabbitQueueEnum.TEST.getQueueKey(), "hank001");
+        return restTemplate.getForObject("http://ARES-SETTLEMENT/settlement/settlement/hello", String.class);
     }
 }
