@@ -4,17 +4,26 @@
 
 - [x] 注册中心集群
 
-#### ares-gateway
+#### ares-gateway 网关中心
 
 - [x] 负载均衡
-- [ ] 动态增删改路由规则
-- [ ] 认证&权限模块（Spring Security）
-- [ ] 熔断模块（Hystrix）
-- [ ] 限流模块（令牌桶）
+- [ ] 动态加载路由规则
+- [ ] 熔断模块
+- [x] 限流模块(sentinel)
 
-#### ares-settlement
+#### ares-order 订单中心
+
+#### ares-settlement 结算中心
 
 - [ ] 商品履约规则/结算规则
+
+#### TODO ares-auth 认证中心
+
+- [ ] 认证 
+- [ ] 权限（Spring Security）
+- [ ] 三方接入
+- [ ] Github登陆
+- [ ] QQ登陆
 
 #### TODO ares-config 配置中心
 
@@ -22,16 +31,15 @@
 
 #### TODO ares-quartz 调度中心
 
-#### TODO ares-monitor 监控中心
+- []定时任务
 
-#### TODO ares-order 订单中心
+#### TODO ares-monitor 监控中心
 
 #### TODO ares-goods 商品中心
 
 #### TODO ares-market 营销中心
 
-- 优惠券/打折券/满减券 互斥逻辑
-- 优惠计算引擎
+- [ ]优惠券/打折券/满减券 互斥逻辑 - [ ]优惠计算引擎
 
 #### TODO ares-member 会员中心
 
@@ -46,19 +54,21 @@
 #### 容器化
 
 - CI/CD
-- K8S学习
+- K8S
 
 #### 待引进技术
 
-- Mybatis Plus
-- RabbitMQ
-- MangoDb
-- Redis
-- Elastic Search
-- Docker
-- Oss
-- ElK
-- Seata
+- [ ] Mybatis Plus
+- [x] RabbitMQ
+- [ ] MangoDb
+- [x] Redis
+- [ ] Elastic Search
+- [ ] Docker
+- [ ] Oss
+- [ ] ElK
+- [ ] Seata
+- [ ] 分库分表
+- [ ] 读写分离
 
 #### 待解决问题
 
