@@ -13,7 +13,6 @@
         <module>ares-settlement</module>
         <module>ares-common</module>
         <module>ares-order</module>
-        <module>ares-quartz</module>
     </modules>
     <packaging>pom</packaging>
     <parent>
