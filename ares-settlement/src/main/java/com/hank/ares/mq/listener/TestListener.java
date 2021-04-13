@@ -1,4 +1,4 @@
-package com.hank.ares;
+package com.hank.ares.mq.listener;
 
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;

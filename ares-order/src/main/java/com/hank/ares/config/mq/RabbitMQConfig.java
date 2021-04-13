@@ -1,7 +1,6 @@
 package com.hank.ares.config.mq;
 
 import com.hank.ares.enums.RabbitExchangeEnum;
-import com.hank.ares.enums.RabbitQueueEnum;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -10,6 +9,8 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.hank.ares.enums.RabbitQueueEnum.TEST;
 
 @Configuration
 public class RabbitMQConfig {
@@ -43,23 +44,13 @@ public class RabbitMQConfig {
         return new DirectExchange(RabbitExchangeEnum.TEST.getExchangeName(), true, false);
     }
 
-    /**
-     * 队列一：测试队列
-     *
-     * @return
-     */
     @Bean
     public Queue queue1() {
-        return new Queue(RabbitQueueEnum.TEST.getQueueName(), true);
+        return new Queue(TEST.getQueueName(), true);
     }
 
-    /**
-     * 队列绑定一：测试队列绑定到默认交换机上，并指定路由key
-     *
-     * @return
-     */
     @Bean
     public Binding binding1() {
-        return BindingBuilder.bind(queue1()).to(defaultExchange()).with(RabbitQueueEnum.TEST.getQueueKey());
+        return BindingBuilder.bind(queue1()).to(defaultExchange()).with(TEST.getQueueKey());
     }
 }

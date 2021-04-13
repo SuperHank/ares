@@ -1,14 +1,15 @@
 package com.hank.ares.config.mq;
 
-import com.hank.ares.TestListener;
 import com.hank.ares.enums.RabbitExchangeEnum;
-import com.hank.ares.enums.RabbitQueueEnum;
+import com.hank.ares.mq.listener.TestListener;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.hank.ares.enums.RabbitQueueEnum.TEST;
 
 @Configuration
 public class RabbitMQConfig {
@@ -49,7 +50,7 @@ public class RabbitMQConfig {
      */
     @Bean
     public Queue queue1() {
-        return new Queue(RabbitQueueEnum.TEST.getQueueName(), true);
+        return new Queue(TEST.getQueueName(), true);
     }
 
     /**
@@ -59,7 +60,7 @@ public class RabbitMQConfig {
      */
     @Bean
     public Binding binding1() {
-        return BindingBuilder.bind(queue1()).to(defaultExchange()).with(RabbitQueueEnum.TEST.getQueueKey());
+        return BindingBuilder.bind(queue1()).to(defaultExchange()).with(TEST.getQueueKey());
     }
 
     /**
