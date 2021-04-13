@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: ares-quartz
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/ares_quartz?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/,http://localhost:8003/eureka/
+server:
+  servlet:
+    context-path: /quartz
+---
+spring:
+  profiles: dev
+server:
+  port: 8050
+
+---
+spring:
+  profiles: test
+server:
+  port: 8051
+
+---
+spring:
+  profiles: prod
+server:
+  port: 8052
