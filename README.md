@@ -14,7 +14,8 @@
 
 #### 各服务端口
 
-- eureka-server:8000-8009
-- eureka-client:8010-8019
-- gateway:8020-8029
-- settlement:8030-8039
+- ares-eureka-server:8001-8003
+- ares-gateway:8020-8022
+- ares-settlement:8030-8032
+- ares-order:8040-8042
+- ares-quartz:8050-8052
