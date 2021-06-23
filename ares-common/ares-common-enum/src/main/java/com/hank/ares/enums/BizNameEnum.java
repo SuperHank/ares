@@ -10,5 +10,5 @@ public enum BizNameEnum {
     GATEWAY_SINGLE_ADD_ROUTE("手动添加路由（单条）"),
     ;
 
-    private String bizName;
+    private final String bizName;
 }

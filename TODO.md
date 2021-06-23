@@ -19,7 +19,7 @@
 
 #### TODO ares-auth 认证中心
 
-- [ ] 认证 
+- [ ] 认证
 - [ ] 权限（Spring Security）
 - [ ] 三方接入
 - [ ] Github登陆
@@ -39,7 +39,11 @@
 
 #### TODO ares-market 营销中心
 
-- [ ]优惠券/打折券/满减券 互斥逻辑 - [ ]优惠计算引擎
+#### TODO ares-coupon 优惠券中心
+
+
+- [ ] 优惠券/打折券/满减券 互斥逻辑
+- [ ] 优惠计算引擎
 
 #### TODO ares-member 会员中心
 

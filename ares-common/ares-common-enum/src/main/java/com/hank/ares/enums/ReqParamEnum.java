@@ -16,5 +16,5 @@ public enum ReqParamEnum {
      */
     ARES_TOKEN("ares-user-token");
 
-    private String paramKey;
+    private final String paramKey;
 }

@@ -27,7 +27,14 @@ public enum ResultCode {
     USER_LOGIN_ERROR(2002, "账号不存在或密码错误"),
     USER_ACCOUNT_FORBIDDEN(2003, "账号已被禁用"),
     USER_NOT_EXIST(2004, "用户不存在"),
-    USER_HAS_EXISTED(2005, "用户已存在");
-    private Integer code;
-    private String message;
+    USER_HAS_EXISTED(2005, "用户已存在"),
+
+    /**
+     * 系统异常
+     */
+    SYSTEM_ERROR(9000, "系统异常"),
+    ;
+
+    private final Integer code;
+    private final String message;
 }

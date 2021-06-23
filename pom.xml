@@ -14,6 +14,7 @@
         <module>ares-common</module>
         <module>ares-order</module>
         <module>ares-coupon</module>
+        <module>ares-api</module>
     </modules>
     <packaging>pom</packaging>
     <parent>
