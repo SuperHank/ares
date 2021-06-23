@@ -1,4 +1,4 @@
-package com.hank.ares.model.dto;
+package com.hank.ares.model.dto.req;
 
 import com.hank.ares.model.BaseReqDto;
 import lombok.Data;

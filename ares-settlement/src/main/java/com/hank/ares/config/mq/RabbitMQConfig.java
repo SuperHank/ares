@@ -1,6 +1,6 @@
 package com.hank.ares.config.mq;
 
-import com.hank.ares.enums.RabbitExchangeEnum;
+import com.hank.ares.enums.mq.RabbitExchangeEnum;
 import com.hank.ares.mq.listener.TestListener;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.hank.ares.enums.RabbitQueueEnum.TEST;
+import static com.hank.ares.enums.mq.RabbitQueueEnum.TEST;
 
 @Configuration
 public class RabbitMQConfig {

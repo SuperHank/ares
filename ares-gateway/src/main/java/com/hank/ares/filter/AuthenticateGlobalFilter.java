@@ -1,6 +1,6 @@
 package com.hank.ares.filter;
 
-import com.hank.ares.enums.ReqParamEnum;
+import com.hank.ares.enums.common.ReqParamEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

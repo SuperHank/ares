@@ -1,6 +1,6 @@
 package com.hank.ares.config;
 
-import com.hank.ares.enums.ReqParamEnum;
+import com.hank.ares.enums.common.ReqParamEnum;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

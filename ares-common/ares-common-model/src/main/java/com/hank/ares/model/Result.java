@@ -1,6 +1,6 @@
 package com.hank.ares.model;
 
-import com.hank.ares.enums.ResultCode;
+import com.hank.ares.enums.common.ResultCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

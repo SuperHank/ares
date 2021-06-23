@@ -1,6 +1,6 @@
 package com.hank.ares.annotations;
 
-import com.hank.ares.enums.BizNameEnum;
+import com.hank.ares.enums.common.BizNameEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

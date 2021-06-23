@@ -1,7 +1,7 @@
 package com.hank.ares.controller;
 
-import com.hank.ares.enums.RabbitExchangeEnum;
-import com.hank.ares.enums.RabbitQueueEnum;
+import com.hank.ares.enums.mq.RabbitExchangeEnum;
+import com.hank.ares.enums.mq.RabbitQueueEnum;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

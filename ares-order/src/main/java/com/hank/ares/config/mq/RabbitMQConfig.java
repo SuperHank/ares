@@ -1,6 +1,6 @@
 package com.hank.ares.config.mq;
 
-import com.hank.ares.enums.RabbitExchangeEnum;
+import com.hank.ares.enums.mq.RabbitExchangeEnum;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.hank.ares.enums.RabbitQueueEnum.TEST;
+import static com.hank.ares.enums.mq.RabbitQueueEnum.TEST;
 
 @Configuration
 public class RabbitMQConfig {

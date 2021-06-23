@@ -1,4 +1,4 @@
-package com.hank.ares.enums;
+package com.hank.ares.enums.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
