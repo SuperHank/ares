@@ -1,24 +1,20 @@
-package com.hank.ares.config.mybatisplus;
+package com.hank.ares.util;
 
-import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-@Configuration
-public class GenerateCodeConfig {
+public class GenerateCodeUtil {
 
-    public static String scanner(String tip) {
+    public static String scanner(String tip) throws Exception {
         Scanner scanner = new Scanner(System.in);
         StringBuilder help = new StringBuilder();
         help.append("请输入" + tip + "：");
@@ -29,11 +25,11 @@ public class GenerateCodeConfig {
                 return ipt;
             }
         }
-        throw new MybatisPlusException("请输入正确的" + tip + "！");
+        throw new Exception("请输入正确的" + tip + "！");
     }
 
-    public static void main(String[] args) {
-        String modelName = scanner("应用名");
+    public static void main(String[] args) throws Exception {
+        String projectFolder = scanner("应用目录");
         String databaseName = scanner("库名");
         String tableNames = scanner("表名，多个英文逗号分割");
         // 代码生成器
@@ -42,7 +38,7 @@ public class GenerateCodeConfig {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/" + modelName + "/src/main/java");
+        gc.setOutputDir(projectFolder + "/src/main/java");
         gc.setAuthor("shih");
         gc.setOpen(false);
         //实体属性 Swagger2 注解
@@ -54,7 +50,7 @@ public class GenerateCodeConfig {
         dsc.setUrl("jdbc:mysql://127.0.0.1:3306/" + databaseName + "?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("root");
+        dsc.setPassword("root123");
         mpg.setDataSource(dsc);
 
         // 包配置
@@ -88,7 +84,7 @@ public class GenerateCodeConfig {
             public String outputFile(TableInfo tableInfo) {
                 tableInfo.setConvert(true);
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/" + modelName + "/src/main/resources/mapper/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                return projectFolder + "/src/main/resources/mapper/" + tableInfo.getEntityName() + "Mapper.xml";
             }
         });
         cfg.setFileOutConfigList(focList);

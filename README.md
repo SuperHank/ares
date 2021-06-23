@@ -18,5 +18,5 @@
 - ares-gateway:8020-8022
 - ares-settlement:8030-8032
 - ares-order:8040-8042
-- ares-coupon:8050:8052
+- ares-coupon:8050:8059
 - ares-quartz:8060-8062
