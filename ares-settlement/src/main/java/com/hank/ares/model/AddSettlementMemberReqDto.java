@@ -9,4 +9,9 @@ public class AddSettlementMemberReqDto extends BaseReqDto {
     private String memberName;
     @ApiModelProperty("会员性别 M-男；F-女")
     private String memberGender;
+
+    @Override
+    public boolean validate() {
+        return false;
+    }
 }

@@ -3,6 +3,8 @@ package com.hank.ares.model;
 import lombok.Data;
 
 @Data
-public class BaseReqDto {
+public abstract class BaseReqDto {
     private String token;
+
+    protected abstract boolean validate();
 }

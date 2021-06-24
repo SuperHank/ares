@@ -1,4 +1,4 @@
-package com.hank.ares.enums.coupon;
+package com.hank.ares.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-public enum DistributeTargetEnum {
+public enum DistributeTarget {
 
     SINGLE(1, "单用户"),
     MULTI(2, "多用户");
@@ -25,7 +25,7 @@ public enum DistributeTargetEnum {
      */
     private final String description;
 
-    public static DistributeTargetEnum of(Integer code) {
+    public static DistributeTarget of(Integer code) {
         Objects.requireNonNull(code);
         return Stream.of(values())
                 .filter(i -> i.code.equals(code))

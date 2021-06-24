@@ -1,7 +1,8 @@
 package com.hank.ares.service;
 
+import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.CouponTemplate;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.hank.ares.model.dto.req.CreateTemplateReqDto;
 
 /**
  * <p>
@@ -11,6 +12,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author shih
  * @since 2021-06-23
  */
-public interface ICouponTemplateService extends IService<CouponTemplate> {
-
+public interface ICouponTemplateService {
+    /**
+     * 创建优惠券模板
+     *
+     * @param reqDto {@link CreateTemplateReqDto} 模板信息请求对象
+     * @return {@link CouponTemplate} 优惠券模板实体
+     */
+    CouponTemplate buildTemplate(CreateTemplateReqDto reqDto) throws CouponException;
 }

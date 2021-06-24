@@ -1,4 +1,4 @@
-package com.hank.ares.enums.coupon;
+package com.hank.ares.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-public enum ProductLineEnum {
+public enum ProductLine {
 
     DAMAO(1, "大猫"),
     DABAO(2, "大宝");
@@ -25,7 +25,7 @@ public enum ProductLineEnum {
      */
     private final String description;
 
-    public static ProductLineEnum of(Integer code) {
+    public static ProductLine of(Integer code) {
         Objects.requireNonNull(code);
         return Stream.of(values())
                 .filter(i -> i.code.equals(code))

@@ -1,4 +1,4 @@
-package com.hank.ares.enums.coupon;
+package com.hank.ares.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,26 +7,25 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * 优惠券分类
+ * 有效期类型
  */
 @Getter
 @AllArgsConstructor
-public enum CouponCategoryEnum {
+public enum PeriodType {
 
-    MANJIAN(1, "满减券"),
-    ZHEKOU(2, "折扣券"),
-    LIJIAN(3, "立减券");
+    REGULAR(1, "固定的（固定日期）"),
+    SHIFT(2, "变动的（以领取之日开始计算）");
 
     /**
-     * 优惠券分类编码
+     * 有效期编码
      */
     private final Integer code;
     /**
-     * 优惠券描述
+     * 有效期描述
      */
     private final String description;
 
-    public static CouponCategoryEnum of(Integer code) {
+    public static PeriodType of(Integer code) {
         Objects.requireNonNull(code);
         return Stream.of(values())
                 .filter(i -> i.code.equals(code))

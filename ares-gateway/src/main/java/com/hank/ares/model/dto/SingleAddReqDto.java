@@ -12,4 +12,9 @@ public class SingleAddReqDto extends BaseReqDto {
     private String path;
     @ApiModelProperty("过滤路由")
     private String uri;
+
+    @Override
+    protected boolean validate() {
+        return false;
+    }
 }
