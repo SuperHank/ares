@@ -21,8 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * <h1>异步服务接口实现</h1>
- * Created by Qinyi.
+ * 异步服务接口实现
  */
 @Slf4j
 @Service
@@ -41,7 +40,7 @@ public class AsyncServiceImpl implements IAsyncService {
     private StringRedisTemplate redisTemplate;
 
     /**
-     * <h2>根据模板异步的创建优惠券码</h2>
+     * 根据模板异步的创建优惠券码
      *
      * @param template {@link CouponTemplate} 优惠券模板实体
      */

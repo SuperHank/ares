@@ -4,8 +4,7 @@ package com.hank.ares.service;
 import com.hank.ares.model.CouponTemplate;
 
 /**
- * <h1>异步服务接口定义</h1>
- * Created by Qinyi.
+ * 异步服务接口定义
  */
 public interface IAsyncService {
 

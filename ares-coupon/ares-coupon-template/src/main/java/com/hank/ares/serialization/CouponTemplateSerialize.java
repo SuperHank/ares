@@ -1,4 +1,4 @@
-package com.hank.ares.serializaion;
+package com.hank.ares.serialization;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -12,7 +12,8 @@ import java.text.SimpleDateFormat;
 /**
  * 优惠券模板实体类自定义序列化器
  */
-public class CouponTemplateSerialize extends JsonSerializer<CouponTemplate> {
+public class CouponTemplateSerialize
+        extends JsonSerializer<CouponTemplate> {
 
     @Override
     public void serialize(CouponTemplate template,
@@ -31,7 +32,7 @@ public class CouponTemplateSerialize extends JsonSerializer<CouponTemplate> {
                 template.getCategory().getDescription());
         generator.writeStringField("productLine",
                 template.getProductLine().getDescription());
-        generator.writeStringField("count", template.getCouponCount().toString());
+        generator.writeStringField("count", template.getTemplateKey().toString());
         generator.writeStringField("createTime",
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(template.getCreateTime()));
         generator.writeStringField("userId", template.getUserId().toString());

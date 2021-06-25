@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface ICouponTemplateBaseService {
     /**
-     * <h2>根据优惠券模板 id 获取优惠券模板信息</h2>
+     * 根据优惠券模板 id 获取优惠券模板信息
      *
      * @param id 模板 id
      * @return {@link CouponTemplate} 优惠券模板实体
@@ -18,14 +18,14 @@ public interface ICouponTemplateBaseService {
     CouponTemplate buildTemplateInfo(Integer id) throws CouponException;
 
     /**
-     * <h2>查找所有可用的优惠券模板</h2>
+     * 查找所有可用的优惠券模板
      *
      * @return {@link CouponTemplateSDK}s
      */
     List<CouponTemplateSDK> findAllUsableTemplate();
 
     /**
-     * <h2>获取模板 ids 到 CouponTemplateSDK 的映射</h2>
+     * 获取模板 ids 到 CouponTemplateSDK 的映射
      *
      * @param ids 模板 ids
      * @return Map<key: 模板 id ， value: CouponTemplateSDK>

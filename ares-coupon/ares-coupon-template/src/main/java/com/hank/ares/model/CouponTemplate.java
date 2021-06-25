@@ -1,7 +1,6 @@
 package com.hank.ares.model;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hank.ares.convert.CouponCategoryConverter;
 import com.hank.ares.convert.DistributeTargetConverter;
 import com.hank.ares.convert.ProductLineConverter;
@@ -9,16 +8,18 @@ import com.hank.ares.convert.RuleConverter;
 import com.hank.ares.enums.CouponCategory;
 import com.hank.ares.enums.DistributeTarget;
 import com.hank.ares.enums.ProductLine;
+import com.hank.ares.serialization.CouponTemplateSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -30,11 +31,15 @@ import java.util.Date;
  * @since 2021-06-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("coupon_template")
 @ApiModel(value = "CouponTemplate对象", description = "优惠券模板表")
-public class CouponTemplate extends Model {
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "coupon_template")
+@JsonSerialize(using = CouponTemplateSerialize.class)
+@AllArgsConstructor
+@NoArgsConstructor
+public class CouponTemplate {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,7 +86,7 @@ public class CouponTemplate extends Model {
     @ApiModelProperty(value = "创建时间")
     @CreatedDate
     @Column(name = "create_time", nullable = false)
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "创建用户")
     @Column(name = "user_id", nullable = false)
@@ -102,7 +107,7 @@ public class CouponTemplate extends Model {
     private TemplateRule rule;
 
     /**
-     * <h2>自定义构造函数</h2>
+     * 自定义构造函数
      */
     public CouponTemplate(String name, String logo, String intro, String category,
                           Integer productLine, Integer couponCount, Long userId,
@@ -122,5 +127,6 @@ public class CouponTemplate extends Model {
                 new SimpleDateFormat("yyyyMMdd").format(new Date());
         this.target = DistributeTarget.of(target);
         this.rule = rule;
+        this.createTime = new Date();
     }
 }
