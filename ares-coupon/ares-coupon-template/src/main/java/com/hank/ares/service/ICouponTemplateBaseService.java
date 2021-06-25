@@ -1,6 +1,5 @@
 package com.hank.ares.service;
 
-import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.CouponTemplateSDK;
 
@@ -15,7 +14,7 @@ public interface ICouponTemplateBaseService {
      * @param id 模板 id
      * @return {@link CouponTemplate} 优惠券模板实体
      */
-    CouponTemplate buildTemplateInfo(Integer id) throws CouponException;
+    CouponTemplate buildTemplateInfo(Integer id);
 
     /**
      * 查找所有可用的优惠券模板

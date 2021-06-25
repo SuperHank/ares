@@ -10,9 +10,7 @@ public class ExceptionThen {
     }
 
     public static void then(boolean condition, String bizName, Throwable cause) {
-
         if (condition) {
-
             throw new AresBusinessException(cause, bizName);
         }
     }

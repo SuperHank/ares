@@ -30,6 +30,12 @@ public enum ResultCode {
     USER_HAS_EXISTED(2005, "用户已存在"),
 
     /**
+     * 数据错误
+     * 3001-3999
+     */
+    DATA_NOT_EXIST(3001, "数据不存在"),
+
+    /**
      * 系统异常
      */
     SYSTEM_ERROR(9000, "系统异常"),

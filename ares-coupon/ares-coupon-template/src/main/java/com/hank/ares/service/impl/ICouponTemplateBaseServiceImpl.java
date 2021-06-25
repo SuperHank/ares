@@ -1,10 +1,12 @@
 package com.hank.ares.service.impl;
 
 import com.hank.ares.dao.CouponTemplateDao;
+import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.CouponTemplateSDK;
 import com.hank.ares.service.ICouponTemplateBaseService;
+import com.hank.ares.util.ExceptionThen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +31,9 @@ public class ICouponTemplateBaseServiceImpl implements ICouponTemplateBaseServic
      * @return {@link CouponTemplate} 优惠券模板实体
      */
     @Override
-    public CouponTemplate buildTemplateInfo(Integer id) throws CouponException {
+    public CouponTemplate buildTemplateInfo(Integer id) {
         Optional<CouponTemplate> template = couponTemplateDao.findById(id);
-        if (!template.isPresent()) {
-            throw new CouponException("Template does not exist: " + id);
-        }
+        ExceptionThen.then(!template.isPresent(), ResultCode.DATA_NOT_EXIST.name(), new CouponException("Template Does Not Exist: " + id));
         return template.get();
     }
 
@@ -75,8 +75,6 @@ public class ICouponTemplateBaseServiceImpl implements ICouponTemplateBaseServic
     @Override
     public Map<Integer, CouponTemplateSDK> findIds2TemplateSDK(Collection<Integer> ids) {
         List<CouponTemplate> templates = couponTemplateDao.findAllById(ids);
-
-        return templates.stream().map(this::template2TemplateSDK)
-                .collect(Collectors.toMap(CouponTemplateSDK::getId, Function.identity()));
+        return templates.stream().map(this::template2TemplateSDK).collect(Collectors.toMap(CouponTemplateSDK::getId, Function.identity()));
     }
 }
