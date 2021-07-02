@@ -3,7 +3,7 @@ package com.hank.ares.constant;
 /**
  * 常用常量定义
  */
-public class CouponTemplateConstant {
+public class CouponConstant {
 
     /**
      * Kafka 消息的 Topic

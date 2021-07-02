@@ -1,15 +1,19 @@
 package com.hank.ares.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import com.hank.ares.enums.CouponStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -23,7 +27,9 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("coupon")
-@ApiModel(value="Coupon对象", description="优惠券(用户领取的记录)")
+@ApiModel(value = "Coupon对象", description = "优惠券(用户领取的记录)")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Coupon extends Model {
 
     private static final long serialVersionUID = 1L;
@@ -47,5 +53,24 @@ public class Coupon extends Model {
     @ApiModelProperty(value = "优惠券的状态")
     private Integer status;
 
+    /**
+     * 返回一个无效的 Coupon 对象
+     */
+    public static Coupon invalidCoupon() {
 
+        Coupon coupon = new Coupon();
+        coupon.setId(-1);
+        return coupon;
+    }
+
+    /**
+     * 构造优惠券
+     */
+    public Coupon(Integer templateId, Long userId, String couponCode, CouponStatus status) {
+
+        this.templateId = templateId;
+        this.userId = userId;
+        this.couponCode = couponCode;
+        this.status = status.getStatus();
+    }
 }

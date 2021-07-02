@@ -1,7 +1,7 @@
 package com.hank.ares.service.impl;
 
 import com.google.common.base.Stopwatch;
-import com.hank.ares.constant.CouponTemplateConstant;
+import com.hank.ares.constant.CouponConstant;
 import com.hank.ares.dao.CouponTemplateDao;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.service.IAsyncService;
@@ -54,7 +54,7 @@ public class AsyncServiceImpl implements IAsyncService {
         Set<String> couponCodes = buildCouponCode(template);
 
         // ares_coupon_template_code_1
-        String redisKey = String.format("%s%s", CouponTemplateConstant.RedisPrefix.COUPON_TEMPLATE, template.getId().toString());
+        String redisKey = String.format("%s%s", CouponConstant.RedisPrefix.COUPON_TEMPLATE, template.getId().toString());
         log.info("Push CouponCode To Redis: {}", redisTemplate.opsForList().rightPushAll(redisKey, couponCodes));
 
         template.setAvailable(true);

@@ -1,0 +1,37 @@
+server:
+  port: 8060
+
+spring:
+  application:
+    name: ares-coupon-gateway
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/,http://localhost:8003/eureka/
+
+zuul:
+  prefix: /ares
+  routes:
+    # 优惠券模板微服务路由配置定义
+    template:
+      path: /ares-coupon-template/**
+      serviceId: ares-coupon-template
+      strip-prefix: false
+  #    # 优惠券分发微服务路由配置定义
+  #    distribution:
+  #      path: /ares-coupon-distribution/**
+  #      serviceId: eureka-client-ares-coupon-distribution
+  #      strip-prefix: false
+  #    # 优惠券结算微服务路由配置定义
+  #    settlement:
+  #      path: /ares-coupon-settlement/**
+  #      serviceId: eureka-client-ares-coupon-settlement
+  #      strip-prefix: false
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis: 60000
+
+ribbon:
+  ConnectTimeout: 15000
+  ReadTimeout: 15000

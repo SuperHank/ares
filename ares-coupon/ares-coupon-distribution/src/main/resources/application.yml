@@ -6,6 +6,40 @@ spring:
     username: root
     password: root123
     url: jdbc:mysql://127.0.0.1:3306/ares_coupon?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    # 连接池
+    hikari:
+      maximum-pool-size: 8
+      minimum-idle: 4
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 45000
+      auto-commit: true
+      pool-name: ImoocCouponHikariCP
+  # kafka 配置
+  kafka:
+    bootstrap-servers:
+      - 127.0.0.1:9002
+    consumer:
+      group-id: ares-coupon-x
+      auto-offset-reset: latest
+  # redis配置
+  redis:
+    port: 6379
+    database: 0
+    host: localhost
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000ms
+  # 开启ribbon的重试机制，即获取服务失败是否从另外一个节点重试
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
 eureka:
   instance:
     hostname: localhost
@@ -30,6 +64,18 @@ mybatis-plus:
 server:
   servlet:
     context-path: /coupon-distribution
+### feign相关的配置
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 5000
+      coupon-template: # 单独服务的配置
+        connectTimeout: 3000
+        readTimeout: 5000
 ---
 spring:
   profiles: dev

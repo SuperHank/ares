@@ -14,6 +14,7 @@
         <module>ares-coupon-settlement</module>
         <module>ares-coupon-distribution</module>
         <module>ares-coupon-common</module>
+        <module>ares-coupon-gateway</module>
     </modules>
 
     <artifactId>ares-coupon</artifactId>

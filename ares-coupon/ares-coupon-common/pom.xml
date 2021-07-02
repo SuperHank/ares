@@ -18,11 +18,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hank</groupId>
-            <artifactId>ares-coupon-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
