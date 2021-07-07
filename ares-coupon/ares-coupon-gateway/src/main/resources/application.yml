@@ -23,11 +23,11 @@ zuul:
       path: /ares-coupon-distribution/**
       serviceId: ares-coupon-distribution
       strip-prefix: false
-  #    # 优惠券结算微服务路由配置定义
-  #    settlement:
-  #      path: /ares-coupon-settlement/**
-  #      serviceId: eureka-client-ares-coupon-settlement
-  #      strip-prefix: false
+      # 优惠券结算微服务路由配置定义
+      settlement:
+        path: /ares-coupon-settlement/**
+        serviceId: ares-coupon-settlement
+        strip-prefix: false
   host:
     connect-timeout-millis: 15000
     socket-timeout-millis: 60000
