@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hank.ares.constant.CouponConstant;
 import com.hank.ares.enums.CouponStatus;
 import com.hank.ares.exception.CouponException;
-import com.hank.ares.feigh.SettlementClient;
-import com.hank.ares.feigh.TemplateClient;
+import com.hank.ares.feigh.SettlementServiceFeignClient;
+import com.hank.ares.feigh.TemplateServiceFeighClient;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
 import com.hank.ares.model.CouponTemplateSDK;
@@ -52,13 +52,13 @@ public class UserServiceImpl implements IUserService {
      * 模板微服务客户端
      */
     @Autowired
-    private TemplateClient templateClient;
+    private TemplateServiceFeighClient templateServiceFeighClient;
 
     /**
      * 结算微服务客户端
      */
     @Autowired
-    private SettlementClient settlementClient;
+    private SettlementServiceFeignClient settlementServiceFeignClient;
 
     /**
      * Kafka 客户端
@@ -92,7 +92,7 @@ public class UserServiceImpl implements IUserService {
             }
 
             // 填充 dbCoupons的 templateSDK 字段
-            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateClient.findIds2TemplateSDK(
+            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateServiceFeighClient.findIds2TemplateSDK(
                     dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList())).getData();
             dbCoupons.forEach(dc -> dc.setTemplateSDK(id2TemplateSDK.get(dc.getTemplateId())));
             // 数据库中存在记录
@@ -133,7 +133,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<CouponTemplateSDK> findAvailableTemplate(Long userId) throws CouponException {
         long curTime = new Date().getTime();
-        List<CouponTemplateSDK> templateSDKS = templateClient.findAllUsableTemplate().getData();
+        List<CouponTemplateSDK> templateSDKS = templateServiceFeighClient.findAllUsableTemplate().getData();
         log.debug("Find All Template(From TemplateClient) Count:{}", templateSDKS.size());
 
         templateSDKS = templateSDKS.stream().filter(i -> i.getRule().getExpiration().getDeadline() > curTime).collect(Collectors.toList());
@@ -179,7 +179,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.findIds2TemplateSDK(Collections.singletonList(request.getTemplateSDK().getId())).getData();
+        Map<Integer, CouponTemplateSDK> id2Template = templateServiceFeighClient.findIds2TemplateSDK(Collections.singletonList(request.getTemplateSDK().getId())).getData();
         // 优惠券模板是需要存在的
         if (id2Template.size() <= 0) {
             log.error("Can Not Acquire Template From TemplateClient:{}", request.getTemplateSDK().getId());
@@ -256,7 +256,7 @@ public class UserServiceImpl implements IUserService {
         ctInfos.forEach(ci -> settleCoupons.add(id2Coupon.get(ci.getId())));
 
         // 通过结算服务获取结算信息
-        SettlementInfo processedInfo = settlementClient.computeRule(info).getData();
+        SettlementInfo processedInfo = settlementServiceFeignClient.computeRule(info).getData();
         if (processedInfo.getEmploy() && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
             log.info("Settle User Coupon: {}, {}", info.getUserId(), JSON.toJSONString(settleCoupons));
             // 更新缓存

@@ -1,6 +1,6 @@
 package com.hank.ares.feigh;
 
-import com.hank.ares.feigh.hystrix.TemplateClientHystrix;
+import com.hank.ares.feigh.hystrix.TemplateServiceHystrixClient;
 import com.hank.ares.model.CommonResponse;
 import com.hank.ares.model.CouponTemplateSDK;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(value = "ares-coupon-template", fallback = TemplateClientHystrix.class)
-public interface TemplateClient {
+@FeignClient(value = "ares-coupon-template", fallback = TemplateServiceHystrixClient.class)
+public interface TemplateServiceFeighClient {
 
     /**
      * 查找所有可用的优惠券模板

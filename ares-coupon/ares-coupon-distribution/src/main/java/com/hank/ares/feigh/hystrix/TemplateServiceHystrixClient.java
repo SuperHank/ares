@@ -1,6 +1,6 @@
 package com.hank.ares.feigh.hystrix;
 
-import com.hank.ares.feigh.TemplateClient;
+import com.hank.ares.feigh.TemplateServiceFeighClient;
 import com.hank.ares.model.CommonResponse;
 import com.hank.ares.model.CouponTemplateSDK;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import java.util.*;
  */
 @Slf4j
 @Component
-public class TemplateClientHystrix implements TemplateClient {
+public class TemplateServiceHystrixClient implements TemplateServiceFeighClient {
 
     @Override
     public CommonResponse<List<CouponTemplateSDK>> findAllUsableTemplate() {

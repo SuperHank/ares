@@ -1,7 +1,7 @@
 package com.hank.ares.feigh.hystrix;
 
 import com.hank.ares.exception.CouponException;
-import com.hank.ares.feigh.SettlementClient;
+import com.hank.ares.feigh.SettlementServiceFeignClient;
 import com.hank.ares.model.CommonResponse;
 import com.hank.ares.model.SettlementInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class SettlementClientHystrix implements SettlementClient {
+public class SettlementServiceHystrixClient implements SettlementServiceFeignClient {
 
     @Override
     public CommonResponse<SettlementInfo> computeRule(SettlementInfo settlement) throws CouponException {
