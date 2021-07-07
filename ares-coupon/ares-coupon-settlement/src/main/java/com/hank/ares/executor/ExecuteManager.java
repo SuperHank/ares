@@ -9,10 +9,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 优惠券结算规则执行管理器
@@ -57,20 +57,24 @@ public class ExecuteManager implements BeanPostProcessor {
         } else {
 
             // 多类优惠券
-            List<CouponCategory> categories = new ArrayList<>(settlement.getCouponAndTemplateInfos().size());
+//            List<CouponCategory> categories = new ArrayList<>(settlement.getCouponAndTemplateInfos().size());
+//            settlement.getCouponAndTemplateInfos().forEach(ct ->
+//                    categories.add(CouponCategory.of(
+//                            ct.getTemplate().getCategory()
+//                    )));
+            List<CouponCategory> categories = settlement.getCouponAndTemplateInfos().stream()
+                    .map(SettlementInfo.CouponAndTemplateInfo::getTemplate)
+                    .map(i -> CouponCategory.of(i.getCategory())).collect(Collectors.toList());
 
-            settlement.getCouponAndTemplateInfos().forEach(ct ->
-                    categories.add(CouponCategory.of(
-                            ct.getTemplate().getCategory()
-                    )));
+
             if (categories.size() != 2) {
                 throw new CouponException("Not Support For More Template Category");
+            }
+
+            if (categories.contains(CouponCategory.MANJIAN) && categories.contains(CouponCategory.ZHEKOU)) {
+                result = executorIndex.get(RuleFlag.MANJIAN_ZHEKOU).computeRule(settlement);
             } else {
-                if (categories.contains(CouponCategory.MANJIAN) && categories.contains(CouponCategory.ZHEKOU)) {
-                    result = executorIndex.get(RuleFlag.MANJIAN_ZHEKOU).computeRule(settlement);
-                } else {
-                    throw new CouponException("Not Support For Other Template Category");
-                }
+                throw new CouponException("Not Support For Other Template Category");
             }
         }
 

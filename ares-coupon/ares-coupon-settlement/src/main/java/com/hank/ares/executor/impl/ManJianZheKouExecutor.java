@@ -51,12 +51,7 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
         List<Integer> templateGoodsType = new ArrayList<>();
 
         settlement.getCouponAndTemplateInfos().forEach(ct -> {
-
-            templateGoodsType.addAll(JSON.parseObject(
-                    ct.getTemplate().getRule().getUsage().getGoodsType(),
-                    List.class
-            ));
-
+            templateGoodsType.addAll(JSON.parseObject(ct.getTemplate().getRule().getUsage().getGoodsType(), List.class));
         });
 
         // 如果想要使用多类优惠券, 则必须要所有的商品类型都包含在内, 即差集为空
@@ -117,11 +112,11 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
 
         // 再计算折扣
         double zheKouQuota = (double) zheKou.getTemplate().getRule().getDiscount().getQuota();
-        targetSum *= zheKouQuota * 1.0 / 100;
+        targetSum *= zheKouQuota / 100;
         ctInfos.add(zheKou);
 
         settlement.setCouponAndTemplateInfos(ctInfos);
-        settlement.setCost(retain2Decimals(targetSum > minCost() ? targetSum : minCost()));
+        settlement.setCost(retain2Decimals(Math.max(targetSum, minCost())));
 
         log.debug("Use ManJian And ZheKou Coupon Make Goods Cost From {} To {}", goodsSum, settlement.getCost());
 
@@ -145,15 +140,9 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
 
         List<String> allSharedKeysForZhekou = new ArrayList<>();
         allSharedKeysForZhekou.add(zhekouKey);
-        allSharedKeysForZhekou.addAll(JSON.parseObject(
-                zheKou.getTemplate().getRule().getWeight(),
-                List.class
-        ));
+        allSharedKeysForZhekou.addAll(JSON.parseObject(zheKou.getTemplate().getRule().getWeight(), List.class));
 
-        return CollectionUtils.isSubCollection(
-                Arrays.asList(manjianKey, zhekouKey), allSharedKeysForManjian)
-                || CollectionUtils.isSubCollection(
-                Arrays.asList(manjianKey, zhekouKey), allSharedKeysForZhekou
-        );
+        return CollectionUtils.isSubCollection(Arrays.asList(manjianKey, zhekouKey), allSharedKeysForManjian)
+                || CollectionUtils.isSubCollection(Arrays.asList(manjianKey, zhekouKey), allSharedKeysForZhekou);
     }
 }

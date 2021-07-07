@@ -6,6 +6,7 @@ import com.hank.ares.model.SettlementInfo;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,11 +26,11 @@ public abstract class AbstractExecutor {
     protected boolean isGoodsTypeSatisfy(SettlementInfo settlement) {
 
         List<Integer> goodsType = settlement.getGoodsInfos().stream().map(GoodsInfo::getType).collect(Collectors.toList());
-        List<Integer> templateGoodsType = JSON.parseObject(
-                settlement.getCouponAndTemplateInfos().get(0).getTemplate()
-                        .getRule().getUsage().getGoodsType(),
-                List.class
-        );
+        List<Integer> templateGoodsType = new ArrayList<>();
+
+        settlement.getCouponAndTemplateInfos().forEach(ct -> {
+            templateGoodsType.addAll(JSON.parseObject(ct.getTemplate().getRule().getUsage().getGoodsType(), List.class));
+        });
 
         // 存在交集即可
         return CollectionUtils.isNotEmpty(CollectionUtils.intersection(goodsType, templateGoodsType));
@@ -44,10 +45,8 @@ public abstract class AbstractExecutor {
      */
     protected SettlementInfo processGoodsTypeNotSatisfy(SettlementInfo settlement, double goodsSum) {
 
-        boolean isGoodsTypeSatisfy = isGoodsTypeSatisfy(settlement);
-
         // 当商品类型不满足时, 直接返回总价, 并清空优惠券
-        if (!isGoodsTypeSatisfy) {
+        if (!isGoodsTypeSatisfy(settlement)) {
             settlement.setCost(goodsSum);
             settlement.setCouponAndTemplateInfos(Collections.emptyList());
             return settlement;

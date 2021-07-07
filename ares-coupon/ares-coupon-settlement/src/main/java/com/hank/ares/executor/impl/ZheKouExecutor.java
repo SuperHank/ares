@@ -46,11 +46,7 @@ public class ZheKouExecutor extends AbstractExecutor implements RuleExecutor {
         double quota = (double) templateSDK.getRule().getDiscount().getQuota();
 
         // 计算使用优惠券之后的价格
-        settlement.setCost(
-                retain2Decimals((goodsSum * (quota * 1.0 / 100))) > minCost() ?
-                        retain2Decimals((goodsSum * (quota * 1.0 / 100)))
-                        : minCost()
-        );
+        settlement.setCost(Math.max(retain2Decimals((goodsSum * (quota / 100))), minCost()));
         log.debug("Use ZheKou Coupon Make Goods Cost From {} To {}", goodsSum, settlement.getCost());
 
         return settlement;

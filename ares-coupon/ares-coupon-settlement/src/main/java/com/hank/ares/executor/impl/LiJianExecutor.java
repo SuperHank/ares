@@ -46,10 +46,7 @@ public class LiJianExecutor extends AbstractExecutor implements RuleExecutor {
         double quota = (double) templateSDK.getRule().getDiscount().getQuota();
 
         // 计算使用优惠券之后的价格 - 结算
-        settlement.setCost(
-                retain2Decimals(goodsSum - quota) > minCost() ?
-                        retain2Decimals(goodsSum - quota) : minCost()
-        );
+        settlement.setCost(Math.max(retain2Decimals(goodsSum - quota), minCost()));
 
         log.debug("Use LiJian Coupon Make Goods Cost From {} To {}", goodsSum, settlement.getCost());
 
