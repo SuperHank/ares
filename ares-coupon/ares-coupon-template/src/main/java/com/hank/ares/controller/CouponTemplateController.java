@@ -19,12 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * 优惠券模板表 前端控制器
- * </p>
- *
- * @author shih
- * @since 2021-06-23
+ * 优惠券模板
  */
 @RestController
 @Slf4j

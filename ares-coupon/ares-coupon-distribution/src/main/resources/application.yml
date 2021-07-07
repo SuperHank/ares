@@ -18,7 +18,7 @@ spring:
   # kafka 配置
   kafka:
     bootstrap-servers:
-      - 127.0.0.1:9002
+      - 127.0.0.1:9092
     consumer:
       group-id: ares-coupon-x
       auto-offset-reset: latest

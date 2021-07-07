@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RedisServiceImpl implements IRedisService {
 
-
     @Autowired
     private StringRedisTemplate redisTemplate;
 

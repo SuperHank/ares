@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -48,10 +48,15 @@ public class Coupon extends Model {
     private String couponCode;
 
     @ApiModelProperty(value = "领取时间")
-    private LocalDateTime assignTime;
+    private Date assignTime;
 
     @ApiModelProperty(value = "优惠券的状态")
     private Integer status;
+
+    /**
+     * 用户优惠券对应的模板信息
+     */
+    private transient CouponTemplateSDK templateSDK;
 
     /**
      * 返回一个无效的 Coupon 对象

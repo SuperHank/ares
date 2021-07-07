@@ -18,11 +18,11 @@ zuul:
       path: /ares-coupon-template/**
       serviceId: ares-coupon-template
       strip-prefix: false
-  #    # 优惠券分发微服务路由配置定义
-  #    distribution:
-  #      path: /ares-coupon-distribution/**
-  #      serviceId: eureka-client-ares-coupon-distribution
-  #      strip-prefix: false
+      # 优惠券分发微服务路由配置定义
+    distribution:
+      path: /ares-coupon-distribution/**
+      serviceId: ares-coupon-distribution
+      strip-prefix: false
   #    # 优惠券结算微服务路由配置定义
   #    settlement:
   #      path: /ares-coupon-settlement/**

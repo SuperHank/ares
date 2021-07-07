@@ -9,8 +9,7 @@ import com.hank.ares.service.ICouponTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -30,6 +29,7 @@ public class CouponTemplateServiceImpl implements ICouponTemplateService {
     private IAsyncService asyncService;
 
     @Override
+    @Transactional
     public CouponTemplate buildTemplate(CreateTemplateReqDto reqDto) throws CouponException {
         // 判断同名的优惠券模板是否存在
         if (null != templateDao.findByName(reqDto.getName())) {
@@ -37,8 +37,7 @@ public class CouponTemplateServiceImpl implements ICouponTemplateService {
         }
 
         // 构造 CouponTemplate 并保存到数据库中
-        CouponTemplate template = requestToTemplate(reqDto);
-        template = templateDao.save(template);
+        CouponTemplate template = templateDao.save(requestToTemplate(reqDto));
 
         // 根据优惠券模板异步生成优惠券码
         asyncService.asyncConstructCouponByTemplate(template);

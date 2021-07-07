@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -47,6 +48,7 @@ public class AsyncServiceImpl implements IAsyncService {
     @Async("getAsyncExecutor")
     @Override
     @SuppressWarnings("all")
+    @Transactional
     public void asyncConstructCouponByTemplate(CouponTemplate template) {
 
         Stopwatch watch = Stopwatch.createStarted();
@@ -62,9 +64,9 @@ public class AsyncServiceImpl implements IAsyncService {
 
         watch.stop();
         log.info("Construct CouponCode By Template Cost: {}ms", watch.elapsed(TimeUnit.MILLISECONDS));
-
-        // TODO 发送短信或者邮件通知优惠券模板已经可用
         log.info("CouponTemplate({}) Is Available!", template.getId());
+
+        // TODO 异步发送短信或者邮件通知优惠券模板已经可用
     }
 
     /**
