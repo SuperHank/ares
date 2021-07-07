@@ -47,5 +47,10 @@
             <artifactId>ares-common-model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.hank</groupId>
+            <artifactId>ares-common-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

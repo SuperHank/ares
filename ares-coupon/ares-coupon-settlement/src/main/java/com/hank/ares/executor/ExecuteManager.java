@@ -2,8 +2,10 @@ package com.hank.ares.executor;
 
 import com.hank.ares.constants.RuleFlag;
 import com.hank.ares.enums.CouponCategory;
+import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.SettlementInfo;
+import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -31,54 +33,15 @@ public class ExecuteManager implements BeanPostProcessor {
 
     /**
      * 优惠券结算规则计算入口
-     * 注意: 一定要保证传递进来的优惠券个数 >= 1
      */
     public SettlementInfo computeRule(SettlementInfo settlement) throws CouponException {
+        // 优惠券模版类型
+        List<CouponCategory> categories = settlement.getCouponAndTemplateInfos().stream()
+                .map(SettlementInfo.CouponAndTemplateInfo::getTemplate)
+                .map(i -> CouponCategory.of(i.getCategory())).collect(Collectors.toList());
 
-        SettlementInfo result = null;
-
-        // 单类优惠券
-        if (settlement.getCouponAndTemplateInfos().size() == 1) {
-
-            // 获取优惠券的类别
-            CouponCategory category = CouponCategory.of(settlement.getCouponAndTemplateInfos().get(0).getTemplate().getCategory());
-
-            switch (category) {
-                case MANJIAN:
-                    result = executorIndex.get(RuleFlag.MANJIAN).computeRule(settlement);
-                    break;
-                case ZHEKOU:
-                    result = executorIndex.get(RuleFlag.ZHEKOU).computeRule(settlement);
-                    break;
-                case LIJIAN:
-                    result = executorIndex.get(RuleFlag.LIJIAN).computeRule(settlement);
-                    break;
-            }
-        } else {
-
-            // 多类优惠券
-//            List<CouponCategory> categories = new ArrayList<>(settlement.getCouponAndTemplateInfos().size());
-//            settlement.getCouponAndTemplateInfos().forEach(ct ->
-//                    categories.add(CouponCategory.of(
-//                            ct.getTemplate().getCategory()
-//                    )));
-            List<CouponCategory> categories = settlement.getCouponAndTemplateInfos().stream()
-                    .map(SettlementInfo.CouponAndTemplateInfo::getTemplate)
-                    .map(i -> CouponCategory.of(i.getCategory())).collect(Collectors.toList());
-
-
-            if (categories.size() != 2) {
-                throw new CouponException("Not Support For More Template Category");
-            }
-
-            if (categories.contains(CouponCategory.MANJIAN) && categories.contains(CouponCategory.ZHEKOU)) {
-                result = executorIndex.get(RuleFlag.MANJIAN_ZHEKOU).computeRule(settlement);
-            } else {
-                throw new CouponException("Not Support For Other Template Category");
-            }
-        }
-
-        return result;
+        RuleFlag ruleFlag = RuleFlag.of(categories);
+        return executorIndex.get(ruleFlag).computeRule(settlement);
     }
 
     /**
@@ -94,9 +57,8 @@ public class ExecuteManager implements BeanPostProcessor {
         RuleExecutor executor = (RuleExecutor) bean;
         RuleFlag ruleFlag = executor.ruleConfig();
 
-        if (executorIndex.containsKey(ruleFlag)) {
-            throw new IllegalStateException("There is already an executor for rule flag: " + ruleFlag);
-        }
+        ExceptionThen.then(executorIndex.containsKey(ruleFlag), ResultCode.SYSTEM_ERROR,
+                String.format("There is already an executor for rule flag: %s", ruleFlag));
 
         log.info("Load executor {} for rule flag {}.", executor.getClass(), ruleFlag);
         executorIndex.put(ruleFlag, executor);

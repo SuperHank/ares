@@ -1,11 +1,12 @@
 package com.hank.ares.util;
 
+import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.exception.AresBusinessException;
 
 public class ExceptionThen {
-    public static void then(boolean condition, String code, String msg) {
+    public static void then(boolean condition, ResultCode resultCode, String msg) {
         if (condition) {
-            throw new AresBusinessException(code, msg, false);
+            throw new AresBusinessException(resultCode.getMessage(), msg, false);
         }
     }
 

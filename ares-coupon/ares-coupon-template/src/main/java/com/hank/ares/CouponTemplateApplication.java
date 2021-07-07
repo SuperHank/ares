@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableEurekaClient
 @EnableScheduling
 @EnableJpaRepositories(basePackages = "com.hank.ares.dao")
-@EntityScan("com.hank.ares.model")
+@EntityScan("com.hank.ares")
 public class CouponTemplateApplication {
     public static void main(String[] args) {
         SpringApplication.run(CouponTemplateApplication.class, args);

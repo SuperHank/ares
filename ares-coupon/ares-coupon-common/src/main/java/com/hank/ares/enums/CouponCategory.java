@@ -15,7 +15,10 @@ public enum CouponCategory {
 
     MANJIAN("001", "满减券"),
     ZHEKOU("002", "折扣券"),
-    LIJIAN("003", "立减券");
+    LIJIAN("003", "立减券"),
+    MANZENG("004", "满赠券"),
+    LIPIN("005", "礼品券"),
+    ZENGPIN("006", "赠品券");
 
     /**
      * 优惠券分类编码
