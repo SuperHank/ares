@@ -13,12 +13,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * <p>
  * 清分会员表
- * </p>
- *
- * @author shih
- * @since 2021-02-07
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

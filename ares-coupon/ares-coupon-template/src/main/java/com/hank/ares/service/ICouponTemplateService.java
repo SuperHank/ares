@@ -5,12 +5,7 @@ import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;
 
 /**
- * <p>
  * 优惠券模板表 服务类
- * </p>
- *
- * @author shih
- * @since 2021-06-23
  */
 public interface ICouponTemplateService {
     /**

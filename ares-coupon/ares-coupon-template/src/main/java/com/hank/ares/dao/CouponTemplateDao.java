@@ -7,9 +7,6 @@ import java.util.List;
 
 /**
  * 优惠券模板表 Mapper 接口
- *
- * @author shih
- * @since 2021-06-23
  */
 public interface CouponTemplateDao extends JpaRepository<CouponTemplate, Integer> {
 

@@ -80,7 +80,7 @@ feign:
 spring:
   profiles: dev
 server:
-  port: 8055
+  port: 8056
 
 ---
 spring:

@@ -16,12 +16,7 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 
 /**
- * <p>
  * 优惠券(用户领取的记录)
- * </p>
- *
- * @author shih
- * @since 2021-06-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

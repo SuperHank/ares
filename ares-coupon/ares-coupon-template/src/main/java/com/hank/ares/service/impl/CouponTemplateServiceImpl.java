@@ -12,12 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * <p>
  * 优惠券模板表 服务实现类
- * </p>
- *
- * @author shih
- * @since 2021-06-23
  */
 @Service
 @Slf4j

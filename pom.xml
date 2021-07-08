@@ -16,6 +16,7 @@
         <module>ares-coupon</module>
         <module>ares-api</module>
         <module>ares-leetcode</module>
+        <module>ares-auth</module>
     </modules>
     <packaging>pom</packaging>
     <parent>

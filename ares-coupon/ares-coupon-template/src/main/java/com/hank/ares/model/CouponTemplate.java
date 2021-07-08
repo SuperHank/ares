@@ -23,12 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <p>
  * 优惠券模板表
- * </p>
- *
- * @author shih
- * @since 2021-06-23
  */
 @Data
 @Accessors(chain = true)
