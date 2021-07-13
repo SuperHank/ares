@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -18,6 +19,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("coupon_path")
 @ApiModel(value = "CouponPath对象", description = "路径信息表")
+@NoArgsConstructor
 public class CouponPath extends Model {
 
     private static final long serialVersionUID = 1L;
@@ -42,4 +44,10 @@ public class CouponPath extends Model {
     private String opMode;
 
 
+    public CouponPath(String pathPattern, String httpMethod, String pathName, String serviceName, String opMode) {
+        this.pathPattern = pathPattern;
+        this.httpMethod = httpMethod;
+        this.serviceName = serviceName;
+        this.opMode = opMode;
+    }
 }

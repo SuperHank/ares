@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 路径创建与权限校验功能 Feign 接口实现
  */
-@FeignClient(value = "eureka-client-coupon-permission")
+@FeignClient(value = "ares-coupon-permission")
 public interface PermissionFeignClient {
 
     @PostMapping(value = "/coupon-permission/create/path")
