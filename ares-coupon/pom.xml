@@ -17,6 +17,7 @@
         <module>ares-coupon-gateway</module>
         <module>ares-coupon-permission-sdk</module>
         <module>ares-coupon-permission</module>
+        <module>ares-coupon-permission-detector</module>
     </modules>
 
     <artifactId>ares-coupon</artifactId>
