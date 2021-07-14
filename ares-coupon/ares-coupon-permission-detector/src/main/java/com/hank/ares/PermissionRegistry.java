@@ -21,12 +21,12 @@ public class PermissionRegistry {
     /**
      * 权限服务 SDK 客户端
      */
-    private PermissionFeignClient permissionClient;
+    private final PermissionFeignClient permissionClient;
 
     /**
      * 服务名称
      */
-    private String serviceName;
+    private final String serviceName;
 
 
     /**
@@ -49,11 +49,9 @@ public class PermissionRegistry {
                         .build()
                 ).collect(Collectors.toList());
 
-        CommonResponse<List<Integer>> response = permissionClient.createPath(
-                new CreatePathRequest(pathInfos)
-        );
+        CommonResponse<List<Integer>> response = permissionClient.createPath(new CreatePathRequest(pathInfos));
 
-        if (!CollectionUtils.isEmpty(response.getData())) {
+        if (CollectionUtils.isNotEmpty(response.getData())) {
             log.info("register path info: {}", response.getData());
             return true;
         }

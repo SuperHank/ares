@@ -6,7 +6,7 @@ import com.hank.ares.constant.CouponConstant;
 import com.hank.ares.enums.CouponStatus;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.feigh.SettlementServiceFeignClient;
-import com.hank.ares.feigh.TemplateServiceFeighClient;
+import com.hank.ares.feigh.TemplateServiceFeignClient;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
 import com.hank.ares.model.CouponTemplateSDK;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements IUserService {
      * 模板微服务客户端
      */
     @Autowired
-    private TemplateServiceFeighClient templateServiceFeighClient;
+    private TemplateServiceFeignClient templateServiceFeignClient;
 
     /**
      * 结算微服务客户端
@@ -92,7 +92,7 @@ public class UserServiceImpl implements IUserService {
             }
 
             // 填充 dbCoupons的 templateSDK 字段
-            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateServiceFeighClient.findIds2TemplateSDK(
+            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateServiceFeignClient.findIds2TemplateSDK(
                     dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList())).getData();
             dbCoupons.forEach(dc -> dc.setTemplateSDK(id2TemplateSDK.get(dc.getTemplateId())));
             // 数据库中存在记录
@@ -133,7 +133,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<CouponTemplateSDK> findAvailableTemplate(Long userId) throws CouponException {
         long curTime = new Date().getTime();
-        List<CouponTemplateSDK> templateSDKS = templateServiceFeighClient.findAllUsableTemplate().getData();
+        List<CouponTemplateSDK> templateSDKS = templateServiceFeignClient.findAllUsableTemplate().getData();
         log.debug("Find All Template(From TemplateClient) Count:{}", templateSDKS.size());
 
         templateSDKS = templateSDKS.stream().filter(i -> i.getRule().getExpiration().getDeadline() > curTime).collect(Collectors.toList());
@@ -179,7 +179,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        Map<Integer, CouponTemplateSDK> id2Template = templateServiceFeighClient.findIds2TemplateSDK(Collections.singletonList(request.getTemplateSDK().getId())).getData();
+        Map<Integer, CouponTemplateSDK> id2Template = templateServiceFeignClient.findIds2TemplateSDK(Collections.singletonList(request.getTemplateSDK().getId())).getData();
         // 优惠券模板是需要存在的
         if (id2Template.size() <= 0) {
             log.error("Can Not Acquire Template From TemplateClient:{}", request.getTemplateSDK().getId());

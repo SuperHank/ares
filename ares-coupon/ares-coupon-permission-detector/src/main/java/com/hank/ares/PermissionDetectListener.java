@@ -27,14 +27,9 @@ public class PermissionDetectListener implements ApplicationListener<Application
 
         ApplicationContext ctx = event.getApplicationContext();
 
+        // 扫描并注册权限
         new Thread(() -> {
-
-            // 扫描权限(注解)
-            List<PermissionInfo> infoList = scanPermission(ctx);
-
-            // 注册权限
-            registerPermission(infoList, ctx);
-
+            registerPermission(scanPermission(ctx), ctx);
         }).start();
     }
 
@@ -42,13 +37,12 @@ public class PermissionDetectListener implements ApplicationListener<Application
      * 注册接口权限
      */
     @SuppressWarnings("all")
-    private void registerPermission(List<PermissionInfo> infoList,
-                                    ApplicationContext ctx) {
+    private void registerPermission(List<PermissionInfo> infoList, ApplicationContext ctx) {
 
         log.info("*************** register permission ***************");
 
         PermissionFeignClient permissionClient = ctx.getBean(PermissionFeignClient.class);
-        if (null == permissionClient) {
+        if (permissionClient == null) {
             log.error("no permissionClient bean found");
             return;
         }
@@ -58,9 +52,7 @@ public class PermissionDetectListener implements ApplicationListener<Application
 
         log.info("serviceName: {}", servName);
 
-        boolean result = new PermissionRegistry(
-                permissionClient, servName
-        ).register(infoList);
+        boolean result = new PermissionRegistry(permissionClient, servName).register(infoList);
 
         if (result) {
             log.info("*************** done register ***************");
@@ -79,10 +71,7 @@ public class PermissionDetectListener implements ApplicationListener<Application
         RequestMappingHandlerMapping mappingBean = (RequestMappingHandlerMapping) ctx.getBean("requestMappingHandlerMapping");
 
         // 扫描权限
-        List<PermissionInfo> permissionInfoList =
-                new AnnotationScanner(pathPrefix).scanPermission(
-                        mappingBean.getHandlerMethods()
-                );
+        List<PermissionInfo> permissionInfoList = new AnnotationScanner(pathPrefix).scanPermission(mappingBean.getHandlerMethods());
 
         permissionInfoList.forEach(p -> log.info("{}", p));
         log.info("{} permission found", permissionInfoList.size());

@@ -1,7 +1,7 @@
 package com.hank.ares;
 
+import com.hank.ares.annotation.AresCouponPermission;
 import com.hank.ares.annotation.IgnorePermission;
-import com.hank.ares.annotation.ImoocCouponPermission;
 import com.hank.ares.vo.PermissionInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 接口权限信息扫描器
@@ -19,16 +20,16 @@ import java.util.*;
 @Slf4j
 public class AnnotationScanner {
 
-    private String pathPrefix;
+    private final String pathPrefix;
 
-    private static final String IMOOC_COUPON_PKG = "com.imooc.coupon";
+    private static final String ARES_COUPON_PKG = "com.hank.ares";
 
     AnnotationScanner(String prefix) {
         this.pathPrefix = trimPath(prefix);
     }
 
     /**
-     * <h2>构造所有 Controller 的权限信息</h2>
+     * 构造所有 Controller 的权限信息
      */
     List<PermissionInfo> scanPermission(Map<RequestMappingInfo, HandlerMethod> mappingMap) {
 
@@ -39,37 +40,34 @@ public class AnnotationScanner {
     }
 
     /**
-     * <h2>构造 Controller 的权限信息</h2>
+     * 构造 Controller 的权限信息
      *
      * @param mapInfo       {@link RequestMappingInfo} @RequestMapping 对应的信息
-     * @param handlerMethod {@link HandlerMethod} @RequestMapping
-     *                      对应方法的详情, 包括方法、类、参数
+     * @param handlerMethod {@link HandlerMethod} @RequestMapping 对应方法的详情, 包括方法、类、参数
      */
     private List<PermissionInfo> buildPermission(RequestMappingInfo mapInfo, HandlerMethod handlerMethod) {
 
         Method javaMethod = handlerMethod.getMethod();
-        Class baseClass = javaMethod.getDeclaringClass();
+        Class<?> baseClass = javaMethod.getDeclaringClass();
 
-        // 忽略非 com.imooc.coupon 下的 mapping
-        if (!isImoocCouponPackage(baseClass.getName())) {
+        // 忽略非 com.hank.ares 下的 mapping
+        if (!isAresCouponPackage(baseClass.getName())) {
             log.debug("ignore method: {}", javaMethod.getName());
             return Collections.emptyList();
         }
 
         // 判断是否需要忽略此方法
         IgnorePermission ignorePermission = javaMethod.getAnnotation(IgnorePermission.class);
-        if (null != ignorePermission) {
+        if (ignorePermission != null) {
             log.debug("ignore method: {}", javaMethod.getName());
             return Collections.emptyList();
         }
 
         // 取出权限注解
-        ImoocCouponPermission couponPermission = javaMethod.getAnnotation(ImoocCouponPermission.class);
-        if (null == couponPermission) {
-            // 如果没有 ImoocCouponPermission 且没有 IgnorePermission, 在日志中记录
-            log.error("lack @ImoocCouponPermission -> {}#{}",
-                    javaMethod.getDeclaringClass().getName(),
-                    javaMethod.getName());
+        AresCouponPermission couponPermission = javaMethod.getAnnotation(AresCouponPermission.class);
+        if (couponPermission == null) {
+            // 如果没有 AresCouponPermission 且没有 IgnorePermission, 在日志中记录
+            log.error("lack @AresCouponPermission -> {}#{}", baseClass.getName(), javaMethod.getName());
             return Collections.emptyList();
         }
 
@@ -77,11 +75,8 @@ public class AnnotationScanner {
         Set<String> urlSet = mapInfo.getPatternsCondition().getPatterns();
 
         // 取出 method
-        boolean isAllMethods = false;
         Set<RequestMethod> methodSet = mapInfo.getMethodsCondition().getMethods();
-        if (CollectionUtils.isEmpty(methodSet)) {
-            isAllMethods = true;
-        }
+        boolean isAllMethods = CollectionUtils.isEmpty(methodSet);
 
         List<PermissionInfo> infoList = new ArrayList<>();
 
@@ -120,36 +115,30 @@ public class AnnotationScanner {
     }
 
     /**
-     * <h2>构造单个接口的权限信息</h2>
+     * 构造单个接口的权限信息
      */
-    private PermissionInfo buildPermissionInfo(
-            String reqMethod, String javaMethod, String path,
-            boolean readOnly, String desp, String extra
-    ) {
+    private PermissionInfo buildPermissionInfo(String reqMethod, String javaMethod, String path, boolean readOnly, String desp, String extra) {
 
         PermissionInfo info = new PermissionInfo();
         info.setMethod(reqMethod);
         info.setUrl(path);
         info.setIsRead(readOnly);
-        info.setDescription(
-                // 如果注解中没有描述, 则使用方法名称
-                StringUtils.isEmpty(desp) ? javaMethod : desp
-        );
+        // 如果注解中没有描述, 则使用方法名称
+        info.setDescription(StringUtils.isBlank(desp) ? javaMethod : desp);
         info.setExtra(extra);
 
         return info;
     }
 
     /**
-     * <h2>判断当前类是否在我们定义的包中</h2>
+     * 判断当前类是否在我们定义的包中
      */
-    private boolean isImoocCouponPackage(String className) {
-
-        return className.startsWith(IMOOC_COUPON_PKG);
+    private boolean isAresCouponPackage(String className) {
+        return className.startsWith(ARES_COUPON_PKG);
     }
 
     /**
-     * <h2>保证 path 以 / 开头, 且不以 / 结尾</h2>
+     * 保证 path 以 / 开头, 且不以 / 结尾
      * 如果 user -> /user, /user/ -> /user
      */
     private String trimPath(String path) {

@@ -14,7 +14,7 @@ spring:
       connection-timeout: 30000
       max-lifetime: 45000
       auto-commit: true
-      pool-name: ImoocCouponHikariCP
+      pool-name: AresCouponHikariCP
   # kafka 配置
   kafka:
     bootstrap-servers:

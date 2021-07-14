@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @FeignClient(value = "ares-coupon-template", fallback = TemplateServiceHystrixClient.class)
-public interface TemplateServiceFeighClient {
+public interface TemplateServiceFeignClient {
 
     /**
      * 查找所有可用的优惠券模板

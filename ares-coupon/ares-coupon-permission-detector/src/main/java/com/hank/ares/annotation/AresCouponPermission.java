@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ImoocCouponPermission {
+public @interface AresCouponPermission {
 
     /**
      * 接口描述信息
