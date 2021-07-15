@@ -1,6 +1,6 @@
 package com.hank.ares.executor.impl;
 
-import com.hank.ares.constants.RuleFlag;
+import com.hank.ares.enums.permission.RuleFlagEnum;
 import com.hank.ares.executor.AbstractExecutor;
 import com.hank.ares.executor.RuleExecutor;
 import com.hank.ares.model.CouponTemplateSDK;
@@ -20,11 +20,11 @@ public class ManJianExecutor extends AbstractExecutor implements RuleExecutor {
     /**
      * 规则类型标记
      *
-     * @return {@link RuleFlag}
+     * @return {@link RuleFlagEnum}
      */
     @Override
-    public RuleFlag ruleConfig() {
-        return RuleFlag.MANJIAN;
+    public RuleFlagEnum ruleConfig() {
+        return RuleFlagEnum.MANJIAN;
     }
 
     /**

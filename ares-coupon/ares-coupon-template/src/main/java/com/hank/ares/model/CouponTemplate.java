@@ -1,14 +1,12 @@
 package com.hank.ares.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hank.ares.convert.CouponCategoryConverter;
 import com.hank.ares.convert.DistributeTargetConverter;
 import com.hank.ares.convert.ProductLineConverter;
 import com.hank.ares.convert.RuleConverter;
-import com.hank.ares.enums.CouponCategory;
-import com.hank.ares.enums.DistributeTarget;
-import com.hank.ares.enums.ProductLine;
-import com.hank.ares.serialization.CouponTemplateSerialize;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.coupon.DistributeTargetEnum;
+import com.hank.ares.enums.coupon.ProductLineEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -31,7 +29,6 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "coupon_template")
-@JsonSerialize(using = CouponTemplateSerialize.class)
 @AllArgsConstructor
 @NoArgsConstructor
 public class CouponTemplate {
@@ -45,10 +42,12 @@ public class CouponTemplate {
     private Integer id;
 
     @ApiModelProperty(value = "是否是可用状态; true: 可用, false: 不可用")
+    // 提前关闭优惠券领取
     @Column(name = "available", nullable = false)
     private Boolean available;
 
     @ApiModelProperty(value = "是否过期; true: 是, false: 否")
+    // 自然过期
     @Column(name = "expired", nullable = false)
     private Boolean expired;
 
@@ -67,12 +66,12 @@ public class CouponTemplate {
     @ApiModelProperty(value = "优惠券分类")
     @Column(name = "category", nullable = false)
     @Convert(converter = CouponCategoryConverter.class)
-    private CouponCategory category;
+    private CouponCategoryEnum category;
 
     @ApiModelProperty(value = "产品线")
     @Column(name = "product_line", nullable = false)
     @Convert(converter = ProductLineConverter.class)
-    private ProductLine productLine;
+    private ProductLineEnum productLineEnum;
 
     @ApiModelProperty(value = "总数")
     @Column(name = "coupon_count", nullable = false)
@@ -94,7 +93,7 @@ public class CouponTemplate {
     @ApiModelProperty(value = "目标用户")
     @Column(name = "target", nullable = false)
     @Convert(converter = DistributeTargetConverter.class)
-    private DistributeTarget target;
+    private DistributeTargetEnum target;
 
     @ApiModelProperty(value = "优惠券规则: TemplateRule 的 json 表示")
     @Column(name = "rule", nullable = false)
@@ -113,14 +112,14 @@ public class CouponTemplate {
         this.name = name;
         this.logo = logo;
         this.intro = intro;
-        this.category = CouponCategory.of(category);
-        this.productLine = ProductLine.of(productLine);
+        this.category = CouponCategoryEnum.of(category);
+        this.productLineEnum = ProductLineEnum.of(productLine);
         this.couponCount = couponCount;
         this.userId = userId;
         // 优惠券模板唯一编码 = 4(产品线和类型) + 8(日期: 20190101) + id(扩充为4位)
         this.templateKey = productLine.toString() + category +
                 new SimpleDateFormat("yyyyMMdd").format(new Date());
-        this.target = DistributeTarget.of(target);
+        this.target = DistributeTargetEnum.of(target);
         this.rule = rule;
         this.createTime = new Date();
     }

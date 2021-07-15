@@ -1,8 +1,8 @@
 package com.hank.ares.service.impl;
 
 import com.google.common.base.Stopwatch;
-import com.hank.ares.constant.CouponConstant;
 import com.hank.ares.dao.CouponTemplateDao;
+import com.hank.ares.enums.common.RedisPrefixEnum;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.service.IAsyncService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +28,9 @@ import java.util.stream.Collectors;
 @Service
 public class AsyncServiceImpl implements IAsyncService {
 
-    /**
-     * CouponTemplate Dao
-     */
     @Autowired
     private CouponTemplateDao templateDao;
 
-    /**
-     * 注入 Redis 模板类
-     */
     @Autowired
     private StringRedisTemplate redisTemplate;
 
@@ -47,7 +41,6 @@ public class AsyncServiceImpl implements IAsyncService {
      */
     @Async("getAsyncExecutor")
     @Override
-    @SuppressWarnings("all")
     @Transactional
     public void asyncConstructCouponByTemplate(CouponTemplate template) {
 
@@ -55,15 +48,14 @@ public class AsyncServiceImpl implements IAsyncService {
 
         Set<String> couponCodes = buildCouponCode(template);
 
-        // ares_coupon_template_code_1
-        String redisKey = String.format("%s%s", CouponConstant.RedisPrefix.COUPON_TEMPLATE, template.getId().toString());
+        String redisKey = String.format("%s%s", RedisPrefixEnum.COUPON_TEMPLATE.getPrefix(), template.getId().toString());
         log.info("Push CouponCode To Redis: {}", redisTemplate.opsForList().rightPushAll(redisKey, couponCodes));
-
-        template.setAvailable(true);
-        templateDao.save(template);
 
         watch.stop();
         log.info("Construct CouponCode By Template Cost: {}ms", watch.elapsed(TimeUnit.MILLISECONDS));
+
+        template.setAvailable(true);
+        templateDao.save(template);
         log.info("CouponTemplate({}) Is Available!", template.getId());
 
         // TODO 异步发送短信或者邮件通知优惠券模板已经可用
@@ -79,7 +71,6 @@ public class AsyncServiceImpl implements IAsyncService {
      * @param template {@link CouponTemplate} 实体类
      * @return Set<String> 与 template.count 相同个数的优惠券码
      */
-    @SuppressWarnings("all")
     private Set<String> buildCouponCode(CouponTemplate template) {
 
         Stopwatch watch = Stopwatch.createStarted();
@@ -87,18 +78,12 @@ public class AsyncServiceImpl implements IAsyncService {
         Set<String> result = new HashSet<>(template.getCouponCount());
 
         // 前四位
-        String prefix4 = template.getProductLine().getCode().toString() + template.getCategory().getCode();
+        String prefix4 = template.getProductLineEnum().getCode().toString() + template.getCategory().getCode();
         String date = new SimpleDateFormat("yyMMdd").format(template.getCreateTime());
-
-        for (int i = 0; i != template.getCouponCount(); ++i) {
-            result.add(prefix4 + buildCouponCodeSuffix14(date));
-        }
 
         while (result.size() < template.getCouponCount()) {
             result.add(prefix4 + buildCouponCodeSuffix14(date));
         }
-
-        assert result.size() == template.getCouponCount();
 
         watch.stop();
         log.info("Build Coupon Code Cost: {}ms", watch.elapsed(TimeUnit.MILLISECONDS));

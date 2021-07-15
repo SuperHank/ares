@@ -1,7 +1,7 @@
 package com.hank.ares.model.vo;
 
-import com.hank.ares.enums.CouponStatus;
-import com.hank.ares.enums.PeriodType;
+import com.hank.ares.enums.coupon.CouponStatusEnum;
+import com.hank.ares.enums.coupon.PeriodTypeEnum;
 import com.hank.ares.model.Coupon;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,15 +33,15 @@ public class CouponClassify {
             boolean isTimeExpire;
             long curTime = new Date().getTime();
 
-            if (c.getTemplateSDK().getRule().getExpiration().getPeriod().equals(PeriodType.REGULAR.getCode())) {
+            if (c.getTemplateSDK().getRule().getExpiration().getPeriod().equals(PeriodTypeEnum.REGULAR.getCode())) {
                 isTimeExpire = c.getTemplateSDK().getRule().getExpiration().getDeadline() <= curTime;
             } else {
                 isTimeExpire = DateUtils.addDays(c.getAssignTime(), c.getTemplateSDK().getRule().getExpiration().getGap()).getTime() <= curTime;
             }
 
-            if (CouponStatus.USED.getStatus().equals(c.getStatus())) {
+            if (CouponStatusEnum.USED.getStatus().equals(c.getStatus())) {
                 used.add(c);
-            } else if (CouponStatus.EXPIRED.getStatus().equals(c.getStatus()) || isTimeExpire) {
+            } else if (CouponStatusEnum.EXPIRED.getStatus().equals(c.getStatus()) || isTimeExpire) {
                 expired.add(c);
             } else {
                 usable.add(c);

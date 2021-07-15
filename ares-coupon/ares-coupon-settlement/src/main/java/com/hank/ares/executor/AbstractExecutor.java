@@ -22,7 +22,7 @@ public abstract class AbstractExecutor {
      * 1. 这里实现的单品类优惠券的校验, 多品类优惠券重载此方法
      * 2. 商品只需要有一个优惠券要求的商品类型去匹配就可以
      */
-    @SuppressWarnings("all")
+    
     protected boolean isGoodsTypeSatisfy(SettlementInfo settlement) {
 
         List<Integer> goodsType = settlement.getGoodsInfos().stream().map(GoodsInfo::getType).collect(Collectors.toList());

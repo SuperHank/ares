@@ -1,7 +1,7 @@
 package com.hank.ares.executor;
 
-import com.hank.ares.constants.RuleFlag;
-import com.hank.ares.enums.CouponCategory;
+import com.hank.ares.enums.permission.RuleFlagEnum;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.SettlementInfo;
@@ -23,25 +23,25 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-@SuppressWarnings("all")
+
 public class ExecuteManager implements BeanPostProcessor {
 
     /**
      * 规则执行器映射
      */
-    private static Map<RuleFlag, RuleExecutor> executorIndex = new HashMap<>(RuleFlag.values().length);
+    private static Map<RuleFlagEnum, RuleExecutor> executorIndex = new HashMap<>(RuleFlagEnum.values().length);
 
     /**
      * 优惠券结算规则计算入口
      */
     public SettlementInfo computeRule(SettlementInfo settlement) throws CouponException {
         // 优惠券模版类型
-        List<CouponCategory> categories = settlement.getCouponAndTemplateInfos().stream()
+        List<CouponCategoryEnum> categories = settlement.getCouponAndTemplateInfos().stream()
                 .map(SettlementInfo.CouponAndTemplateInfo::getTemplate)
-                .map(i -> CouponCategory.of(i.getCategory())).collect(Collectors.toList());
+                .map(i -> CouponCategoryEnum.of(i.getCategory())).collect(Collectors.toList());
 
-        RuleFlag ruleFlag = RuleFlag.of(categories);
-        return executorIndex.get(ruleFlag).computeRule(settlement);
+        RuleFlagEnum ruleFlagEnum = RuleFlagEnum.of(categories);
+        return executorIndex.get(ruleFlagEnum).computeRule(settlement);
     }
 
     /**
@@ -55,13 +55,13 @@ public class ExecuteManager implements BeanPostProcessor {
         }
 
         RuleExecutor executor = (RuleExecutor) bean;
-        RuleFlag ruleFlag = executor.ruleConfig();
+        RuleFlagEnum ruleFlagEnum = executor.ruleConfig();
 
-        ExceptionThen.then(executorIndex.containsKey(ruleFlag), ResultCode.SYSTEM_ERROR,
-                String.format("There is already an executor for rule flag: %s", ruleFlag));
+        ExceptionThen.then(executorIndex.containsKey(ruleFlagEnum), ResultCode.SYSTEM_ERROR,
+                String.format("There is already an executor for rule flag: %s", ruleFlagEnum));
 
-        log.info("Load executor {} for rule flag {}.", executor.getClass(), ruleFlag);
-        executorIndex.put(ruleFlag, executor);
+        log.info("Load executor {} for rule flag {}.", executor.getClass(), ruleFlagEnum);
+        executorIndex.put(ruleFlagEnum, executor);
 
         return null;
     }

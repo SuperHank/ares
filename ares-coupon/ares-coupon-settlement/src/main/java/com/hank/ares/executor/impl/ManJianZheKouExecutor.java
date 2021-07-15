@@ -1,8 +1,8 @@
 package com.hank.ares.executor.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.constants.RuleFlag;
-import com.hank.ares.enums.CouponCategory;
+import com.hank.ares.enums.permission.RuleFlagEnum;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.executor.AbstractExecutor;
 import com.hank.ares.executor.RuleExecutor;
 import com.hank.ares.model.GoodsInfo;
@@ -27,11 +27,11 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
     /**
      * 规则类型标记
      *
-     * @return {@link RuleFlag}
+     * @return {@link RuleFlagEnum}
      */
     @Override
-    public RuleFlag ruleConfig() {
-        return RuleFlag.MANJIAN_ZHEKOU;
+    public RuleFlagEnum ruleConfig() {
+        return RuleFlagEnum.MANJIAN_ZHEKOU;
     }
 
     /**
@@ -43,7 +43,7 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
      * @param settlement {@link SettlementInfo} 用户传递的计算信息
      */
     @Override
-    @SuppressWarnings("all")
+    
     protected boolean isGoodsTypeSatisfy(SettlementInfo settlement) {
 
         log.debug("Check ManJian And ZheKou Is Match Or Not!");
@@ -79,7 +79,7 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
         SettlementInfo.CouponAndTemplateInfo zheKou = null;
 
         for (SettlementInfo.CouponAndTemplateInfo ct : settlement.getCouponAndTemplateInfos()) {
-            if (CouponCategory.of(ct.getTemplate().getCategory()) == CouponCategory.MANJIAN) {
+            if (CouponCategoryEnum.of(ct.getTemplate().getCategory()) == CouponCategoryEnum.MANJIAN) {
                 manJian = ct;
             } else {
                 zheKou = ct;
@@ -127,7 +127,7 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
      * 当前的两张优惠券是否可以共用
      * 即校验 TemplateRule 中的 weight 是否满足条件
      */
-    @SuppressWarnings("all")
+    
     private boolean
     isTemplateCanShared(SettlementInfo.CouponAndTemplateInfo manJian, SettlementInfo.CouponAndTemplateInfo zheKou) {
 

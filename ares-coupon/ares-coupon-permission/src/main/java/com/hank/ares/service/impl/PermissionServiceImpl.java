@@ -1,7 +1,7 @@
 package com.hank.ares.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hank.ares.constant.RoleEnum;
+import com.hank.ares.enums.permission.RoleEnum;
 import com.hank.ares.mapper.CouponPathMapper;
 import com.hank.ares.mapper.CouponRoleMapper;
 import com.hank.ares.mapper.CouponRolePathMappingMapper;

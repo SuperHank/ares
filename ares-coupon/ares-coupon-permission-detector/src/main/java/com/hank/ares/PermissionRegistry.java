@@ -1,9 +1,10 @@
 package com.hank.ares;
 
-import com.hank.ares.feign.PermissionFeignClient;
+import com.hank.ares.enums.permission.OperationModeEnum;
+import com.hank.ares.feign.IPermissionServiceFeignClient;
 import com.hank.ares.model.CommonResponse;
-import com.hank.ares.vo.CreatePathRequest;
-import com.hank.ares.vo.PermissionInfo;
+import com.hank.ares.model.dto.CreatePathReqDto;
+import com.hank.ares.model.dto.PermissionInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,7 +22,7 @@ public class PermissionRegistry {
     /**
      * 权限服务 SDK 客户端
      */
-    private final PermissionFeignClient permissionClient;
+    private final IPermissionServiceFeignClient permissionClient;
 
     /**
      * 服务名称
@@ -38,18 +39,18 @@ public class PermissionRegistry {
             return false;
         }
 
-        List<CreatePathRequest.PathInfo> pathInfos = infoList.stream()
-                .map(info -> CreatePathRequest.PathInfo.builder()
+        List<CreatePathReqDto.PathInfo> pathInfos = infoList.stream()
+                .map(info -> CreatePathReqDto.PathInfo.builder()
                         .pathPattern(info.getUrl())
                         .httpMethod(info.getMethod())
                         .pathName(info.getDescription())
                         .serviceName(serviceName)
-                        .opMode(info.getIsRead() ? OpModeEnum.READ.name() :
-                                OpModeEnum.WRITE.name())
+                        .opMode(info.getIsRead() ? OperationModeEnum.READ.name() :
+                                OperationModeEnum.WRITE.name())
                         .build()
                 ).collect(Collectors.toList());
 
-        CommonResponse<List<Integer>> response = permissionClient.createPath(new CreatePathRequest(pathInfos));
+        CommonResponse<List<Integer>> response = permissionClient.createPath(new CreatePathReqDto(pathInfos));
 
         if (CollectionUtils.isNotEmpty(response.getData())) {
             log.info("register path info: {}", response.getData());

@@ -14,7 +14,6 @@ public class SingleAddReqDto extends BaseReqDto {
     private String uri;
 
     @Override
-    protected boolean validate() {
-        return false;
+    protected void validate() {
     }
 }

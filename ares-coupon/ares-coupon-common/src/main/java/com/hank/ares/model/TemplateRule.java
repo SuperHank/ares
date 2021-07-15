@@ -1,6 +1,6 @@
 package com.hank.ares.model;
 
-import com.hank.ares.enums.PeriodType;
+import com.hank.ares.enums.coupon.PeriodTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,9 +26,7 @@ public class TemplateRule {
      * 校验功能
      */
     public boolean validate() {
-        return expiration.validate() && discount.validate()
-                && limitation > 0 && usage.validate()
-                && StringUtils.isNotEmpty(weight);
+        return expiration.validate() && discount.validate() && limitation > 0 && usage.validate() && StringUtils.isNotEmpty(weight);
     }
 
 
@@ -53,7 +51,7 @@ public class TemplateRule {
         private Long deadline;
 
         boolean validate() {
-            return null != PeriodType.of(period) && gap > 0 && deadline > 0;
+            return null != PeriodTypeEnum.of(period) && gap > 0 && deadline > 0;
         }
     }
 
@@ -96,9 +94,7 @@ public class TemplateRule {
         private String goodsType;
 
         boolean validate() {
-            return StringUtils.isNotBlank(province)
-                    && StringUtils.isNotBlank(city)
-                    && StringUtils.isNotBlank(goodsType);
+            return StringUtils.isNotBlank(province) && StringUtils.isNotBlank(city) && StringUtils.isNotBlank(goodsType);
         }
     }
 }

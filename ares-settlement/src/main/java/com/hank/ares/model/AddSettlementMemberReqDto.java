@@ -11,7 +11,6 @@ public class AddSettlementMemberReqDto extends BaseReqDto {
     private String memberGender;
 
     @Override
-    public boolean validate() {
-        return false;
+    public void validate() {
     }
 }

@@ -1,8 +1,8 @@
 package com.hank.ares.service;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.enums.CouponCategory;
-import com.hank.ares.enums.GoodsType;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.coupon.GoodsTypeEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.executor.ExecuteManager;
 import com.hank.ares.model.CouponTemplateSDK;
@@ -101,7 +101,7 @@ public class ExecuteManagerTest {
         GoodsInfo goodsInfo01 = new GoodsInfo();
         goodsInfo01.setCount(2);
         goodsInfo01.setPrice(10.88);
-        goodsInfo01.setType(GoodsType.WENYU.getCode());
+        goodsInfo01.setType(GoodsTypeEnum.WENYU.getCode());
 
         GoodsInfo goodsInfo02 = new GoodsInfo();
         // 达到满减标准
@@ -109,7 +109,7 @@ public class ExecuteManagerTest {
         // 没有达到满减标准
         goodsInfo02.setCount(5);
         goodsInfo02.setPrice(20.88);
-        goodsInfo02.setType(GoodsType.WENYU.getCode());
+        goodsInfo02.setType(GoodsTypeEnum.WENYU.getCode());
 
         info.setGoodsInfos(Arrays.asList(goodsInfo01, goodsInfo02));
 
@@ -119,15 +119,15 @@ public class ExecuteManagerTest {
 
         CouponTemplateSDK templateSDK = new CouponTemplateSDK();
         templateSDK.setId(1);
-        templateSDK.setCategory(CouponCategory.MANJIAN.getCode());
+        templateSDK.setCategory(CouponCategoryEnum.MANJIAN.getCode());
         templateSDK.setKey("100120190801");
 
         TemplateRule rule = new TemplateRule();
         rule.setDiscount(new TemplateRule.Discount(20, 199));
         rule.setUsage(new TemplateRule.Usage("安徽省", "桐城市",
                 JSON.toJSONString(Arrays.asList(
-                        GoodsType.WENYU.getCode(),
-                        GoodsType.JIAJU.getCode()
+                        GoodsTypeEnum.WENYU.getCode(),
+                        GoodsTypeEnum.JIAJU.getCode()
                 ))));
         templateSDK.setRule(rule);
 
@@ -151,12 +151,12 @@ public class ExecuteManagerTest {
         GoodsInfo goodsInfo01 = new GoodsInfo();
         goodsInfo01.setCount(2);
         goodsInfo01.setPrice(10.88);
-        goodsInfo01.setType(GoodsType.WENYU.getCode());
+        goodsInfo01.setType(GoodsTypeEnum.WENYU.getCode());
 
         GoodsInfo goodsInfo02 = new GoodsInfo();
         goodsInfo02.setCount(10);
         goodsInfo02.setPrice(20.88);
-        goodsInfo02.setType(GoodsType.WENYU.getCode());
+        goodsInfo02.setType(GoodsTypeEnum.WENYU.getCode());
 
         info.setGoodsInfos(Arrays.asList(goodsInfo01, goodsInfo02));
 
@@ -166,7 +166,7 @@ public class ExecuteManagerTest {
 
         CouponTemplateSDK templateSDK = new CouponTemplateSDK();
         templateSDK.setId(2);
-        templateSDK.setCategory(CouponCategory.ZHEKOU.getCode());
+        templateSDK.setCategory(CouponCategoryEnum.ZHEKOU.getCode());
         templateSDK.setKey("100220190712");
 
         // 设置 TemplateRule
@@ -179,8 +179,8 @@ public class ExecuteManagerTest {
 //                ))));
         rule.setUsage(new TemplateRule.Usage("安徽省", "桐城市",
                 JSON.toJSONString(Arrays.asList(
-                        GoodsType.SHENGXIAN.getCode(),
-                        GoodsType.JIAJU.getCode()
+                        GoodsTypeEnum.SHENGXIAN.getCode(),
+                        GoodsTypeEnum.JIAJU.getCode()
                 ))));
 
         templateSDK.setRule(rule);
@@ -203,12 +203,12 @@ public class ExecuteManagerTest {
         GoodsInfo goodsInfo01 = new GoodsInfo();
         goodsInfo01.setCount(2);
         goodsInfo01.setPrice(10.88);
-        goodsInfo01.setType(GoodsType.WENYU.getCode());
+        goodsInfo01.setType(GoodsTypeEnum.WENYU.getCode());
 
         GoodsInfo goodsInfo02 = new GoodsInfo();
         goodsInfo02.setCount(10);
         goodsInfo02.setPrice(20.88);
-        goodsInfo02.setType(GoodsType.WENYU.getCode());
+        goodsInfo02.setType(GoodsTypeEnum.WENYU.getCode());
 
         info.setGoodsInfos(Arrays.asList(goodsInfo01, goodsInfo02));
 
@@ -218,15 +218,15 @@ public class ExecuteManagerTest {
 
         CouponTemplateSDK templateSDK = new CouponTemplateSDK();
         templateSDK.setId(3);
-        templateSDK.setCategory(CouponCategory.LIJIAN.getCode());
+        templateSDK.setCategory(CouponCategoryEnum.LIJIAN.getCode());
         templateSDK.setKey("200320190712");
 
         TemplateRule rule = new TemplateRule();
         rule.setDiscount(new TemplateRule.Discount(5, 1));
         rule.setUsage(new TemplateRule.Usage("安徽省", "桐城市",
                 JSON.toJSONString(Arrays.asList(
-                        GoodsType.WENYU.getCode(),
-                        GoodsType.JIAJU.getCode()
+                        GoodsTypeEnum.WENYU.getCode(),
+                        GoodsTypeEnum.JIAJU.getCode()
                 ))));
         templateSDK.setRule(rule);
         ctInfo.setTemplate(templateSDK);
@@ -249,12 +249,12 @@ public class ExecuteManagerTest {
         GoodsInfo goodsInfo01 = new GoodsInfo();
         goodsInfo01.setCount(2);
         goodsInfo01.setPrice(10.88);
-        goodsInfo01.setType(GoodsType.WENYU.getCode());
+        goodsInfo01.setType(GoodsTypeEnum.WENYU.getCode());
 
         GoodsInfo goodsInfo02 = new GoodsInfo();
         goodsInfo02.setCount(10);
         goodsInfo02.setPrice(20.88);
-        goodsInfo02.setType(GoodsType.WENYU.getCode());
+        goodsInfo02.setType(GoodsTypeEnum.WENYU.getCode());
 
         info.setGoodsInfos(Arrays.asList(goodsInfo01, goodsInfo02));
 
@@ -265,15 +265,15 @@ public class ExecuteManagerTest {
 
         CouponTemplateSDK manjianTemplate = new CouponTemplateSDK();
         manjianTemplate.setId(1);
-        manjianTemplate.setCategory(CouponCategory.MANJIAN.getCode());
+        manjianTemplate.setCategory(CouponCategoryEnum.MANJIAN.getCode());
         manjianTemplate.setKey("100120190712");
 
         TemplateRule manjianRule = new TemplateRule();
         manjianRule.setDiscount(new TemplateRule.Discount(20, 199));
         manjianRule.setUsage(new TemplateRule.Usage("安徽省", "桐城市",
                 JSON.toJSONString(Arrays.asList(
-                        GoodsType.WENYU.getCode(),
-                        GoodsType.JIAJU.getCode()
+                        GoodsTypeEnum.WENYU.getCode(),
+                        GoodsTypeEnum.JIAJU.getCode()
                 ))));
         manjianRule.setWeight(JSON.toJSONString(Collections.emptyList()));
         manjianTemplate.setRule(manjianRule);
@@ -286,15 +286,15 @@ public class ExecuteManagerTest {
 
         CouponTemplateSDK zhekouTemplate = new CouponTemplateSDK();
         zhekouTemplate.setId(2);
-        zhekouTemplate.setCategory(CouponCategory.ZHEKOU.getCode());
+        zhekouTemplate.setCategory(CouponCategoryEnum.ZHEKOU.getCode());
         zhekouTemplate.setKey("100220190712");
 
         TemplateRule zhekouRule = new TemplateRule();
         zhekouRule.setDiscount(new TemplateRule.Discount(85, 1));
         zhekouRule.setUsage(new TemplateRule.Usage("安徽省", "桐城市",
                 JSON.toJSONString(Arrays.asList(
-                        GoodsType.WENYU.getCode(),
-                        GoodsType.JIAJU.getCode()
+                        GoodsTypeEnum.WENYU.getCode(),
+                        GoodsTypeEnum.JIAJU.getCode()
                 ))));
         zhekouRule.setWeight(JSON.toJSONString(
                 Collections.singletonList("1001201907120001")

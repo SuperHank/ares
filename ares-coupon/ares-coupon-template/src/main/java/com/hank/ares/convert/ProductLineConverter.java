@@ -1,6 +1,6 @@
 package com.hank.ares.convert;
 
-import com.hank.ares.enums.ProductLine;
+import com.hank.ares.enums.coupon.ProductLineEnum;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -12,7 +12,7 @@ import javax.persistence.Converter;
  * Y: 是数据库字段的类型
  */
 @Converter
-public class ProductLineConverter implements AttributeConverter<ProductLine, Integer> {
+public class ProductLineConverter implements AttributeConverter<ProductLineEnum, Integer> {
 
     /**
      * 将实体属性X转换为Y存储到数据库中, 插入和更新时执行的动作
@@ -21,7 +21,7 @@ public class ProductLineConverter implements AttributeConverter<ProductLine, Int
      * @return
      */
     @Override
-    public Integer convertToDatabaseColumn(ProductLine couponCategoryEnum) {
+    public Integer convertToDatabaseColumn(ProductLineEnum couponCategoryEnum) {
         return couponCategoryEnum.getCode();
     }
 
@@ -32,7 +32,7 @@ public class ProductLineConverter implements AttributeConverter<ProductLine, Int
      * @return
      */
     @Override
-    public ProductLine convertToEntityAttribute(Integer code) {
-        return ProductLine.of(code);
+    public ProductLineEnum convertToEntityAttribute(Integer code) {
+        return ProductLineEnum.of(code);
     }
 }

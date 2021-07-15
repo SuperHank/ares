@@ -1,10 +1,10 @@
 package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.enums.CouponCategory;
-import com.hank.ares.enums.GoodsType;
-import com.hank.ares.enums.PeriodType;
-import com.hank.ares.enums.ProductLine;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.coupon.GoodsTypeEnum;
+import com.hank.ares.enums.coupon.PeriodTypeEnum;
+import com.hank.ares.enums.coupon.ProductLineEnum;
 import com.hank.ares.model.CouponTemplateSDK;
 import com.hank.ares.model.TemplateRule;
 import lombok.AllArgsConstructor;
@@ -79,8 +79,8 @@ class ThyTemplateInfo {
         info.setId(template.getId());
         info.setName(template.getName());
         info.setDesc(template.getDesc());
-        info.setCategory(CouponCategory.of(template.getCategory()).getDescription());
-        info.setProductLine(ProductLine.of(template.getProductLine()).getDescription());
+        info.setCategory(CouponCategoryEnum.of(template.getCategory()).getDescription());
+        info.setProductLine(ProductLineEnum.of(template.getProductLine()).getDescription());
 
         info.setExpiration(buildExpiration(template.getRule().getExpiration()));
         info.setDiscount(buildDiscount(template.getRule().getDiscount()));
@@ -94,7 +94,7 @@ class ThyTemplateInfo {
      */
     private static String buildExpiration(TemplateRule.Expiration expiration) {
 
-        return PeriodType.of(expiration.getPeriod()).getDescription()
+        return PeriodTypeEnum.of(expiration.getPeriod()).getDescription()
                 + ", 有效间隔: "
                 + expiration.getGap()
                 + ", 优惠券模板过期日期: "
@@ -112,13 +112,13 @@ class ThyTemplateInfo {
     /**
      * 使用条件描述
      */
-    @SuppressWarnings("all")
+    
     private static String buildUsage(TemplateRule.Usage usage) {
 
         List<Integer> goodTypesI = JSON.parseObject(usage.getGoodsType(), List.class);
         List<String> goodsTypes = goodTypesI
                 .stream()
-                .map(g -> GoodsType.of(g))
+                .map(g -> GoodsTypeEnum.of(g))
                 .map(g -> g.getDescription())
                 .collect(Collectors.toList());
 

@@ -3,16 +3,15 @@ package com.hank.ares.thymeleaf;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hank.ares.exception.CouponException;
-import com.hank.ares.feigh.TemplateServiceFeignClient;
+import com.hank.ares.feign.TemplateServiceFeignClient;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
 import com.hank.ares.model.CouponTemplateSDK;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
-import com.hank.ares.service.impl.UserServiceImpl;
+import com.hank.ares.service.ICouponService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +36,8 @@ public class ThyDistributionController {
     private CouponMapper couponMapper;
 
     @Autowired
-    private UserServiceImpl userService;
+    private ICouponService couponService;
 
-    @Qualifier("templateServiceFeignClient")
     @Autowired
     private TemplateServiceFeignClient templateClient;
 
@@ -70,7 +68,7 @@ public class ThyDistributionController {
 
         log.info("view user: {} can acquire template.", userId);
 
-        List<CouponTemplateSDK> templateSDKS = userService.findAvailableTemplate(userId);
+        List<CouponTemplateSDK> templateSDKS = couponService.findAvailableTemplate(userId);
         List<ThyTemplateInfo> infos = templateSDKS.stream()
                 .map(ThyTemplateInfo::to).collect(Collectors.toList());
         infos.forEach(i -> i.setUserId(userId));
@@ -85,7 +83,7 @@ public class ThyDistributionController {
 
         log.info("user view template info: {} -> {}", uid, id);
 
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.findIds2TemplateSDK(
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(
                 Collections.singletonList(id)
         ).getData();
 
@@ -103,11 +101,11 @@ public class ThyDistributionController {
 
         log.info("user {} acquire template {}.", uid, tid);
 
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.findIds2TemplateSDK(
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(
                 Collections.singletonList(tid)
         ).getData();
         if (MapUtils.isNotEmpty(id2Template)) {
-            log.info("user acquire coupon: {}", JSON.toJSONString(userService.acquireTemplate(
+            log.info("user acquire coupon: {}", JSON.toJSONString(couponService.acquireTemplate(
                     new AcquireTemplateReqDto(uid, id2Template.get(tid))
             )));
         }

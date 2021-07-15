@@ -1,10 +1,12 @@
 package com.hank.ares.model.dto.req;
 
-import com.hank.ares.enums.CouponCategory;
-import com.hank.ares.enums.DistributeTarget;
-import com.hank.ares.enums.ProductLine;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.coupon.DistributeTargetEnum;
+import com.hank.ares.enums.coupon.ProductLineEnum;
+import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.model.BaseReqDto;
 import com.hank.ares.model.TemplateRule;
+import com.hank.ares.util.ExceptionThen;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,16 +65,13 @@ public class CreateTemplateReqDto extends BaseReqDto {
      * 校验对象的合法性
      */
     @Override
-    public boolean validate() {
+    public void validate() {
+        boolean stringValid = StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(logo) && StringUtils.isNotEmpty(desc);
 
-        boolean stringValid = StringUtils.isNotEmpty(name)
-                && StringUtils.isNotEmpty(logo)
-                && StringUtils.isNotEmpty(desc);
-        boolean enumValid = null != CouponCategory.of(category)
-                && null != ProductLine.of(productLine)
-                && null != DistributeTarget.of(target);
+        boolean enumValid = null != CouponCategoryEnum.of(category) && null != ProductLineEnum.of(productLine) && null != DistributeTargetEnum.of(target);
+
         boolean numValid = count > 0 && userId > 0;
 
-        return stringValid && enumValid && numValid && rule.validate();
+        ExceptionThen.then(!(stringValid && enumValid && numValid), ResultCode.PARAM_IS_INVALID, "BuildTemplate Param Is Not Valid!");
     }
 }

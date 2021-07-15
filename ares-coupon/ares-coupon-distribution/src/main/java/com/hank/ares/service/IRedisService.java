@@ -1,5 +1,6 @@
 package com.hank.ares.service;
 
+import com.hank.ares.enums.coupon.CouponStatusEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.Coupon;
 
@@ -16,11 +17,10 @@ public interface IRedisService {
      * 根据userId和状态查询缓存的优惠券列表数据
      *
      * @param userId 用户ID
-     * @param status 优惠券状态 {@link com.hank.ares.enums.CouponStatus}
+     * @param status 优惠券状态 {@link CouponStatusEnum}
      * @return {@link Coupon}s 注意，可能会返回null，代表从没有过记录
      */
     List<Coupon> getCachedCoupons(Long userId, Integer status);
-
 
     /**
      * 保存空的优惠券列表到缓存中
@@ -47,5 +47,5 @@ public interface IRedisService {
      * @param status  优惠券状态
      * @return 保存成功的个数
      */
-    Integer addCouponToCache(Long userId, List<Coupon> coupons, Integer status) throws CouponException;
+    void addCouponToCache(Long userId, List<Coupon> coupons, Integer status) throws CouponException;
 }

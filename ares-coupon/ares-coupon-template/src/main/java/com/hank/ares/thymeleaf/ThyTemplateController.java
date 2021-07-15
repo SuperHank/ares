@@ -2,7 +2,7 @@ package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
 import com.hank.ares.dao.CouponTemplateDao;
-import com.hank.ares.enums.*;
+import com.hank.ares.enums.coupon.*;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.TemplateRule;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;
@@ -46,7 +46,6 @@ public class ThyTemplateController {
 
     /**
      * 优惠券系统入口
-     * 127.0.0.1:7001/coupon-template/template/thy/home
      */
     @GetMapping("/home")
     public String home() {
@@ -57,7 +56,6 @@ public class ThyTemplateController {
 
     /**
      * 查看优惠券模板详情
-     * 127.0.0.1:7001/coupon-template/template/thy/info/{id}
      */
     @GetMapping("/info/{id}")
     public String info(@PathVariable Integer id, ModelMap map) {
@@ -74,7 +72,6 @@ public class ThyTemplateController {
 
     /**
      * 查看优惠券模板列表
-     * 127.0.0.1:7001/coupon-template/template/thy/list
      */
     @GetMapping("/list")
     public String list(ModelMap map) {
@@ -90,18 +87,17 @@ public class ThyTemplateController {
 
     /**
      * 创建优惠券模板
-     * 127.0.0.1:7001/coupon-template/template/thy/create
      */
     @GetMapping("/create")
     public String create(ModelMap map, HttpSession session) {
 
         log.info("view create form.");
 
-        session.setAttribute("category", CouponCategory.values());
-        session.setAttribute("productLine", ProductLine.values());
-        session.setAttribute("target", DistributeTarget.values());
-        session.setAttribute("period", PeriodType.values());
-        session.setAttribute("goodsType", GoodsType.values());
+        session.setAttribute("category", CouponCategoryEnum.values());
+        session.setAttribute("productLine", ProductLineEnum.values());
+        session.setAttribute("target", DistributeTargetEnum.values());
+        session.setAttribute("period", PeriodTypeEnum.values());
+        session.setAttribute("goodsType", GoodsTypeEnum.values());
 
         map.addAttribute("template", new ThyCreateTemplate());
         map.addAttribute("action", "create");
@@ -110,7 +106,6 @@ public class ThyTemplateController {
 
     /**
      * 创建优惠券模板
-     * 127.0.0.1:7001/coupon-template/template/thy/create
      */
     @PostMapping("/create")
     public String create(@ModelAttribute ThyCreateTemplate template) throws Exception {

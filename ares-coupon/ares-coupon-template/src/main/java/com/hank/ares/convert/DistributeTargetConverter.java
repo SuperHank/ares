@@ -1,6 +1,6 @@
 package com.hank.ares.convert;
 
-import com.hank.ares.enums.DistributeTarget;
+import com.hank.ares.enums.coupon.DistributeTargetEnum;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -12,7 +12,7 @@ import javax.persistence.Converter;
  * Y: 是数据库字段的类型
  */
 @Converter
-public class DistributeTargetConverter implements AttributeConverter<DistributeTarget, Integer> {
+public class DistributeTargetConverter implements AttributeConverter<DistributeTargetEnum, Integer> {
 
     /**
      * 将实体属性X转换为Y存储到数据库中, 插入和更新时执行的动作
@@ -21,7 +21,7 @@ public class DistributeTargetConverter implements AttributeConverter<DistributeT
      * @return
      */
     @Override
-    public Integer convertToDatabaseColumn(DistributeTarget couponCategoryEnum) {
+    public Integer convertToDatabaseColumn(DistributeTargetEnum couponCategoryEnum) {
         return couponCategoryEnum.getCode();
     }
 
@@ -32,7 +32,7 @@ public class DistributeTargetConverter implements AttributeConverter<DistributeT
      * @return
      */
     @Override
-    public DistributeTarget convertToEntityAttribute(Integer code) {
-        return DistributeTarget.of(code);
+    public DistributeTargetEnum convertToEntityAttribute(Integer code) {
+        return DistributeTargetEnum.of(code);
     }
 }

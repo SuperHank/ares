@@ -30,7 +30,7 @@ public class AsyncPoolConfig implements AsyncConfigurer {
         executor.setMaxPoolSize(20);
         executor.setQueueCapacity(20);
         executor.setKeepAliveSeconds(60);
-        executor.setThreadNamePrefix("AresAsync_");
+        executor.setThreadNamePrefix("AresCouponAsync_");
 
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(60);
@@ -49,7 +49,7 @@ public class AsyncPoolConfig implements AsyncConfigurer {
         return new AsyncExceptionHandler();
     }
 
-    @SuppressWarnings("all")
+    
     class AsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
 
         @Override

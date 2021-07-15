@@ -17,6 +17,7 @@
         <module>ares-api</module>
         <module>ares-leetcode</module>
         <module>ares-auth</module>
+        <module>ares-user</module>
     </modules>
     <packaging>pom</packaging>
     <parent>

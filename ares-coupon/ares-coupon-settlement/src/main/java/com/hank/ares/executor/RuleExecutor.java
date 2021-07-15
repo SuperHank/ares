@@ -1,6 +1,6 @@
 package com.hank.ares.executor;
 
-import com.hank.ares.constants.RuleFlag;
+import com.hank.ares.enums.permission.RuleFlagEnum;
 import com.hank.ares.model.SettlementInfo;
 
 /**
@@ -11,9 +11,9 @@ public interface RuleExecutor {
     /**
      * 规则类型标记
      *
-     * @return {@link RuleFlag}
+     * @return {@link RuleFlagEnum}
      */
-    RuleFlag ruleConfig();
+    RuleFlagEnum ruleConfig();
 
     /**
      * 优惠券规则的计算

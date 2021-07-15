@@ -20,12 +20,8 @@ public class SettlementController {
     /**
      * 结算规则执行管理器
      */
-    private final ExecuteManager executeManager;
-
     @Autowired
-    public SettlementController(ExecuteManager executeManager) {
-        this.executeManager = executeManager;
-    }
+    private ExecuteManager executeManager;
 
     /**
      * 优惠券结算

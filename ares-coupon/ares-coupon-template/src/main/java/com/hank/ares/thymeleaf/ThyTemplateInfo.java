@@ -1,8 +1,8 @@
 package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.enums.GoodsType;
-import com.hank.ares.enums.PeriodType;
+import com.hank.ares.enums.coupon.GoodsTypeEnum;
+import com.hank.ares.enums.coupon.PeriodTypeEnum;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.TemplateRule;
 import lombok.AllArgsConstructor;
@@ -106,7 +106,7 @@ class ThyTemplateInfo {
      */
     private String weight;
 
-    @SuppressWarnings("all")
+    
     static ThyTemplateInfo to(CouponTemplate template) {
 
         ThyTemplateInfo info = new ThyTemplateInfo();
@@ -115,7 +115,7 @@ class ThyTemplateInfo {
         info.setName(template.getName());
         info.setDesc(template.getIntro());
         info.setCategory(template.getCategory().getDescription());
-        info.setProductLine(template.getProductLine().getDescription());
+        info.setProductLine(template.getProductLineEnum().getDescription());
         info.setCount(template.getCouponCount());
         info.setCreateTime(new SimpleDateFormat("yyyy-MM-dd").format(template.getCreateTime()));
         info.setUserId(template.getUserId());
@@ -137,7 +137,7 @@ class ThyTemplateInfo {
      */
     private static String buildExpiration(TemplateRule.Expiration expiration) {
 
-        return PeriodType.of(expiration.getPeriod()).getDescription()
+        return PeriodTypeEnum.of(expiration.getPeriod()).getDescription()
                 + ", 有效间隔: "
                 + expiration.getGap()
                 + ", 优惠券模板过期日期: "
@@ -155,13 +155,13 @@ class ThyTemplateInfo {
     /**
      * 使用条件描述
      */
-    @SuppressWarnings("all")
+    
     private static String buildUsage(TemplateRule.Usage usage) {
 
         List<Integer> goodTypesI = JSON.parseObject(usage.getGoodsType(), List.class);
         List<String> goodsTypes = goodTypesI
                 .stream()
-                .map(g -> GoodsType.of(g))
+                .map(g -> GoodsTypeEnum.of(g))
                 .map(g -> g.getDescription())
                 .collect(Collectors.toList());
 

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hank.ares.mapper.CouponPathMapper;
 import com.hank.ares.model.CouponPath;
 import com.hank.ares.service.ICouponPathService;
-import com.hank.ares.vo.CreatePathRequest;
+import com.hank.ares.model.dto.CreatePathReqDto;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,9 @@ public class CouponPathServiceImpl extends ServiceImpl<CouponPathMapper, CouponP
 
 
     @Override
-    public List<Integer> createPath(CreatePathRequest request) {
-        List<CreatePathRequest.PathInfo> pathInfos = request.getPathInfos();
-        List<CreatePathRequest.PathInfo> validRequests = new ArrayList<>(request.getPathInfos().size());
+    public List<Integer> createPath(CreatePathReqDto request) {
+        List<CreatePathReqDto.PathInfo> pathInfos = request.getPathInfos();
+        List<CreatePathReqDto.PathInfo> validRequests = new ArrayList<>(request.getPathInfos().size());
 
         QueryWrapper<CouponPath> wrapper = new QueryWrapper<>();
         wrapper.eq("service_name", request.getPathInfos().get(0).getServiceName());
@@ -34,7 +34,7 @@ public class CouponPathServiceImpl extends ServiceImpl<CouponPathMapper, CouponP
         String serviceName = pathInfos.get(0).getServiceName();
 
         if (CollectionUtils.isNotEmpty(currentPaths)) {
-            for (CreatePathRequest.PathInfo pathInfo : pathInfos) {
+            for (CreatePathReqDto.PathInfo pathInfo : pathInfos) {
                 boolean isValid = true;
                 for (CouponPath currentPath : currentPaths) {
                     if (currentPath.getPathPattern().equals(pathInfo.getPathPattern())

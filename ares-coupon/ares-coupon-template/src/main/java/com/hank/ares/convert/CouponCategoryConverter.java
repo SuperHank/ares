@@ -1,6 +1,6 @@
 package com.hank.ares.convert;
 
-import com.hank.ares.enums.CouponCategory;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -12,7 +12,7 @@ import javax.persistence.Converter;
  * Y: 是数据库字段的类型
  */
 @Converter
-public class CouponCategoryConverter implements AttributeConverter<CouponCategory, String> {
+public class CouponCategoryConverter implements AttributeConverter<CouponCategoryEnum, String> {
 
     /**
      * 将实体属性X转换为Y存储到数据库中, 插入和更新时执行的动作
@@ -21,7 +21,7 @@ public class CouponCategoryConverter implements AttributeConverter<CouponCategor
      * @return
      */
     @Override
-    public String convertToDatabaseColumn(CouponCategory couponCategoryEnum) {
+    public String convertToDatabaseColumn(CouponCategoryEnum couponCategoryEnum) {
         return couponCategoryEnum.getCode();
     }
 
@@ -32,7 +32,7 @@ public class CouponCategoryConverter implements AttributeConverter<CouponCategor
      * @return
      */
     @Override
-    public CouponCategory convertToEntityAttribute(String code) {
-        return CouponCategory.of(code);
+    public CouponCategoryEnum convertToEntityAttribute(String code) {
+        return CouponCategoryEnum.of(code);
     }
 }

@@ -6,5 +6,5 @@ import lombok.Data;
 public abstract class BaseReqDto {
     private String token;
 
-    protected abstract boolean validate();
+    protected abstract void validate();
 }

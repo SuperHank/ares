@@ -2,7 +2,7 @@ package com.hank.ares.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hank.ares.model.CouponPath;
-import com.hank.ares.vo.CreatePathRequest;
+import com.hank.ares.model.dto.CreatePathReqDto;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ public interface ICouponPathService extends IService<CouponPath> {
     /**
      * 添加新的 path 到数据表中
      *
-     * @param request {@link CreatePathRequest}
+     * @param request {@link CreatePathReqDto}
      * @return Path 数据记录的主键
      */
-    List<Integer> createPath(CreatePathRequest request);
+    List<Integer> createPath(CreatePathReqDto request);
 }

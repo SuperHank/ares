@@ -27,7 +27,7 @@ public class CouponTemplateServiceImpl implements ICouponTemplateService {
     @Transactional
     public CouponTemplate buildTemplate(CreateTemplateReqDto reqDto) throws CouponException {
         // 判断同名的优惠券模板是否存在
-        if (null != templateDao.findByName(reqDto.getName())) {
+        if (templateDao.findByName(reqDto.getName()) != null) {
             throw new CouponException("Exist Same Name Template!");
         }
 
