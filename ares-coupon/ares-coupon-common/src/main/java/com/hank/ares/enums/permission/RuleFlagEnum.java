@@ -18,12 +18,12 @@ import java.util.stream.Stream;
 public enum RuleFlagEnum {
 
     // 单类别优惠券定义
-    MANJIAN(Stream.of(CouponCategoryEnum.MANJIAN).collect(Collectors.toList()), "满减券的计算规则"),
-    ZHEKOU(Stream.of(CouponCategoryEnum.ZHEKOU).collect(Collectors.toList()), "折扣券的计算规则"),
-    LIJIAN(Stream.of(CouponCategoryEnum.LIJIAN).collect(Collectors.toList()), "立减券的计算规则"),
+    MANJIAN(Stream.of(CouponCategoryEnum.MANJIAN).collect(Collectors.toList()), "满减券计算规则"),
+    ZHEKOU(Stream.of(CouponCategoryEnum.ZHEKOU).collect(Collectors.toList()), "折扣券计算规则"),
+    LIJIAN(Stream.of(CouponCategoryEnum.LIJIAN).collect(Collectors.toList()), "立减券计算规则"),
 
     // 多类别优惠券定义
-    MANJIAN_ZHEKOU(Stream.of(CouponCategoryEnum.MANJIAN, CouponCategoryEnum.ZHEKOU).collect(Collectors.toList()), "满减券 + 折扣券的计算规则");
+    MANJIAN_ZHEKOU(Stream.of(CouponCategoryEnum.MANJIAN, CouponCategoryEnum.ZHEKOU).collect(Collectors.toList()), "满减券 + 折扣券计算规则");
     // TODO 更多优惠券类别的组合
 
     private final List<CouponCategoryEnum> couponCategoryEnums;

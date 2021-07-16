@@ -179,7 +179,7 @@ public class RedisServiceImpl implements IRedisService {
     private void addCouponToCacheForExpired(Long userId, List<Coupon> coupons) throws CouponException {
 
         // status 是 EXPIRED, 代表是已有的优惠券过期了, 影响到两个 Cache
-        // USABLE, EXPIRED
+        // USABLE（删除）, EXPIRED（新增）
 
         log.debug("Add Coupon To Cache For Expired.");
 
@@ -204,8 +204,6 @@ public class RedisServiceImpl implements IRedisService {
             throw new CouponException("CurCoupon Is Not Equal To Cache.");
         }
 
-        List<String> needCleanKey = paramIds.stream().map(i -> i.toString()).collect(Collectors.toList());
-
         SessionCallback<Objects> sessionCallback = new SessionCallback<Objects>() {
             @Override
             public Objects execute(RedisOperations operations) throws DataAccessException {
@@ -213,7 +211,7 @@ public class RedisServiceImpl implements IRedisService {
                 // 1. 已过期的优惠券 Cache 缓存
                 operations.opsForHash().putAll(redisKeyForExpired, needCachedForExpired);
                 // 2. 可用的优惠券 Cache 需要清理
-                operations.opsForHash().delete(redisKeyForUsable, needCleanKey.toArray());
+                operations.opsForHash().delete(redisKeyForUsable, paramIds.stream().map(Functions.toStringFunction()).collect(Collectors.toList()));
                 // 3. 重置过期时间
                 operations.expire(redisKeyForUsable, getRandomExpirationTime(1, 2), TimeUnit.SECONDS);
                 operations.expire(redisKeyForExpired, getRandomExpirationTime(1, 2), TimeUnit.SECONDS);

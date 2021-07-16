@@ -36,13 +36,14 @@ public class LiJianExecutor extends AbstractExecutor implements RuleExecutor {
 
         double goodsSum = retain2Decimals(goodsCostSum(settlement.getGoodsInfos()));
         SettlementInfo probability = processGoodsTypeNotSatisfy(settlement, goodsSum);
-        if (null != probability) {
+        if (probability != null) {
             log.debug("LiJian Template Is Not Match To GoodsType!");
             return probability;
         }
 
         // 立减优惠券直接使用, 没有门槛
         CouponTemplateSDK templateSDK = settlement.getCouponAndTemplateInfos().get(0).getTemplate();
+        // 抵扣额度
         double quota = (double) templateSDK.getRule().getDiscount().getQuota();
 
         // 计算使用优惠券之后的价格 - 结算

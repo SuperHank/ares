@@ -1,8 +1,8 @@
 package com.hank.ares.executor;
 
-import com.hank.ares.enums.permission.RuleFlagEnum;
-import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.enums.common.ResultCode;
+import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.permission.RuleFlagEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.SettlementInfo;
 import com.hank.ares.util.ExceptionThen;
@@ -60,7 +60,7 @@ public class ExecuteManager implements BeanPostProcessor {
         ExceptionThen.then(executorIndex.containsKey(ruleFlagEnum), ResultCode.SYSTEM_ERROR,
                 String.format("There is already an executor for rule flag: %s", ruleFlagEnum));
 
-        log.info("Load executor {} for rule flag {}.", executor.getClass(), ruleFlagEnum);
+        log.info("Load executor {} for rule flag {}.", executor.getClass(), ruleFlagEnum.getDescription());
         executorIndex.put(ruleFlagEnum, executor);
 
         return null;

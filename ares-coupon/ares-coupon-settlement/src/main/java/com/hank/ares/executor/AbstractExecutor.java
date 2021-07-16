@@ -17,26 +17,6 @@ import java.util.stream.Collectors;
 public abstract class AbstractExecutor {
 
     /**
-     * 校验商品类型与优惠券是否匹配
-     * 需要注意:
-     * 1. 这里实现的单品类优惠券的校验, 多品类优惠券重载此方法
-     * 2. 商品只需要有一个优惠券要求的商品类型去匹配就可以
-     */
-    
-    protected boolean isGoodsTypeSatisfy(SettlementInfo settlement) {
-
-        List<Integer> goodsType = settlement.getGoodsInfos().stream().map(GoodsInfo::getType).collect(Collectors.toList());
-        List<Integer> templateGoodsType = new ArrayList<>();
-
-        settlement.getCouponAndTemplateInfos().forEach(ct -> {
-            templateGoodsType.addAll(JSON.parseObject(ct.getTemplate().getRule().getUsage().getGoodsType(), List.class));
-        });
-
-        // 存在交集即可
-        return CollectionUtils.isNotEmpty(CollectionUtils.intersection(goodsType, templateGoodsType));
-    }
-
-    /**
      * 处理商品类型与优惠券限制不匹配的情况
      *
      * @param settlement {@link SettlementInfo} 用户传递的结算信息
@@ -53,6 +33,26 @@ public abstract class AbstractExecutor {
         }
 
         return null;
+    }
+
+    /**
+     * 校验商品类型与优惠券是否匹配
+     * 需要注意:
+     * 1. 这里实现的单品类优惠券的校验, 多品类优惠券重载此方法
+     * 2. 商品只需要有一个优惠券要求的商品类型去匹配就可以
+     */
+
+    protected boolean isGoodsTypeSatisfy(SettlementInfo settlement) {
+
+        List<Integer> goodsType = settlement.getGoodsInfos().stream().map(GoodsInfo::getType).collect(Collectors.toList());
+        List<Integer> templateGoodsType = new ArrayList<>();
+
+        settlement.getCouponAndTemplateInfos().forEach(ct -> {
+            templateGoodsType.addAll(JSON.parseObject(ct.getTemplate().getRule().getUsage().getGoodsType(), List.class));
+        });
+
+        // 存在交集即可
+        return CollectionUtils.isNotEmpty(CollectionUtils.intersection(goodsType, templateGoodsType));
     }
 
     /**
