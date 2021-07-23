@@ -1,5 +1,6 @@
 package com.hank.ares.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hank.ares.enums.permission.RoleEnum;
 import com.hank.ares.mapper.CouponPathMapper;
@@ -30,7 +31,9 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     public boolean checkPermission(Long userId, String uri, String httpMethod) {
-        CouponUserRoleMapping userRoleMapping = userRoleMappingMapper.selectById(userId);
+        QueryWrapper<CouponUserRoleMapping> query = new QueryWrapper<>();
+        query.eq("user_id", userId);
+        CouponUserRoleMapping userRoleMapping = userRoleMappingMapper.selectOne(query);
 
         // 用户没有绑定角色, 直接返回 false
         if (userRoleMapping == null) {
@@ -55,7 +58,8 @@ public class PermissionServiceImpl implements IPermissionService {
         wrapper.eq("path_pattern", uri).eq("http_method", httpMethod);
         CouponPath path = pathMapper.selectOne(wrapper);
         if (path == null) {
-            return true;
+            log.error("path not exist : {}", JSON.toJSONString(path));
+            return false;
         }
 
         QueryWrapper<CouponRolePathMapping> queryWrapper = new QueryWrapper<>();

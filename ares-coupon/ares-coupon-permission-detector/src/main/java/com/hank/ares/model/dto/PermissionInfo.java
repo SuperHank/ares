@@ -32,13 +32,4 @@ public class PermissionInfo {
      * 扩展属性
      */
     private String extra;
-
-    @Override
-    public String toString() {
-
-        return "url = " + url
-                + ", method = " + method
-                + ", isRead = " + isRead
-                + ", description = " + description;
-    }
 }

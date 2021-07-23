@@ -17,5 +17,5 @@ public interface ICouponPathService extends IService<CouponPath> {
      * @param request {@link CreatePathReqDto}
      * @return Path 数据记录的主键
      */
-    List<Integer> createPath(CreatePathReqDto request);
+    void createPath(CreatePathReqDto request);
 }

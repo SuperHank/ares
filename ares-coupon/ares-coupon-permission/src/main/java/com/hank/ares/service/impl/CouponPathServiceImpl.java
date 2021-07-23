@@ -4,14 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hank.ares.mapper.CouponPathMapper;
 import com.hank.ares.model.CouponPath;
-import com.hank.ares.service.ICouponPathService;
 import com.hank.ares.model.dto.CreatePathReqDto;
-import org.apache.commons.collections4.CollectionUtils;
+import com.hank.ares.service.ICouponPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 路径信息表 服务实现类
@@ -22,50 +19,22 @@ public class CouponPathServiceImpl extends ServiceImpl<CouponPathMapper, CouponP
     @Autowired
     private CouponPathMapper pathMapper;
 
-
     @Override
-    public List<Integer> createPath(CreatePathReqDto request) {
-        List<CreatePathReqDto.PathInfo> pathInfos = request.getPathInfos();
-        List<CreatePathReqDto.PathInfo> validRequests = new ArrayList<>(request.getPathInfos().size());
+    @Transactional
+    public void createPath(CreatePathReqDto request) {
+        for (CreatePathReqDto.PathInfo pathInfo : request.getPathInfos()) {
+            QueryWrapper<CouponPath> wrapper = new QueryWrapper<>();
+            wrapper.eq("path_pattern", pathInfo.getPathPattern())
+                    .eq("http_method", pathInfo.getHttpMethod())
+                    .eq("path_name", pathInfo.getPathName())
+                    .eq("service_name", pathInfo.getServiceName())
+                    .eq("op_mode", pathInfo.getOpMode());
 
-        QueryWrapper<CouponPath> wrapper = new QueryWrapper<>();
-        wrapper.eq("service_name", request.getPathInfos().get(0).getServiceName());
-        List<CouponPath> currentPaths = pathMapper.selectList(wrapper);
-        String serviceName = pathInfos.get(0).getServiceName();
-
-        if (CollectionUtils.isNotEmpty(currentPaths)) {
-            for (CreatePathReqDto.PathInfo pathInfo : pathInfos) {
-                boolean isValid = true;
-                for (CouponPath currentPath : currentPaths) {
-                    if (currentPath.getPathPattern().equals(pathInfo.getPathPattern())
-                            && currentPath.getHttpMethod().equals(pathInfo.getHttpMethod())) {
-                        isValid = false;
-                        break;
-                    }
-                }
-
-                if (isValid) {
-                    validRequests.add(pathInfo);
-                }
+            CouponPath couponPath = pathMapper.selectOne(wrapper);
+            if (couponPath == null) {
+                CouponPath insertDo = new CouponPath(pathInfo.getPathPattern(), pathInfo.getHttpMethod(), pathInfo.getPathName(), pathInfo.getServiceName(), pathInfo.getOpMode());
+                pathMapper.insert(insertDo);
             }
-        } else {
-            validRequests = pathInfos;
         }
-
-        List<CouponPath> paths = new ArrayList<>(validRequests.size());
-        validRequests.forEach(p -> paths.add(new CouponPath(
-                p.getPathPattern(),
-                p.getHttpMethod(),
-                p.getPathName(),
-                p.getServiceName(),
-                p.getOpMode()
-        )));
-
-        ArrayList<Integer> ids = new ArrayList<>();
-        for (CouponPath path : paths) {
-            pathMapper.insert(path);
-            ids.add(path.getId());
-        }
-        return ids;
     }
 }

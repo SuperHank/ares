@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CheckPermissionReqDto {
-
     private Long userId;
     private String uri;
     private String httpMethod;

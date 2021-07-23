@@ -19,24 +19,18 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PermissionRegistry {
 
-    /**
-     * 权限服务 SDK 客户端
-     */
     private final IPermissionServiceFeignClient permissionClient;
 
-    /**
-     * 服务名称
-     */
     private final String serviceName;
 
 
     /**
      * 权限注册
      */
-    boolean register(List<PermissionInfo> infoList) {
+    void register(List<PermissionInfo> infoList) {
 
         if (CollectionUtils.isEmpty(infoList)) {
-            return false;
+            return;
         }
 
         List<CreatePathReqDto.PathInfo> pathInfos = infoList.stream()
@@ -54,9 +48,6 @@ public class PermissionRegistry {
 
         if (CollectionUtils.isNotEmpty(response.getData())) {
             log.info("register path info: {}", response.getData());
-            return true;
         }
-
-        return false;
     }
 }

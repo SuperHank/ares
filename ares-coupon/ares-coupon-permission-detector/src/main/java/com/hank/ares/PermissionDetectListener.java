@@ -21,42 +21,17 @@ public class PermissionDetectListener implements ApplicationListener<Application
     private static final String KEY_SERVER_CTX = "server.servlet.context-path";
     private static final String KEY_SERVICE_NAME = "spring.application.name";
 
+    /**
+     * 自线程扫描并注册权限
+     */
     @Override
-    
     public void onApplicationEvent(ApplicationReadyEvent event) {
 
         ApplicationContext ctx = event.getApplicationContext();
 
-        // 扫描并注册权限
         new Thread(() -> {
             registerPermission(scanPermission(ctx), ctx);
         }).start();
-    }
-
-    /**
-     * 注册接口权限
-     */
-    
-    private void registerPermission(List<PermissionInfo> infoList, ApplicationContext ctx) {
-
-        log.info("*************** register permission ***************");
-
-        IPermissionServiceFeignClient permissionClient = ctx.getBean(IPermissionServiceFeignClient.class);
-        if (permissionClient == null) {
-            log.error("no permissionClient bean found");
-            return;
-        }
-
-        // 取出 service name
-        String servName = ctx.getEnvironment().getProperty(KEY_SERVICE_NAME);
-
-        log.info("serviceName: {}", servName);
-
-        boolean result = new PermissionRegistry(permissionClient, servName).register(infoList);
-
-        if (result) {
-            log.info("*************** done register ***************");
-        }
     }
 
     /**
@@ -65,18 +40,42 @@ public class PermissionDetectListener implements ApplicationListener<Application
     private List<PermissionInfo> scanPermission(ApplicationContext ctx) {
 
         // 取出 context 前缀
-        String pathPrefix = ctx.getEnvironment().getProperty(KEY_SERVER_CTX);
+        String contextPath = ctx.getEnvironment().getProperty(KEY_SERVER_CTX);
 
         // 取出 Spring 的映射 bean
         RequestMappingHandlerMapping mappingBean = (RequestMappingHandlerMapping) ctx.getBean("requestMappingHandlerMapping");
 
         // 扫描权限
-        List<PermissionInfo> permissionInfoList = new AnnotationScanner(pathPrefix).scanPermission(mappingBean.getHandlerMethods());
+        List<PermissionInfo> permissionInfoList = new AnnotationScanner(contextPath).scanPermission(mappingBean.getHandlerMethods());
 
         permissionInfoList.forEach(p -> log.info("{}", p));
         log.info("{} permission found", permissionInfoList.size());
         log.info("*************** done scanning ***************");
 
         return permissionInfoList;
+    }
+
+    /**
+     * 注册接口权限
+     */
+
+    private void registerPermission(List<PermissionInfo> infoList, ApplicationContext ctx) {
+
+        log.info("*************** permission register start ***************");
+
+        IPermissionServiceFeignClient permissionClient = ctx.getBean(IPermissionServiceFeignClient.class);
+        if (permissionClient == null) {
+            log.error("no permissionClient bean found");
+            return;
+        }
+
+        // 取出 服务名
+        String serviceName = ctx.getEnvironment().getProperty(KEY_SERVICE_NAME);
+
+        log.info("serviceName: {}", serviceName);
+
+        new PermissionRegistry(permissionClient, serviceName).register(infoList);
+
+        log.info("*************** permission register done ***************");
     }
 }
