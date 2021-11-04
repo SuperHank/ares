@@ -50,7 +50,7 @@ public class GenerateCodeUtil {
         dsc.setUrl("jdbc:mysql://139.196.201.176:3306/" + databaseName + "?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("root123");
+        dsc.setPassword("Root1234");
         mpg.setDataSource(dsc);
 
         // 包配置
