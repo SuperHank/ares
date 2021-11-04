@@ -26,7 +26,7 @@ public class RabbitMQConfig {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
         connectionFactory.setUsername(userName);
         connectionFactory.setPassword(password);
-        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setHost("139.196.201.176");
         connectionFactory.setPort(5672);
         connectionFactory.setVirtualHost("/");
         connectionFactory.setPublisherConfirms(true);
