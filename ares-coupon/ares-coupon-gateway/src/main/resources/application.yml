@@ -15,19 +15,19 @@ zuul:
   routes:
     # 优惠券模板微服务路由配置定义
     template:
-      path: /ares-coupon-template/**
+      path: /coupon-template/**
       serviceId: ares-coupon-template
       strip-prefix: false
-      # 优惠券分发微服务路由配置定义
+    # 优惠券分发微服务路由配置定义
     distribution:
-      path: /ares-coupon-distribution/**
+      path: /coupon-distribution/**
       serviceId: ares-coupon-distribution
       strip-prefix: false
-      # 优惠券结算微服务路由配置定义
-      settlement:
-        path: /ares-coupon-settlement/**
-        serviceId: ares-coupon-settlement
-        strip-prefix: false
+    # 优惠券结算微服务路由配置定义
+    settlement:
+      path: /coupon-settlement/**
+      serviceId: ares-coupon-settlement
+      strip-prefix: false
   host:
     connect-timeout-millis: 15000
     socket-timeout-millis: 60000

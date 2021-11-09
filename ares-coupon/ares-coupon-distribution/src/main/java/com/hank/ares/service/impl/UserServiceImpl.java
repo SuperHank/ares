@@ -250,15 +250,10 @@ public class UserServiceImpl implements IUserService {
         // 通过结算服务获取结算信息
         SettlementInfo processedInfo = settlementClient.computeRule(info).getData();
         if (processedInfo.getEmploy() && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
-            log.info("Settle User Coupon: {}, {}", info.getUserId(),
-                    JSON.toJSONString(settleCoupons));
+            log.info("Settle User Coupon: {}, {}", info.getUserId(), JSON.toJSONString(settleCoupons));
             // 更新缓存
-            redisService.addCouponToCache(
-                    info.getUserId(),
-                    settleCoupons,
-                    CouponStatusEnum.USED.getStatus()
-            );
-            // 更新 db
+            redisService.addCouponToCache(info.getUserId(), settleCoupons, CouponStatusEnum.USED.getStatus());
+            // 延迟更新 db
             kafkaTemplate.send(KafkaTopicConstants.TOPIC,
                     JSON.toJSONString(new CouponKafkaMsg(CouponStatusEnum.USED.getStatus(), settleCoupons.stream().map(Coupon::getId).collect(Collectors.toList())))
             );
