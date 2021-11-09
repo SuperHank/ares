@@ -1,7 +1,6 @@
 package com.hank.ares.feign;
 
 import com.hank.ares.feign.hystrix.TemplateServiceHystrixClient;
-import com.hank.ares.model.CommonResponse;
 import com.hank.ares.model.CouponTemplateSDK;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +17,17 @@ public interface TemplateServiceFeignClient {
      * 获取模版id 到 CouponTemplateSDK的映射
      */
     @GetMapping("/coupon-template/template/sdk/{id}")
-    CommonResponse<CouponTemplateSDK> getById(@PathVariable("id") Integer id);
+    CouponTemplateSDK getById(@PathVariable("id") Integer id);
 
     /**
      * 查找所有可用的优惠券模板
      */
     @GetMapping("/coupon-template/template/sdk/all")
-    CommonResponse<List<CouponTemplateSDK>> getAllUsableTemplate();
+    List<CouponTemplateSDK> getAllUsableTemplate();
 
     /**
      * 获取模板 ids 到 CouponTemplateSDK 的映射
      */
     @GetMapping("/coupon-template/template/sdk/infos")
-    CommonResponse<Map<Integer, CouponTemplateSDK>> getByIds(@RequestParam("ids") Collection<Integer> ids);
+    Map<Integer, CouponTemplateSDK> getByIds(@RequestParam("ids") Collection<Integer> ids);
 }

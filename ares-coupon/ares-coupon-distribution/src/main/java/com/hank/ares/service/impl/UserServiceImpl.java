@@ -86,7 +86,7 @@ public class UserServiceImpl implements IUserService {
             }
 
             // 填充 dbCoupons 的 templateSDK 字段
-            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateClient.getByIds(dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList())).getData();
+            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateClient.getByIds(dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList()));
             dbCoupons.forEach(dc -> {
                 dc.setTemplateSDK(id2TemplateSDK.get(dc.getTemplateId()));
             });
@@ -119,7 +119,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<CouponTemplateSDK> findAvailableTemplate(Long userId) throws CouponException {
         long curTime = new Date().getTime();
-        List<CouponTemplateSDK> templateSDKS = templateClient.getAllUsableTemplate().getData();
+        List<CouponTemplateSDK> templateSDKS = templateClient.getAllUsableTemplate();
         log.debug("Find All Template From Template Client Count :{}", templateSDKS.size());
 
         // 过滤过期的优惠券模版
@@ -171,7 +171,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(request.getTemplateSDK().getId())).getData();
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(request.getTemplateSDK().getId()));
 
         // 优惠券模版是需要存在的
         ExceptionThen.then(MapUtils.isEmpty(id2Template), ResultCode.PARAM_IS_INVALID, "Can Not Acquire Template From TemplateClient ;{}" + request.getTemplateSDK().getId());

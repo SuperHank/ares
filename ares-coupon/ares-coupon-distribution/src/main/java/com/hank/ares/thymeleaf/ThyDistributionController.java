@@ -83,9 +83,7 @@ public class ThyDistributionController {
 
         log.info("user view template info: {} -> {}", uid, id);
 
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(
-                Collections.singletonList(id)
-        ).getData();
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(id));
 
         if (MapUtils.isNotEmpty(id2Template)) {
             ThyTemplateInfo info = ThyTemplateInfo.to(id2Template.get(id));
@@ -101,9 +99,7 @@ public class ThyDistributionController {
 
         log.info("user {} acquire template {}.", uid, tid);
 
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(
-                Collections.singletonList(tid)
-        ).getData();
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(tid));
         if (MapUtils.isNotEmpty(id2Template)) {
             log.info("user acquire coupon: {}", JSON.toJSONString(couponService.acquireTemplate(
                     new AcquireTemplateReqDto(uid, id2Template.get(tid))

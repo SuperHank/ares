@@ -70,7 +70,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     @Override
     @Transactional
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        CouponTemplateSDK couponTemplateSDK = templateServiceFeignClient.getById(request.getTemplateSDK().getId()).getData();
+        CouponTemplateSDK couponTemplateSDK = templateServiceFeignClient.getById(request.getTemplateSDK().getId());
         // 优惠券模板是需要存在的
         ExceptionThen.then(couponTemplateSDK == null, ResultCode.DATA_NOT_EXIST, "Can Not Acquire Template From TemplateClient");
 
@@ -130,7 +130,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
 
             // 填充 dbCoupons的 templateSDK 字段
             Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateServiceFeignClient.getByIds(
-                    dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList())).getData();
+                    dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList()));
             dbCoupons.forEach(dc -> dc.setTemplateSDK(id2TemplateSDK.get(dc.getTemplateId())));
             // 数据库中存在记录
             preTarget = dbCoupons;
@@ -166,7 +166,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     @Override
     public List<CouponTemplateSDK> findAvailableTemplate(Long userId) throws CouponException {
         long curTime = new Date().getTime();
-        List<CouponTemplateSDK> templateSDKS = templateServiceFeignClient.getAllUsableTemplate().getData();
+        List<CouponTemplateSDK> templateSDKS = templateServiceFeignClient.getAllUsableTemplate();
         log.debug("Find All Template(From TemplateClient) Count:{}", templateSDKS.size());
 
         templateSDKS = templateSDKS.stream().filter(i -> i.getRule().getExpiration().getDeadline() > curTime).collect(Collectors.toList());

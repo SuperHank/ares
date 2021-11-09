@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * 微服务之间用的优惠券模板信息定义
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CouponTemplateSDK {
+public class CouponTemplateSDK implements Serializable {
 
     /**
      * 优惠券模板主键

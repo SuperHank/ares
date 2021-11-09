@@ -28,6 +28,11 @@ zuul:
       path: /coupon-settlement/**
       serviceId: ares-coupon-settlement
       strip-prefix: false
+    # 用户为服务路由配置定义
+    member:
+      path: /ares-member/**
+      serviceId: ares-member
+      strip-prefix: false
   host:
     connect-timeout-millis: 15000
     socket-timeout-millis: 60000
