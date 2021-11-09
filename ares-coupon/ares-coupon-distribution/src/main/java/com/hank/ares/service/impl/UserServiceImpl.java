@@ -3,6 +3,7 @@ package com.hank.ares.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hank.ares.constant.KafkaTopicConstants;
+import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.enums.coupon.CouponStatusEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.feign.SettlementServiceFeignClient;
@@ -16,14 +17,17 @@ import com.hank.ares.model.kafka.CouponKafkaMsg;
 import com.hank.ares.model.vo.CouponClassify;
 import com.hank.ares.service.IRedisService;
 import com.hank.ares.service.IUserService;
+import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +54,13 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    /**
+     * 根据用户 id 和状态查询优惠券记录
+     *
+     * @param userId 用户 id
+     * @param status 优惠券状态
+     * @return {@link Coupon}s
+     */
     @Override
     public List<Coupon> findCouponsByStatus(Long userId, Integer status) throws CouponException {
         List<Coupon> curCached = redisService.getCachedCoupons(userId, status);
@@ -96,14 +107,105 @@ public class UserServiceImpl implements IUserService {
         return preTarget;
     }
 
+    /**
+     * 根据用户 id 查找当前可以领取的优惠券模板
+     *
+     * @param userId 用户 id
+     * @return {@link CouponTemplateSDK}s
+     */
     @Override
     public List<CouponTemplateSDK> findAvailableTemplate(Long userId) throws CouponException {
-        return null;
+        long curTime = new Date().getTime();
+        List<CouponTemplateSDK> templateSDKS = templateClient.getAllUsableTemplate().getData();
+        log.debug("Find All Template From Template Client Count :{}", templateSDKS.size());
+
+        // 过滤过期的优惠券模版
+        templateSDKS = templateSDKS.stream().filter(t -> t.getRule().getExpiration().getDeadline() > curTime).collect(Collectors.toList());
+
+        log.info("Find Usable Template Count :{}", templateSDKS.size());
+
+        // key 是 TemplateID
+        // value 中的 left 是 Template limitation， right 是 优惠券模版
+        HashMap<Integer, Pair<Integer, CouponTemplateSDK>> limit2Template = new HashMap<>(templateSDKS.size());
+
+        templateSDKS.forEach(t -> {
+            limit2Template.put(t.getId(), Pair.of(t.getRule().getLimitation(), t));
+        });
+
+        List<CouponTemplateSDK> result = new ArrayList<>(limit2Template.size());
+
+        List<Coupon> userUsableCoupons = findCouponsByStatus(userId, CouponStatusEnum.USED.getStatus());
+
+        log.debug("Current User Has Usable Coupons:{},{}", userId, userUsableCoupons.size());
+
+        // key 是 TemplateId
+        Map<Integer, List<Coupon>> templateId2Coupons = userUsableCoupons.stream().collect(Collectors.groupingBy(Coupon::getTemplateId));
+
+        // 根据 Template 的 Rule 判断是否可以领取优惠券模版
+        limit2Template.forEach((k, v) -> {
+            int limitation = v.getLeft();
+            CouponTemplateSDK templateSDK = v.getRight();
+
+            if (templateId2Coupons.containsKey(k) && templateId2Coupons.get(k).size() >= limitation) {
+                return;
+            }
+
+            result.add(templateSDK);
+        });
+        return result;
     }
 
+    /**
+     * 用户领取优惠券
+     * 1. 从 TemplateClient 拿到对应的优惠券, 并检查是否过期
+     * 2. 根据 limitation 判断用户是否可以领取
+     * 3. save to db
+     * 4. 填充 CouponTemplateSDK
+     * 5. save to cache
+     *
+     * @param request {@link AcquireTemplateReqDto}
+     * @return {@link Coupon}
+     */
     @Override
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        return null;
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(request.getTemplateSDK().getId())).getData();
+
+        // 优惠券模版是需要存在的
+        ExceptionThen.then(MapUtils.isEmpty(id2Template), ResultCode.PARAM_IS_INVALID, "Can Not Acquire Template From TemplateClient ;{}" + request.getTemplateSDK().getId());
+
+        List<Coupon> userUsableCoupons = findCouponsByStatus(request.getUserId(), CouponStatusEnum.USABLE.getStatus());
+
+        Map<Integer, List<Coupon>> templateId2Coupons = userUsableCoupons.stream().collect(Collectors.groupingBy(Coupon::getTemplateId));
+
+        if (templateId2Coupons.containsKey(request.getTemplateSDK().getId()) && templateId2Coupons.get(request.getTemplateSDK().getId()).size() >= request.getTemplateSDK().getRule().getLimitation()) {
+            log.info("Exceec Template Assign Limitation:{}", request.getTemplateSDK().getId());
+            throw new CouponException("Exceec Template Assign Limitation");
+        }
+
+        // 尝试去获取优惠券码
+        String couponCode = redisService.tryToAcquireCouponCodeFromCache(request.getTemplateSDK().getId());
+        if (StringUtils.isEmpty(couponCode)) {
+            log.error("Can Not Acquire Coupon Code :{}", request.getTemplateSDK().getId());
+            throw new CouponException("Can Not Acquire Coupon Code");
+        }
+
+        Coupon newCoupon = new Coupon(
+                request.getTemplateSDK().getId(),
+                request.getUserId(),
+                couponCode,
+                CouponStatusEnum.USABLE
+        );
+
+        couponDao.insert(newCoupon);
+
+        // 填充 Coupon 对象的 CouponTemplateSDK 一定要在放入缓存中之前去填充
+        newCoupon.setTemplateSDK(request.getTemplateSDK());
+
+        // 放入缓存中
+
+        redisService.addCouponToCache(request.getUserId(), Collections.singletonList(newCoupon), CouponStatusEnum.USABLE.getStatus());
+
+        return newCoupon;
     }
 
     @Override
