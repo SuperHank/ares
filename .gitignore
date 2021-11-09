@@ -1,7 +1,12 @@
 # Project exclude paths
-/ares-eureka-client/target/
+/ares-api/target/
+/ares-auth/target/
+/ares-common/target/
+/ares-coupon/target/
 /ares-eureka-server/target/
 /ares-gateway/target/
+/ares-member/target/
+/ares-order/target/
 /ares-settlement/target/
 ### Example user template template
 ### Example user template

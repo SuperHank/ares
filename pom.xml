@@ -16,7 +16,7 @@
         <module>ares-coupon</module>
         <module>ares-api</module>
         <module>ares-auth</module>
-        <module>ares-user</module>
+        <module>ares-member</module>
     </modules>
     <packaging>pom</packaging>
     <parent>

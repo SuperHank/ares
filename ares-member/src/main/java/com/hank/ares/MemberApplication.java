@@ -10,9 +10,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableEurekaClient
 @MapperScan("com.hank.ares.mapper")
 @EnableScheduling
-public class UserApplication {
+public class MemberApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(MemberApplication.class, args);
     }
 }

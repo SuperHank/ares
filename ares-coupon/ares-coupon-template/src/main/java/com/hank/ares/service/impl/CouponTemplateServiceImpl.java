@@ -1,11 +1,12 @@
 package com.hank.ares.service.impl;
 
 import com.hank.ares.dao.CouponTemplateDao;
-import com.hank.ares.exception.CouponException;
+import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;
 import com.hank.ares.service.IAsyncService;
 import com.hank.ares.service.ICouponTemplateService;
+import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,9 @@ public class CouponTemplateServiceImpl implements ICouponTemplateService {
 
     @Override
     @Transactional
-    public CouponTemplate buildTemplate(CreateTemplateReqDto reqDto) throws CouponException {
+    public CouponTemplate buildTemplate(CreateTemplateReqDto reqDto) {
         // 判断同名的优惠券模板是否存在
-        if (templateDao.findByName(reqDto.getName()) != null) {
-            throw new CouponException("Exist Same Name Template!");
-        }
+        ExceptionThen.then(templateDao.findByName(reqDto.getName()) != null, ResultCode.PARAM_DUPLICATED, "Exist Same Name Template!");
 
         // 构造 CouponTemplate 并保存到数据库中
         CouponTemplate template = templateDao.save(requestToTemplate(reqDto));

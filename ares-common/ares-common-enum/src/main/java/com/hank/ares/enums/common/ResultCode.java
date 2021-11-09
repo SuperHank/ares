@@ -18,6 +18,7 @@ public enum ResultCode {
     PARAM_IS_BLANK(1002, "参数为空"),
     PARAM_TYPE_BIND_ERROR(1003, "参数类型错误"),
     PARAM_NOT_COMPLETE(1004, "参数缺失"),
+    PARAM_DUPLICATED(1005, "数据重复"),
 
     /**
      * 用户错误

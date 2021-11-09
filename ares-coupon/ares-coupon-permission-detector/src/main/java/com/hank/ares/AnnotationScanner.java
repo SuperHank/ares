@@ -81,7 +81,6 @@ public class AnnotationScanner {
         List<PermissionInfo> infoList = new ArrayList<>();
 
         for (String url : urlSet) {
-
             // 支持的 http method 为全量
             if (isAllMethods) {
                 PermissionInfo info = buildPermissionInfo(
