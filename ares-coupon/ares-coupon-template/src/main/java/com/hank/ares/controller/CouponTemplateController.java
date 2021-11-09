@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 优惠券模板
  */
-@RestController
 @Slf4j
+@RestController
 public class CouponTemplateController {
 
     @Autowired
