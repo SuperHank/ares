@@ -102,7 +102,7 @@ public class ThyDistributionController {
         Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(tid));
         if (MapUtils.isNotEmpty(id2Template)) {
             log.info("user acquire coupon: {}", JSON.toJSONString(couponService.acquireTemplate(
-                    new AcquireTemplateReqDto(uid, id2Template.get(tid))
+                    new AcquireTemplateReqDto(uid, tid)
             )));
         }
 

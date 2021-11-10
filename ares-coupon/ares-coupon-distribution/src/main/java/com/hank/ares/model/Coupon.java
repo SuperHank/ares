@@ -57,7 +57,6 @@ public class Coupon extends Model {
      * 返回一个无效的 Coupon 对象
      */
     public static Coupon invalidCoupon() {
-
         Coupon coupon = new Coupon();
         coupon.setId(-1);
         return coupon;
@@ -67,7 +66,6 @@ public class Coupon extends Model {
      * 构造优惠券
      */
     public Coupon(Integer templateId, Long userId, String couponCode, CouponStatusEnum status) {
-
         this.templateId = templateId;
         this.userId = userId;
         this.couponCode = couponCode;

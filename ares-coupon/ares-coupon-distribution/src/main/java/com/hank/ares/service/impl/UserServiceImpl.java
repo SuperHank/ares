@@ -95,6 +95,10 @@ public class UserServiceImpl implements IUserService {
         }
         // 将无效的优惠券剔除
         preTarget = preTarget.stream().filter(i -> i.getId() != -1).collect(Collectors.toList());
+        preTarget.forEach(i -> {
+            CouponTemplateSDK templateSDK = templateClient.getById(i.getTemplateId());
+            i.setTemplateSDK(templateSDK);
+        });
         // 如果当前获取的是可用优惠券，还需要对已过期优惠券做延迟处理
         if (CouponStatusEnum.of(status) == CouponStatusEnum.USABLE) {
             CouponClassify classify = CouponClassify.classify(preTarget);
@@ -171,29 +175,29 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(request.getTemplateSDK().getId()));
+        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(request.getTemplateSDKId()));
 
         // 优惠券模版是需要存在的
-        ExceptionThen.then(MapUtils.isEmpty(id2Template), ResultCode.PARAM_IS_INVALID, "Can Not Acquire Template From TemplateClient ;{}" + request.getTemplateSDK().getId());
+        ExceptionThen.then(MapUtils.isEmpty(id2Template), ResultCode.PARAM_IS_INVALID, "Can Not Acquire Template From TemplateClient ;{}" + request.getTemplateSDKId());
 
         List<Coupon> userUsableCoupons = findCouponsByStatus(request.getUserId(), CouponStatusEnum.USABLE.getStatus());
 
         Map<Integer, List<Coupon>> templateId2Coupons = userUsableCoupons.stream().collect(Collectors.groupingBy(Coupon::getTemplateId));
 
-        if (templateId2Coupons.containsKey(request.getTemplateSDK().getId()) && templateId2Coupons.get(request.getTemplateSDK().getId()).size() >= request.getTemplateSDK().getRule().getLimitation()) {
-            log.info("Exceec Template Assign Limitation:{}", request.getTemplateSDK().getId());
+        if (templateId2Coupons.containsKey(request.getTemplateSDKId()) && templateId2Coupons.get(request.getTemplateSDKId()).size() >= id2Template.get(request.getTemplateSDKId()).getRule().getLimitation()) {
+            log.info("Exceec Template Assign Limitation:{}", request.getTemplateSDKId());
             throw new CouponException("Exceec Template Assign Limitation");
         }
 
         // 尝试去获取优惠券码
-        String couponCode = redisService.tryToAcquireCouponCodeFromCache(request.getTemplateSDK().getId());
+        String couponCode = redisService.tryToAcquireCouponCodeFromCache(request.getTemplateSDKId());
         if (StringUtils.isEmpty(couponCode)) {
-            log.error("Can Not Acquire Coupon Code :{}", request.getTemplateSDK().getId());
+            log.error("Can Not Acquire Coupon Code :{}", request.getTemplateSDKId());
             throw new CouponException("Can Not Acquire Coupon Code");
         }
 
         Coupon newCoupon = new Coupon(
-                request.getTemplateSDK().getId(),
+                request.getTemplateSDKId(),
                 request.getUserId(),
                 couponCode,
                 CouponStatusEnum.USABLE
@@ -202,7 +206,7 @@ public class UserServiceImpl implements IUserService {
         couponDao.insert(newCoupon);
 
         // 填充 Coupon 对象的 CouponTemplateSDK 一定要在放入缓存中之前去填充
-        newCoupon.setTemplateSDK(request.getTemplateSDK());
+        newCoupon.setTemplateSDK(id2Template.get(request.getTemplateSDKId()));
 
         // 放入缓存中
 
@@ -248,7 +252,7 @@ public class UserServiceImpl implements IUserService {
         info.getCouponAndTemplateInfos().forEach(ci -> settleCoupons.add(id2Coupon.get(ci.getId())));
 
         // 通过结算服务获取结算信息
-        SettlementInfo processedInfo = settlementClient.computeRule(info).getData();
+        SettlementInfo processedInfo = settlementClient.computeRule(info);
         if (processedInfo.getEmploy() && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
             log.info("Settle User Coupon: {}, {}", info.getUserId(), JSON.toJSONString(settleCoupons));
             // 更新缓存

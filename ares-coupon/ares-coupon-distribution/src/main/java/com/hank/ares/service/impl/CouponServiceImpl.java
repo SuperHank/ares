@@ -18,6 +18,7 @@ import com.hank.ares.model.kafka.CouponKafkaMsg;
 import com.hank.ares.model.vo.CouponClassify;
 import com.hank.ares.service.ICouponService;
 import com.hank.ares.service.IRedisService;
+import com.hank.ares.util.AmtUtil;
 import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,7 +30,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -70,7 +70,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     @Override
     @Transactional
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        CouponTemplateSDK couponTemplateSDK = templateServiceFeignClient.getById(request.getTemplateSDK().getId());
+        CouponTemplateSDK couponTemplateSDK = templateServiceFeignClient.getById(request.getTemplateSDKId());
         // 优惠券模板是需要存在的
         ExceptionThen.then(couponTemplateSDK == null, ResultCode.DATA_NOT_EXIST, "Can Not Acquire Template From TemplateClient");
 
@@ -79,23 +79,23 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         Map<Integer, List<Coupon>> templateId2Coupons = usableCoupons.stream().collect(Collectors.groupingBy(Coupon::getTemplateId));
 
         // 已领取该模版下的优惠券，且优惠券数量已到优惠券领取上限
-        if (templateId2Coupons.containsKey(request.getTemplateSDK().getId())
-                && templateId2Coupons.get(request.getTemplateSDK().getId()).size() >= request.getTemplateSDK().getRule().getLimitation()) {
-            log.error("Exceed Template Assign Limitation: {}", request.getTemplateSDK().getId());
+        if (templateId2Coupons.containsKey(couponTemplateSDK.getId())
+                && templateId2Coupons.get(couponTemplateSDK.getId()).size() >= couponTemplateSDK.getRule().getLimitation()) {
+            log.error("Exceed Template Assign Limitation: {}", couponTemplateSDK.getId());
             throw new CouponException("Exceed Template Assign Limitation");
         }
 
         // 尝试去获取优惠券码
-        String couponCode = redisService.tryToAcquireCouponCodeFromCache(request.getTemplateSDK().getId());
+        String couponCode = redisService.tryToAcquireCouponCodeFromCache(couponTemplateSDK.getId());
         if (StringUtils.isBlank(couponCode)) {
-            log.error("Can Not Acquire Coupon Code:{}", request.getTemplateSDK().getId());
+            log.error("Can Not Acquire Coupon Code:{}", couponTemplateSDK.getId());
             throw new CouponException("Can Not Acquire Coupon Code");
         }
 
         // 填充 Coupon 对象的 CouponTemplateSDK, 一定要在放入缓存之前去填充
-        Coupon newCoupon = new Coupon(request.getTemplateSDK().getId(), request.getUserId(), couponCode, CouponStatusEnum.USABLE);
+        Coupon newCoupon = new Coupon(couponTemplateSDK.getId(), request.getUserId(), couponCode, CouponStatusEnum.USABLE);
         couponMapper.insert(newCoupon);
-        newCoupon.setTemplateSDK(request.getTemplateSDK());
+        newCoupon.setTemplateSDK(couponTemplateSDK);
 
         // 放入缓存中
         redisService.addCouponToCache(request.getUserId(), Collections.singletonList(newCoupon), CouponStatusEnum.USABLE.getStatus());
@@ -139,6 +139,10 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         }
         // 将无效优惠券剔除
         preTarget = preTarget.stream().filter(c -> c.getId() != -1).collect(Collectors.toList());
+        preTarget.forEach(i -> {
+            CouponTemplateSDK templateSdk = templateServiceFeignClient.getById(i.getTemplateId());
+            i.setTemplateSDK(templateSdk);
+        });
         // 如果当前获取的是可用优惠券, 还需要做对已过期优惠券的延迟处理
         if (CouponStatusEnum.of(status) == CouponStatusEnum.USABLE) {
             CouponClassify classify = CouponClassify.classify(preTarget);
@@ -217,7 +221,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
             double goodsSum = settlementInfo.getGoodsInfos().stream().mapToDouble(i -> i.getPrice() * i.getCount()).sum();
 
             // 没有优惠券也就不存在优惠券的核销, SettlementInfo 其他的字段不需要修改
-            settlementInfo.setCost(retain2Decimals(goodsSum));
+            settlementInfo.setCost(AmtUtil.retain2Decimals(goodsSum));
         }
 
         // 校验传递的优惠券是否是用户自己的
@@ -236,7 +240,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         ctInfos.forEach(ci -> settleCoupons.add(id2Coupon.get(ci.getId())));
 
         // 通过结算服务获取结算信息
-        SettlementInfo processedInfo = settlementServiceFeignClient.computeRule(settlementInfo).getData();
+        SettlementInfo processedInfo = settlementServiceFeignClient.computeRule(settlementInfo);
         if (processedInfo.getEmploy() && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
             log.info("Settle User Coupon: {}, {}", settlementInfo.getUserId(), JSON.toJSONString(settleCoupons));
             // 更新缓存
@@ -247,13 +251,5 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         }
 
         return processedInfo;
-    }
-
-
-    /**
-     * 保留两位小数
-     */
-    private double retain2Decimals(double value) {
-        return new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

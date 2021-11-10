@@ -1,6 +1,5 @@
 package com.hank.ares.model.dto.req;
 
-import com.hank.ares.model.CouponTemplateSDK;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +16,5 @@ public class AcquireTemplateReqDto {
     /**
      * 优惠券模板信息
      */
-    private CouponTemplateSDK templateSDK;
+    private Integer templateSDKId;
 }

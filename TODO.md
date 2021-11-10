@@ -16,6 +16,7 @@
 #### ares-settlement 结算中心
 
 - [ ] 商品履约规则/结算规则
+- [ ] 优惠券核销
 
 #### TODO ares-auth 认证中心
 
@@ -41,7 +42,6 @@
 
 #### TODO ares-coupon 优惠券中心
 
-
 - [ ] 优惠券/打折券/满减券 互斥逻辑
 - [ ] 优惠计算引擎
 
@@ -64,6 +64,7 @@
 
 - [ ] Mybatis Plus
 - [x] RabbitMQ
+- [x] kafka
 - [ ] MangoDb
 - [x] Redis
 - [ ] Elastic Search

@@ -13,5 +13,5 @@ public interface SettlementServiceFeignClient {
      * 优惠券规则计算
      */
     @GetMapping(value = "/coupon-settlement/settlement/compute")
-    CommonResponse<SettlementInfo> computeRule(@RequestBody SettlementInfo settlement) throws CouponException;
+    SettlementInfo computeRule(@RequestBody SettlementInfo settlement) throws CouponException;
 }
