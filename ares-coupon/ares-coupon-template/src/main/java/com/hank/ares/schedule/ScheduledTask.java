@@ -2,7 +2,7 @@ package com.hank.ares.schedule;
 
 import com.hank.ares.dao.CouponTemplateDao;
 import com.hank.ares.model.CouponTemplate;
-import com.hank.ares.model.TemplateRule;
+import com.hank.ares.model.coupon.TemplateRuleDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class ScheduledTask {
 
         templates.forEach(t -> {
             // 根据优惠券模版中的 "过期规则" 校验模版是否过期
-            TemplateRule rule = t.getRule();
+            TemplateRuleDto rule = t.getRule();
             if (rule.getExpiration().getDeadline() < cur.getTime()) {
                 t.setExpired(true);
                 expiredTemplates.add(t);

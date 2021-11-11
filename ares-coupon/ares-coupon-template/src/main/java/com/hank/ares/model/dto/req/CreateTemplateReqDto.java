@@ -5,7 +5,7 @@ import com.hank.ares.enums.coupon.DistributeTargetEnum;
 import com.hank.ares.enums.coupon.ProductLineEnum;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.model.BaseReqDto;
-import com.hank.ares.model.TemplateRule;
+import com.hank.ares.model.coupon.TemplateRuleDto;
 import com.hank.ares.util.ExceptionThen;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -59,7 +59,7 @@ public class CreateTemplateReqDto extends BaseReqDto {
     /**
      * 优惠券规则
      */
-    private TemplateRule rule;
+    private TemplateRuleDto rule;
 
     /**
      * 校验对象的合法性

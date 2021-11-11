@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.hank.ares.enums.coupon.CouponStatusEnum;
+import com.hank.ares.model.coupon.CouponTemplateDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -51,7 +52,7 @@ public class Coupon extends Model {
     /**
      * 用户优惠券对应的模板信息
      */
-    private transient CouponTemplateSDK templateSDK;
+    private transient CouponTemplateDto templateSDK;
 
     /**
      * 返回一个无效的 Coupon 对象

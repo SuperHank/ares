@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>com.hank</groupId>
-            <artifactId>ares-coupon-common</artifactId>
+            <artifactId>ares-common-model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

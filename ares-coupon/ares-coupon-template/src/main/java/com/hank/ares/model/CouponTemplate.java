@@ -7,6 +7,7 @@ import com.hank.ares.convert.RuleConverter;
 import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.enums.coupon.DistributeTargetEnum;
 import com.hank.ares.enums.coupon.ProductLineEnum;
+import com.hank.ares.model.coupon.TemplateRuleDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -98,14 +99,14 @@ public class CouponTemplate {
     @ApiModelProperty(value = "优惠券规则: TemplateRule 的 json 表示")
     @Column(name = "rule", nullable = false)
     @Convert(converter = RuleConverter.class)
-    private TemplateRule rule;
+    private TemplateRuleDto rule;
 
     /**
      * 自定义构造函数
      */
     public CouponTemplate(String name, String logo, String intro, String category,
                           Integer productLine, Integer couponCount, Long userId,
-                          Integer target, TemplateRule rule) {
+                          Integer target, TemplateRuleDto rule) {
 
         this.available = false;
         this.expired = false;

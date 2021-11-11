@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.hank.ares.dao.CouponTemplateDao;
 import com.hank.ares.enums.coupon.*;
 import com.hank.ares.model.CouponTemplate;
-import com.hank.ares.model.TemplateRule;
+import com.hank.ares.model.coupon.TemplateRuleDto;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;
-import com.hank.ares.service.ICouponTemplateService;
+import com.hank.ares.biz.service.ICouponTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,14 +113,14 @@ public class ThyTemplateController {
         log.info("create form.");
         log.info("{}", JSON.toJSONString(template));
 
-        TemplateRule rule = new TemplateRule();
-        rule.setExpiration(new TemplateRule.Expiration(
+        TemplateRuleDto rule = new TemplateRuleDto();
+        rule.setExpiration(new TemplateRuleDto.Expiration(
                 template.getPeriod(), template.getGap(),
                 new SimpleDateFormat("yyyy-MM-dd").parse(template.getDeadline()).getTime()
         ));
-        rule.setDiscount(new TemplateRule.Discount(template.getQuota(), template.getBase()));
+        rule.setDiscount(new TemplateRuleDto.Discount(template.getQuota(), template.getBase()));
         rule.setLimitation(template.getLimitation());
-        rule.setUsage(new TemplateRule.Usage(template.getProvince(), template.getCity(),
+        rule.setUsage(new TemplateRuleDto.Usage(template.getProvince(), template.getCity(),
                 JSON.toJSONString(template.getGoodsType())));
         rule.setWeight(
                 JSON.toJSONString(Stream.of(template.getWeight().split(",")).collect(Collectors.toList()))

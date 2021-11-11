@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hank.ares.enums.coupon.GoodsTypeEnum;
 import com.hank.ares.enums.coupon.PeriodTypeEnum;
 import com.hank.ares.model.CouponTemplate;
-import com.hank.ares.model.TemplateRule;
+import com.hank.ares.model.coupon.TemplateRuleDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -135,7 +135,7 @@ class ThyTemplateInfo {
     /**
      * 过期规则描述
      */
-    private static String buildExpiration(TemplateRule.Expiration expiration) {
+    private static String buildExpiration(TemplateRuleDto.Expiration expiration) {
 
         return PeriodTypeEnum.of(expiration.getPeriod()).getDescription()
                 + ", 有效间隔: "
@@ -147,7 +147,7 @@ class ThyTemplateInfo {
     /**
      * 折扣规则描述
      */
-    private static String buildDiscount(TemplateRule.Discount discount) {
+    private static String buildDiscount(TemplateRuleDto.Discount discount) {
 
         return "基准: " + discount.getBase() + ", " + "额度: " + discount.getQuota();
     }
@@ -156,7 +156,7 @@ class ThyTemplateInfo {
      * 使用条件描述
      */
     
-    private static String buildUsage(TemplateRule.Usage usage) {
+    private static String buildUsage(TemplateRuleDto.Usage usage) {
 
         List<Integer> goodTypesI = JSON.parseObject(usage.getGoodsType(), List.class);
         List<String> goodsTypes = goodTypesI

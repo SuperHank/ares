@@ -1,15 +1,10 @@
-server:
-  port: 8060
-
 spring:
   application:
     name: ares-coupon-gateway
-
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8001/eureka/,http://localhost:8002/eureka/,http://localhost:8003/eureka/
-
 zuul:
   prefix: /ares
   routes:
@@ -40,3 +35,20 @@ zuul:
 ribbon:
   ConnectTimeout: 15000
   ReadTimeout: 15000
+---
+spring:
+  profiles: dev
+server:
+  port: 8060
+
+---
+spring:
+  profiles: test
+server:
+  port: 8061
+
+---
+spring:
+  profiles: prod
+server:
+  port: 8062

@@ -6,9 +6,9 @@ import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.CouponTemplateSDK;
+import com.hank.ares.model.coupon.CouponTemplateDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
-import com.hank.ares.service.ICouponService;
+import com.hank.ares.biz.service.ICouponService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,7 @@ public class ThyDistributionController {
 
         log.info("view user: {} can acquire template.", userId);
 
-        List<CouponTemplateSDK> templateSDKS = couponService.findAvailableTemplate(userId);
+        List<CouponTemplateDto> templateSDKS = couponService.findAvailableTemplate(userId);
         List<ThyTemplateInfo> infos = templateSDKS.stream()
                 .map(ThyTemplateInfo::to).collect(Collectors.toList());
         infos.forEach(i -> i.setUserId(userId));
@@ -83,7 +83,7 @@ public class ThyDistributionController {
 
         log.info("user view template info: {} -> {}", uid, id);
 
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(id));
+        Map<Integer, CouponTemplateDto> id2Template = templateClient.getByIds(Collections.singletonList(id));
 
         if (MapUtils.isNotEmpty(id2Template)) {
             ThyTemplateInfo info = ThyTemplateInfo.to(id2Template.get(id));
@@ -99,7 +99,7 @@ public class ThyDistributionController {
 
         log.info("user {} acquire template {}.", uid, tid);
 
-        Map<Integer, CouponTemplateSDK> id2Template = templateClient.getByIds(Collections.singletonList(tid));
+        Map<Integer, CouponTemplateDto> id2Template = templateClient.getByIds(Collections.singletonList(tid));
         if (MapUtils.isNotEmpty(id2Template)) {
             log.info("user acquire coupon: {}", JSON.toJSONString(couponService.acquireTemplate(
                     new AcquireTemplateReqDto(uid, tid)
