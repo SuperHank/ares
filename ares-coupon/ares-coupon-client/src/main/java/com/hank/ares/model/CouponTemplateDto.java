@@ -1,5 +1,6 @@
-package com.hank.ares.model.coupon;
+package com.hank.ares.model;
 
+import com.hank.ares.model.coupon.TemplateRuleDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

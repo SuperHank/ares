@@ -67,7 +67,7 @@ class ThyTemplateInfo {
     /**
      * 创建用户
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 优惠券模板的编码

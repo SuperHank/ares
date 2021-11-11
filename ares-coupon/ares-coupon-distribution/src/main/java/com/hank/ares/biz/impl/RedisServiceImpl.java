@@ -29,7 +29,7 @@ public class RedisServiceImpl implements IRedisService {
     private StringRedisTemplate redisTemplate;
 
     @Override
-    public List<Coupon> getCachedCoupons(Long userId, Integer status) {
+    public List<Coupon> getCachedCoupons(Integer userId, Integer status) {
         log.info("Get Coupons From Cache:{},{}", userId, status);
         String key = status2RedisKey(userId, status);
 
@@ -47,7 +47,7 @@ public class RedisServiceImpl implements IRedisService {
     }
 
     @Override
-    public void saveEmptyCouponListToCache(Long userId, List<Integer> status) {
+    public void saveEmptyCouponListToCache(Integer userId, List<Integer> status) {
         log.info("Save Empty List To Cache For User:{},Status:{}", userId, JSON.toJSONString(Coupon.invalidCoupon()));
 
         HashMap<String, String> invalidCouponMap = new HashMap<>();
@@ -76,7 +76,7 @@ public class RedisServiceImpl implements IRedisService {
     }
 
     @Override
-    public void addCouponToCache(Long userId, List<Coupon> coupons, Integer status) throws CouponException {
+    public void addCouponToCache(Integer userId, List<Coupon> coupons, Integer status) throws CouponException {
         log.info("Add Coupon To Cache:{},{},{}", userId, JSON.toJSONString(coupons), status);
 
         CouponStatusEnum couponStatusEnum = CouponStatusEnum.of(status);
@@ -96,14 +96,14 @@ public class RedisServiceImpl implements IRedisService {
     /**
      * 根据 status 获取到对应的 Redis Key
      */
-    private String status2RedisKey(Long userId, Integer status) {
+    private String status2RedisKey(Integer userId, Integer status) {
         return String.format("%s_%s", CouponStatusEnum.of(status), userId);
     }
 
     /**
      * 新增加优惠券到 Cache 中
      */
-    private void addCouponToCacheForUsable(Long userId, List<Coupon> coupons) {
+    private void addCouponToCacheForUsable(Integer userId, List<Coupon> coupons) {
 
         // 如果 status 是 USABLE, 代表是新增加的优惠券
         // 只会影响一个 Cache: USER_COUPON_USABLE(新增)
@@ -125,7 +125,7 @@ public class RedisServiceImpl implements IRedisService {
      * 将已使用的优惠券加入到 Cache 中
      */
 
-    private void addCouponToCacheForUsed(Long userId, List<Coupon> coupons) throws CouponException {
+    private void addCouponToCacheForUsed(Integer userId, List<Coupon> coupons) throws CouponException {
 
         // 如果 status 是 USED, 代表用户操作是使用当前的优惠券, 影响到两个 Cache
         // USABLE（删除）, USED（新增）
@@ -176,7 +176,7 @@ public class RedisServiceImpl implements IRedisService {
     /**
      * 将过期优惠券加入到 Cache 中
      */
-    private void addCouponToCacheForExpired(Long userId, List<Coupon> coupons) throws CouponException {
+    private void addCouponToCacheForExpired(Integer userId, List<Coupon> coupons) throws CouponException {
 
         // status 是 EXPIRED, 代表是已有的优惠券过期了, 影响到两个 Cache
         // USABLE（删除）, EXPIRED（新增）

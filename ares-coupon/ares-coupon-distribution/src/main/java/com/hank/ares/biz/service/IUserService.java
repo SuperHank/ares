@@ -2,7 +2,7 @@ package com.hank.ares.biz.service;
 
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.settlement.SettlementDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
 
@@ -17,7 +17,7 @@ public interface IUserService {
      * @param status 优惠券状态
      * @return {@link com.hank.ares.model.Coupon}s
      */
-    List<Coupon> findCouponsByStatus(Long userId, Integer status) throws CouponException;
+    List<Coupon> findCouponsByStatus(Integer userId, Integer status) throws CouponException;
 
     /**
      * 根据用户 id 查找当前可以领取的优惠券模板
@@ -25,7 +25,7 @@ public interface IUserService {
      * @param userId 用户 id
      * @return {@link CouponTemplateDto}s
      */
-    List<CouponTemplateDto> findAvailableTemplate(Long userId)
+    List<CouponTemplateDto> findAvailableTemplate(Integer userId)
             throws CouponException;
 
     /**

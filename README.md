@@ -11,17 +11,3 @@
 #### swagger地址
 
 - http://localhost:8020/swagger-ui
-
-#### 各服务端口
-
-- ares-eureka-server:8001-8003
-- ares-gateway:8020-8022
-- ares-settlement:8030-8032
-- ares-order:8040-8042
-- ares-coupon:8050:8060
-    - ares-coupon-template:8050-8052
-    - ares-coupon-settlement:8053-8055
-    - ares-coupon-distribution:8056-8058
-    - ares-coupon-gateway:8059
-    - ares-coupon-permission-service:8060
-- ares-quartz:

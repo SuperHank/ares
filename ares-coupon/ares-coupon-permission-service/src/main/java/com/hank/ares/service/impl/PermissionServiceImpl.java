@@ -30,7 +30,7 @@ public class PermissionServiceImpl implements IPermissionService {
     private CouponRolePathMappingMapper rolePathMappingMapper;
 
     @Override
-    public boolean checkPermission(Long userId, String uri, String httpMethod) {
+    public boolean checkPermission(Integer userId, String uri, String httpMethod) {
         QueryWrapper<CouponUserRoleMapping> query = new QueryWrapper<>();
         query.eq("user_id", userId);
         CouponUserRoleMapping userRoleMapping = userRoleMappingMapper.selectOne(query);

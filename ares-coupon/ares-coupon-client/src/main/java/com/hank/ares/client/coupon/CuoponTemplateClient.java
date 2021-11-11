@@ -1,6 +1,7 @@
 package com.hank.ares.client.coupon;
 
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponDto;
+import com.hank.ares.model.CouponTemplateDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,4 +30,10 @@ public interface CuoponTemplateClient {
      */
     @GetMapping("/coupon-template/template/sdk/infos")
     Map<Integer, CouponTemplateDto> getByIds(@RequestParam("ids") Collection<Integer> ids);
+
+    /**
+     * 查询用户所有的优惠券
+     */
+    @GetMapping("/coupon-template/coupon/get/{userId}")
+    List<CouponDto> getCouponByUserId(@PathVariable("userId") Integer userId);
 }

@@ -3,7 +3,7 @@ package com.hank.ares.settle.executor;
 import com.alibaba.fastjson.JSON;
 import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.enums.permission.RuleFlagEnum;
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.settlement.GoodsDto;
 import com.hank.ares.model.settlement.SettlementDto;
 import com.hank.ares.settle.AbstractExecutor;

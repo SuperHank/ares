@@ -5,7 +5,7 @@ import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.enums.coupon.GoodsTypeEnum;
 import com.hank.ares.enums.coupon.PeriodTypeEnum;
 import com.hank.ares.enums.coupon.ProductLineEnum;
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.coupon.TemplateRuleDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +29,7 @@ class ThyTemplateInfo {
     /**
      * 用户 id (不是创建优惠券模板的用户, 是当前的查看用户)
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 自增主键

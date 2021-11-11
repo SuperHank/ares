@@ -25,7 +25,7 @@ class ThyCouponInfo {
     /**
      * 领取用户
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 优惠券码

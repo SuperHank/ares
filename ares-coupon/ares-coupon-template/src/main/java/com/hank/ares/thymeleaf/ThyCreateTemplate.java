@@ -50,7 +50,7 @@ class ThyCreateTemplate {
     /**
      * 创建用户
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 目标用户

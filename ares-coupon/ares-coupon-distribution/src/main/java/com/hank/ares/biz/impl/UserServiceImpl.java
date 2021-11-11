@@ -10,7 +10,7 @@ import com.hank.ares.enums.coupon.CouponStatusEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.settlement.GoodsDto;
 import com.hank.ares.model.settlement.SettlementDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
@@ -65,7 +65,7 @@ public class UserServiceImpl implements IUserService {
      * @return {@link Coupon}s
      */
     @Override
-    public List<Coupon> findCouponsByStatus(Long userId, Integer status) throws CouponException {
+    public List<Coupon> findCouponsByStatus(Integer userId, Integer status) throws CouponException {
         List<Coupon> curCached = redisService.getCachedCoupons(userId, status);
         List<Coupon> preTarget;
 
@@ -121,7 +121,7 @@ public class UserServiceImpl implements IUserService {
      * @return {@link CouponTemplateDto}s
      */
     @Override
-    public List<CouponTemplateDto> findAvailableTemplate(Long userId) throws CouponException {
+    public List<CouponTemplateDto> findAvailableTemplate(Integer userId) throws CouponException {
         long curTime = new Date().getTime();
         List<CouponTemplateDto> templateSDKS = templateClient.getAllUsableTemplate();
         log.debug("Find All Template From Template Client Count :{}", templateSDKS.size());

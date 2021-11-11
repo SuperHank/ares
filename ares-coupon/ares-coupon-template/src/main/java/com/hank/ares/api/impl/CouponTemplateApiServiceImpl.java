@@ -1,10 +1,10 @@
 package com.hank.ares.api.impl;
 
+import com.hank.ares.api.service.ICouponTemplateApiService;
 import com.hank.ares.dao.CouponTemplateDao;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.model.CouponTemplate;
-import com.hank.ares.model.coupon.CouponTemplateDto;
-import com.hank.ares.api.service.ICouponTemplateApiService;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

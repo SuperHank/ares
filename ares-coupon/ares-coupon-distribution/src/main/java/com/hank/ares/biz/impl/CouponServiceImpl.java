@@ -3,6 +3,8 @@ package com.hank.ares.biz.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hank.ares.biz.service.ICouponService;
+import com.hank.ares.biz.service.IRedisService;
 import com.hank.ares.client.coupon.CouponSettlementClient;
 import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.constant.KafkaTopicConstants;
@@ -11,13 +13,12 @@ import com.hank.ares.enums.coupon.CouponStatusEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.coupon.CouponTemplateDto;
-import com.hank.ares.model.settlement.SettlementDto;
+import com.hank.ares.model.CouponDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
 import com.hank.ares.model.kafka.CouponKafkaMsg;
+import com.hank.ares.model.settlement.SettlementDto;
 import com.hank.ares.model.vo.CouponClassify;
-import com.hank.ares.biz.service.ICouponService;
-import com.hank.ares.biz.service.IRedisService;
 import com.hank.ares.util.AmtUtil;
 import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +113,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
      * @throws CouponException
      */
     @Override
-    public List<Coupon> findCouponsByStatus(Long userId, Integer status) throws CouponException {
+    public List<Coupon> findCouponsByStatus(Integer userId, Integer status) throws CouponException {
         List<Coupon> curCached = redisService.getCachedCoupons(userId, status);
         List<Coupon> preTarget;
         if (CollectionUtils.isNotEmpty(curCached)) {
@@ -168,7 +169,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
      * @return {@link CouponTemplateDto}s
      */
     @Override
-    public List<CouponTemplateDto> findAvailableTemplate(Long userId) throws CouponException {
+    public List<CouponTemplateDto> findAvailableTemplate(Integer userId) throws CouponException {
         long curTime = new Date().getTime();
         List<CouponTemplateDto> templateSDKS = cuoponTemplateClient.getAllUsableTemplate();
         log.debug("Find All Template(From TemplateClient) Count:{}", templateSDKS.size());
@@ -250,5 +251,10 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         }
 
         return processedInfo;
+    }
+
+    @Override
+    public List<CouponDto> getByUserId(Integer userId) {
+        return cuoponTemplateClient.getCouponByUserId(userId);
     }
 }

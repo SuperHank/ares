@@ -20,7 +20,7 @@ public interface IRedisService {
      * @param status 优惠券状态 {@link CouponStatusEnum}
      * @return {@link Coupon}s 注意，可能会返回null，代表从没有过记录
      */
-    List<Coupon> getCachedCoupons(Long userId, Integer status);
+    List<Coupon> getCachedCoupons(Integer userId, Integer status);
 
     /**
      * 保存空的优惠券列表到缓存中
@@ -29,7 +29,7 @@ public interface IRedisService {
      * @param userId 用户 id
      * @param status 优惠券状态列表
      */
-    void saveEmptyCouponListToCache(Long userId, List<Integer> status);
+    void saveEmptyCouponListToCache(Integer userId, List<Integer> status);
 
     /**
      * 尝试从 Cache 中获取一个优惠券码
@@ -47,5 +47,5 @@ public interface IRedisService {
      * @param status  优惠券状态
      * @return 保存成功的个数
      */
-    void addCouponToCache(Long userId, List<Coupon> coupons, Integer status) throws CouponException;
+    void addCouponToCache(Integer userId, List<Coupon> coupons, Integer status) throws CouponException;
 }

@@ -22,7 +22,7 @@ public class SettlementDto {
     /**
      * 用户 id
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 商品信息

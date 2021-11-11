@@ -2,8 +2,8 @@ package com.hank.ares.api.controller;
 
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.model.coupon.CouponTemplateDto;
 import com.hank.ares.api.service.ICouponTemplateApiService;
+import com.hank.ares.model.CouponTemplateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

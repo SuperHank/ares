@@ -25,6 +25,7 @@
 - [ ] 三方接入
 - [ ] Github登陆
 - [ ] QQ登陆
+- [ ] 微信扫码登陆
 
 #### TODO ares-config 配置中心
 
@@ -32,7 +33,8 @@
 
 #### TODO ares-quartz 调度中心
 
-- []定时任务
+- [ ] 定时任务
+- [ ] 管理界面
 
 #### TODO ares-monitor 监控中心
 

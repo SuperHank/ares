@@ -13,5 +13,5 @@ public interface IPermissionService {
      * @param httpMethod 请求类型
      * @return true/false
      */
-    boolean checkPermission(Long userId, String uri, String httpMethod);
+    boolean checkPermission(Integer userId, String uri, String httpMethod);
 }

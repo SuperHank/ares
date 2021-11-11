@@ -1,7 +1,7 @@
 package com.hank.ares.feign;
 
 import com.hank.ares.feign.hystrix.TemplateServiceHystrixClient;
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponTemplateDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

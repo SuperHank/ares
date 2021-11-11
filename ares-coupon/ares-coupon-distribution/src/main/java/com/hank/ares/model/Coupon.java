@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.hank.ares.enums.coupon.CouponStatusEnum;
-import com.hank.ares.model.coupon.CouponTemplateDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -38,7 +37,7 @@ public class Coupon extends Model {
     private Integer templateId;
 
     @ApiModelProperty(value = "领取用户")
-    private Long userId;
+    private Integer userId;
 
     @ApiModelProperty(value = "优惠券码")
     private String couponCode;
@@ -66,7 +65,7 @@ public class Coupon extends Model {
     /**
      * 构造优惠券
      */
-    public Coupon(Integer templateId, Long userId, String couponCode, CouponStatusEnum status) {
+    public Coupon(Integer templateId, Integer userId, String couponCode, CouponStatusEnum status) {
         this.templateId = templateId;
         this.userId = userId;
         this.couponCode = couponCode;

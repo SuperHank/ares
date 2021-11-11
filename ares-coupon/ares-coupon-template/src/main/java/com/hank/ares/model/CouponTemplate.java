@@ -85,7 +85,7 @@ public class CouponTemplate {
 
     @ApiModelProperty(value = "创建用户")
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private Integer userId;
 
     @ApiModelProperty(value = "优惠券模板的编码")
     @Column(name = "template_key", nullable = false)
@@ -105,7 +105,7 @@ public class CouponTemplate {
      * 自定义构造函数
      */
     public CouponTemplate(String name, String logo, String intro, String category,
-                          Integer productLine, Integer couponCount, Long userId,
+                          Integer productLine, Integer couponCount, Integer userId,
                           Integer target, TemplateRuleDto rule) {
 
         this.available = false;

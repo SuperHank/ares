@@ -11,7 +11,7 @@ public class AcquireTemplateReqDto {
     /**
      * 用户 id
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 优惠券模板信息

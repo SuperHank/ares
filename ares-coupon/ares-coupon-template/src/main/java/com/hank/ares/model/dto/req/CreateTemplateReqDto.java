@@ -49,7 +49,7 @@ public class CreateTemplateReqDto extends BaseReqDto {
     /**
      * 创建用户
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 目标用户

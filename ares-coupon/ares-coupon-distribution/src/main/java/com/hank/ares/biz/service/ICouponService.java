@@ -3,9 +3,10 @@ package com.hank.ares.biz.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.coupon.CouponTemplateDto;
-import com.hank.ares.model.settlement.SettlementDto;
+import com.hank.ares.model.CouponDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
+import com.hank.ares.model.settlement.SettlementDto;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface ICouponService extends IService<Coupon> {
      * @param status 优惠券状态
      * @return {@link Coupon}s
      */
-    List<Coupon> findCouponsByStatus(Long userId, Integer status) throws CouponException;
+    List<Coupon> findCouponsByStatus(Integer userId, Integer status) throws CouponException;
 
     /**
      * 根据用户 id 查找当前可以领取的优惠券模板
@@ -36,7 +37,7 @@ public interface ICouponService extends IService<Coupon> {
      * @param userId 用户 id
      * @return {@link CouponTemplateDto}s
      */
-    List<CouponTemplateDto> findAvailableTemplate(Long userId) throws CouponException;
+    List<CouponTemplateDto> findAvailableTemplate(Integer userId) throws CouponException;
 
     /**
      * 结算(核销)优惠券
@@ -45,4 +46,12 @@ public interface ICouponService extends IService<Coupon> {
      * @return {@link SettlementDto}
      */
     SettlementDto settlement(SettlementDto info) throws CouponException;
+
+    /**
+     * 查询用户所有的优惠券
+     *
+     * @param userId
+     * @return
+     */
+    List<CouponDto> getByUserId(Integer userId);
 }

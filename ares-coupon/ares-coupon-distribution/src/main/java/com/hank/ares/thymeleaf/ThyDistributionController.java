@@ -2,13 +2,13 @@ package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hank.ares.biz.service.ICouponService;
 import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.coupon.CouponTemplateDto;
+import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
-import com.hank.ares.biz.service.ICouponService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class ThyDistributionController {
      * 当前用户的所有优惠券信息
      */
     @GetMapping("/user/{userId}")
-    public String user(@PathVariable Long userId, ModelMap map) {
+    public String user(@PathVariable Integer userId, ModelMap map) {
 
         log.info("view user: {} coupons.", userId);
 
@@ -64,7 +64,7 @@ public class ThyDistributionController {
      * 用户可以领取的优惠券模板
      */
     @GetMapping("/template/{userId}")
-    public String template(@PathVariable Long userId, ModelMap map) throws CouponException {
+    public String template(@PathVariable Integer userId, ModelMap map) throws CouponException {
 
         log.info("view user: {} can acquire template.", userId);
 
@@ -79,7 +79,7 @@ public class ThyDistributionController {
     }
 
     @GetMapping("/template/info")
-    public String templateInfo(@RequestParam Long uid, @RequestParam Integer id, ModelMap map) {
+    public String templateInfo(@RequestParam Integer uid, @RequestParam Integer id, ModelMap map) {
 
         log.info("user view template info: {} -> {}", uid, id);
 
@@ -95,7 +95,7 @@ public class ThyDistributionController {
     }
 
     @GetMapping("/acquire")
-    public String acquire(@RequestParam Long uid, @RequestParam Integer tid) throws CouponException {
+    public String acquire(@RequestParam Integer uid, @RequestParam Integer tid) throws CouponException {
 
         log.info("user {} acquire template {}.", uid, tid);
 
