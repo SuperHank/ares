@@ -2,8 +2,8 @@ package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.exception.CouponException;
-import com.hank.ares.feign.TemplateServiceFeignClient;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
 import com.hank.ares.model.CouponTemplateSDK;
@@ -39,7 +39,7 @@ public class ThyDistributionController {
     private ICouponService couponService;
 
     @Autowired
-    private TemplateServiceFeignClient templateClient;
+    private CuoponTemplateClient templateClient;
 
     /**
      * 当前用户的所有优惠券信息

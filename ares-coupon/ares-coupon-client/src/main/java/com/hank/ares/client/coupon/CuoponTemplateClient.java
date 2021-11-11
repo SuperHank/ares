@@ -1,4 +1,4 @@
-package com.hank.ares.feign;
+package com.hank.ares.client.coupon;
 
 import com.hank.ares.model.CouponTemplateSDK;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @FeignClient(value = "ares-coupon-template")
-public interface TemplateServiceFeignClient {
-
+public interface CuoponTemplateClient {
     /**
      * 获取模版id 到 CouponTemplateSDK的映射
      */

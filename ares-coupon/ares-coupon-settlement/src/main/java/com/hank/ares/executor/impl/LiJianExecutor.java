@@ -42,7 +42,7 @@ public class LiJianExecutor extends AbstractExecutor implements RuleExecutor {
         }
 
         // 立减优惠券直接使用, 没有门槛
-        CouponTemplateSDK templateSDK = settlement.getCouponAndTemplateInfos().get(0).getTemplate();
+        CouponTemplateSDK templateSDK = cuoponTemplateClient.getById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
         // 抵扣额度
         double quota = (double) templateSDK.getRule().getDiscount().getQuota();
 

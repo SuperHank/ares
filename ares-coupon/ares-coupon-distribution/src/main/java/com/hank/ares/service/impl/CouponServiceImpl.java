@@ -3,12 +3,12 @@ package com.hank.ares.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hank.ares.client.coupon.CouponSettlementClient;
+import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.constant.KafkaTopicConstants;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.enums.coupon.CouponStatusEnum;
 import com.hank.ares.exception.CouponException;
-import com.hank.ares.feign.SettlementServiceFeignClient;
-import com.hank.ares.feign.TemplateServiceFeignClient;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
 import com.hank.ares.model.CouponTemplateSDK;
@@ -48,10 +48,10 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     private IRedisService redisService;
 
     @Autowired
-    private TemplateServiceFeignClient templateServiceFeignClient;
+    private CuoponTemplateClient cuoponTemplateClient;
 
     @Autowired
-    private SettlementServiceFeignClient settlementServiceFeignClient;
+    private CouponSettlementClient couponSettlementClient;
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -70,7 +70,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     @Override
     @Transactional
     public Coupon acquireTemplate(AcquireTemplateReqDto request) throws CouponException {
-        CouponTemplateSDK couponTemplateSDK = templateServiceFeignClient.getById(request.getTemplateSDKId());
+        CouponTemplateSDK couponTemplateSDK = cuoponTemplateClient.getById(request.getTemplateSDKId());
         // 优惠券模板是需要存在的
         ExceptionThen.then(couponTemplateSDK == null, ResultCode.DATA_NOT_EXIST, "Can Not Acquire Template From TemplateClient");
 
@@ -129,7 +129,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
             }
 
             // 填充 dbCoupons的 templateSDK 字段
-            Map<Integer, CouponTemplateSDK> id2TemplateSDK = templateServiceFeignClient.getByIds(
+            Map<Integer, CouponTemplateSDK> id2TemplateSDK = cuoponTemplateClient.getByIds(
                     dbCoupons.stream().map(Coupon::getTemplateId).collect(Collectors.toList()));
             dbCoupons.forEach(dc -> dc.setTemplateSDK(id2TemplateSDK.get(dc.getTemplateId())));
             // 数据库中存在记录
@@ -140,7 +140,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         // 将无效优惠券剔除
         preTarget = preTarget.stream().filter(c -> c.getId() != -1).collect(Collectors.toList());
         preTarget.forEach(i -> {
-            CouponTemplateSDK templateSdk = templateServiceFeignClient.getById(i.getTemplateId());
+            CouponTemplateSDK templateSdk = cuoponTemplateClient.getById(i.getTemplateId());
             i.setTemplateSDK(templateSdk);
         });
         // 如果当前获取的是可用优惠券, 还需要做对已过期优惠券的延迟处理
@@ -170,7 +170,7 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     @Override
     public List<CouponTemplateSDK> findAvailableTemplate(Long userId) throws CouponException {
         long curTime = new Date().getTime();
-        List<CouponTemplateSDK> templateSDKS = templateServiceFeignClient.getAllUsableTemplate();
+        List<CouponTemplateSDK> templateSDKS = cuoponTemplateClient.getAllUsableTemplate();
         log.debug("Find All Template(From TemplateClient) Count:{}", templateSDKS.size());
 
         templateSDKS = templateSDKS.stream().filter(i -> i.getRule().getExpiration().getDeadline() > curTime).collect(Collectors.toList());
@@ -212,9 +212,8 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
      */
     @Override
     public SettlementInfo settlement(SettlementInfo settlementInfo) throws CouponException {
-
         // 当没有传递优惠券时, 直接返回商品总价
-        List<SettlementInfo.CouponAndTemplateInfo> ctInfos = settlementInfo.getCouponAndTemplateInfos();
+        List<SettlementInfo.CouponAndTemplateId> ctInfos = settlementInfo.getCouponAndTemplateIds();
         if (CollectionUtils.isEmpty(ctInfos)) {
             log.info("Empty Coupons For Settle.");
 
@@ -227,9 +226,9 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         // 校验传递的优惠券是否是用户自己的
         List<Coupon> coupons = findCouponsByStatus(settlementInfo.getUserId(), CouponStatusEnum.USABLE.getStatus());
         Map<Integer, Coupon> id2Coupon = coupons.stream().collect(Collectors.toMap(Coupon::getId, Function.identity()));
-        if (MapUtils.isEmpty(id2Coupon) || !CollectionUtils.isSubCollection(ctInfos.stream().map(SettlementInfo.CouponAndTemplateInfo::getId).collect(Collectors.toList()), id2Coupon.keySet())) {
+        if (MapUtils.isEmpty(id2Coupon) || !CollectionUtils.isSubCollection(ctInfos.stream().map(SettlementInfo.CouponAndTemplateId::getId).collect(Collectors.toList()), id2Coupon.keySet())) {
             log.info("{}", id2Coupon.keySet());
-            log.info("{}", ctInfos.stream().map(SettlementInfo.CouponAndTemplateInfo::getId).collect(Collectors.toList()));
+            log.info("{}", ctInfos.stream().map(SettlementInfo.CouponAndTemplateId::getId).collect(Collectors.toList()));
             log.error("User Coupon Has Some Problem, It Is Not SubCollection Of Coupons!");
             throw new CouponException("User Coupon Has Some Problem, It Is Not SubCollection Of Coupons!");
         }
@@ -240,8 +239,8 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         ctInfos.forEach(ci -> settleCoupons.add(id2Coupon.get(ci.getId())));
 
         // 通过结算服务获取结算信息
-        SettlementInfo processedInfo = settlementServiceFeignClient.computeRule(settlementInfo);
-        if (processedInfo.getEmploy() && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateInfos())) {
+        SettlementInfo processedInfo = couponSettlementClient.computeRule(settlementInfo);
+        if (processedInfo.getEmploy() && CollectionUtils.isNotEmpty(processedInfo.getCouponAndTemplateIds())) {
             log.info("Settle User Coupon: {}, {}", settlementInfo.getUserId(), JSON.toJSONString(settleCoupons));
             // 更新缓存
             redisService.addCouponToCache(settlementInfo.getUserId(), settleCoupons, CouponStatusEnum.USED.getStatus());

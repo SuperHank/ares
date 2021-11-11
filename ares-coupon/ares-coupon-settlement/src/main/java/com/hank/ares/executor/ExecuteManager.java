@@ -1,13 +1,16 @@
 package com.hank.ares.executor;
 
+import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.enums.coupon.CouponCategoryEnum;
 import com.hank.ares.enums.permission.RuleFlagEnum;
 import com.hank.ares.exception.CouponException;
+import com.hank.ares.model.CouponTemplateSDK;
 import com.hank.ares.model.SettlementInfo;
 import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +26,10 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-
 public class ExecuteManager implements BeanPostProcessor {
 
+    @Autowired
+    private CuoponTemplateClient cuoponTemplateClient;
     /**
      * 规则执行器映射
      */
@@ -35,10 +39,10 @@ public class ExecuteManager implements BeanPostProcessor {
      * 优惠券结算规则计算入口
      */
     public SettlementInfo computeRule(SettlementInfo settlement) throws CouponException {
+        List<Integer> templateIds = settlement.getCouponAndTemplateIds().stream().map(SettlementInfo.CouponAndTemplateId::getTemplateId).collect(Collectors.toList());
+        Map<Integer, CouponTemplateSDK> idMapCoupontemplateSDK = cuoponTemplateClient.getByIds(templateIds);
         // 优惠券模版类型
-        List<CouponCategoryEnum> categories = settlement.getCouponAndTemplateInfos().stream()
-                .map(SettlementInfo.CouponAndTemplateInfo::getTemplate)
-                .map(i -> CouponCategoryEnum.of(i.getCategory())).collect(Collectors.toList());
+        List<CouponCategoryEnum> categories = idMapCoupontemplateSDK.values().stream().map(i -> CouponCategoryEnum.of(i.getCategory())).collect(Collectors.toList());
 
         RuleFlagEnum ruleFlagEnum = RuleFlagEnum.of(categories);
         return executorIndex.get(ruleFlagEnum).computeRule(settlement);

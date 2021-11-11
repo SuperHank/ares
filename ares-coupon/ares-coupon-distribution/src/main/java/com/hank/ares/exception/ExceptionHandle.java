@@ -21,4 +21,10 @@ public class ExceptionHandle {
     public String handleSzBusinessException(AresBusinessException e) {
         return JSON.toJSONString(new CommonResponse<>(ResultCode.SYSTEM_ERROR.getCode(), e.getResMsg(), null));
     }
+
+    @ExceptionHandler(CouponException.class)
+    @ResponseBody
+    public String handleSzBusinessException(CouponException e) {
+        return JSON.toJSONString(new CommonResponse<>(ResultCode.SYSTEM_ERROR.getCode(), e.getMessage(), null));
+    }
 }

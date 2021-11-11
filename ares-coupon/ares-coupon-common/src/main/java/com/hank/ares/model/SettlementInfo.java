@@ -32,7 +32,7 @@ public class SettlementInfo {
     /**
      * 优惠券列表
      */
-    private List<CouponAndTemplateInfo> couponAndTemplateInfos;
+    private List<CouponAndTemplateId> couponAndTemplateIds;
 
     /**
      * 是否使结算生效, 即核销
@@ -50,7 +50,7 @@ public class SettlementInfo {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CouponAndTemplateInfo {
+    public static class CouponAndTemplateId {
 
         /**
          * Coupon 的主键
@@ -60,6 +60,6 @@ public class SettlementInfo {
         /**
          * 优惠券对应的模板对象
          */
-        private CouponTemplateSDK template;
+        private Integer templateId;
     }
 }

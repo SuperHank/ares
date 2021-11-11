@@ -22,4 +22,10 @@ public class ExceptionHandle {
     public String handleSzBusinessException(ZuulException e) {
         return JSON.toJSONString(new CommonResponse<>(ResultCode.SYSTEM_ERROR.getCode(), e.getMessage(), null));
     }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public String handleSzBusinessException(Exception e) {
+        return JSON.toJSONString(new CommonResponse<>(ResultCode.SYSTEM_ERROR.getCode(), e.getMessage(), null));
+    }
 }

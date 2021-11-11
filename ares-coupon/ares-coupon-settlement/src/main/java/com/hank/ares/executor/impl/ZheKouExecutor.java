@@ -42,8 +42,8 @@ public class ZheKouExecutor extends AbstractExecutor implements RuleExecutor {
         }
 
         // 折扣优惠券可以直接使用, 没有门槛
-        CouponTemplateSDK templateSDK = settlement.getCouponAndTemplateInfos().get(0).getTemplate();
-        double quota = (double) templateSDK.getRule().getDiscount().getQuota();
+        CouponTemplateSDK couponTemplateSDK = cuoponTemplateClient.getById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
+        double quota = (double) couponTemplateSDK.getRule().getDiscount().getQuota();
 
         // 计算使用优惠券之后的价格
         settlement.setCost(Math.max(retain2Decimals((goodsSum * (quota / 100))), minCost()));

@@ -1,9 +1,12 @@
 package com.hank.ares.executor;
 
 import com.alibaba.fastjson.JSON;
+import com.hank.ares.client.coupon.CuoponTemplateClient;
+import com.hank.ares.model.CouponTemplateSDK;
 import com.hank.ares.model.GoodsInfo;
 import com.hank.ares.model.SettlementInfo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,6 +18,9 @@ import java.util.stream.Collectors;
  * 规则执行器抽象类, 定义通用方法
  */
 public abstract class AbstractExecutor {
+
+    @Autowired
+    protected CuoponTemplateClient cuoponTemplateClient;
 
     /**
      * 处理商品类型与优惠券限制不匹配的情况
@@ -28,7 +34,7 @@ public abstract class AbstractExecutor {
         // 当商品类型不满足时, 直接返回总价, 并清空优惠券
         if (!isGoodsTypeSatisfy(settlement)) {
             settlement.setCost(goodsSum);
-            settlement.setCouponAndTemplateInfos(Collections.emptyList());
+            settlement.setCouponAndTemplateIds(Collections.emptyList());
             return settlement;
         }
 
@@ -47,8 +53,9 @@ public abstract class AbstractExecutor {
         List<Integer> goodsType = settlement.getGoodsInfos().stream().map(GoodsInfo::getType).collect(Collectors.toList());
         List<Integer> templateGoodsType = new ArrayList<>();
 
-        settlement.getCouponAndTemplateInfos().forEach(ct -> {
-            templateGoodsType.addAll(JSON.parseObject(ct.getTemplate().getRule().getUsage().getGoodsType(), List.class));
+        settlement.getCouponAndTemplateIds().forEach(ct -> {
+            CouponTemplateSDK couponTemplateSDK = cuoponTemplateClient.getById(ct.getTemplateId());
+            templateGoodsType.add(JSON.parseObject(couponTemplateSDK.getRule().getUsage().getGoodsType(), Integer.class));
         });
 
         // 存在交集即可

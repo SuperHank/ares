@@ -44,7 +44,7 @@ public class ManJianExecutor extends AbstractExecutor implements RuleExecutor {
         }
 
         // 判断满减是否符合折扣标准
-        CouponTemplateSDK templateSDK = settlement.getCouponAndTemplateInfos().get(0).getTemplate();
+        CouponTemplateSDK templateSDK = cuoponTemplateClient.getById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
         double base = (double) templateSDK.getRule().getDiscount().getBase();
         double quota = (double) templateSDK.getRule().getDiscount().getQuota();
 
@@ -52,7 +52,7 @@ public class ManJianExecutor extends AbstractExecutor implements RuleExecutor {
         if (goodsSum < base) {
             log.debug("Current Goods Cost Sum < ManJian Coupon Base!");
             settlement.setCost(goodsSum);
-            settlement.setCouponAndTemplateInfos(Collections.emptyList());
+            settlement.setCouponAndTemplateIds(Collections.emptyList());
             return settlement;
         }
 

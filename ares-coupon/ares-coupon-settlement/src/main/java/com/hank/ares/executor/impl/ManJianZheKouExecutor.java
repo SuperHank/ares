@@ -1,10 +1,11 @@
 package com.hank.ares.executor.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.enums.permission.RuleFlagEnum;
 import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.permission.RuleFlagEnum;
 import com.hank.ares.executor.AbstractExecutor;
 import com.hank.ares.executor.RuleExecutor;
+import com.hank.ares.model.CouponTemplateSDK;
 import com.hank.ares.model.GoodsInfo;
 import com.hank.ares.model.SettlementInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -43,15 +44,16 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
      * @param settlement {@link SettlementInfo} 用户传递的计算信息
      */
     @Override
-    
+
     protected boolean isGoodsTypeSatisfy(SettlementInfo settlement) {
 
         log.debug("Check ManJian And ZheKou Is Match Or Not!");
         List<Integer> goodsType = settlement.getGoodsInfos().stream().map(GoodsInfo::getType).collect(Collectors.toList());
         List<Integer> templateGoodsType = new ArrayList<>();
 
-        settlement.getCouponAndTemplateInfos().forEach(ct -> {
-            templateGoodsType.addAll(JSON.parseObject(ct.getTemplate().getRule().getUsage().getGoodsType(), List.class));
+        settlement.getCouponAndTemplateIds().forEach(ct -> {
+            CouponTemplateSDK couponTemplateSDK = cuoponTemplateClient.getById(ct.getTemplateId());
+            templateGoodsType.addAll(JSON.parseObject(couponTemplateSDK.getRule().getUsage().getGoodsType(), List.class));
         });
 
         // 如果想要使用多类优惠券, 则必须要所有的商品类型都包含在内, 即差集为空
@@ -75,14 +77,15 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
             return probability;
         }
 
-        SettlementInfo.CouponAndTemplateInfo manJian = null;
-        SettlementInfo.CouponAndTemplateInfo zheKou = null;
+        CouponTemplateSDK manJian = null;
+        CouponTemplateSDK zheKou = null;
 
-        for (SettlementInfo.CouponAndTemplateInfo ct : settlement.getCouponAndTemplateInfos()) {
-            if (CouponCategoryEnum.of(ct.getTemplate().getCategory()) == CouponCategoryEnum.MANJIAN) {
-                manJian = ct;
+        for (SettlementInfo.CouponAndTemplateId ct : settlement.getCouponAndTemplateIds()) {
+            CouponTemplateSDK templateSDK = cuoponTemplateClient.getById(ct.getTemplateId());
+            if (CouponCategoryEnum.of(templateSDK.getCategory()) == CouponCategoryEnum.MANJIAN) {
+                manJian = templateSDK;
             } else {
-                zheKou = ct;
+                zheKou = templateSDK;
             }
         }
 
@@ -93,13 +96,13 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
         if (!isTemplateCanShared(manJian, zheKou)) {
             log.debug("Current ManJian And ZheKou Can Not Shared!");
             settlement.setCost(goodsSum);
-            settlement.setCouponAndTemplateInfos(Collections.emptyList());
+            settlement.setCouponAndTemplateIds(Collections.emptyList());
             return settlement;
         }
 
-        List<SettlementInfo.CouponAndTemplateInfo> ctInfos = new ArrayList<>();
-        double manJianBase = (double) manJian.getTemplate().getRule().getDiscount().getBase();
-        double manJianQuota = (double) manJian.getTemplate().getRule().getDiscount().getQuota();
+        List<CouponTemplateSDK> ctInfos = new ArrayList<>();
+        double manJianBase = (double) manJian.getRule().getDiscount().getBase();
+        double manJianQuota = (double) manJian.getRule().getDiscount().getQuota();
 
         // 最终的价格
         double targetSum = goodsSum;
@@ -111,11 +114,11 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
         }
 
         // 再计算折扣
-        double zheKouQuota = (double) zheKou.getTemplate().getRule().getDiscount().getQuota();
+        double zheKouQuota = (double) zheKou.getRule().getDiscount().getQuota();
         targetSum *= zheKouQuota / 100;
         ctInfos.add(zheKou);
 
-        settlement.setCouponAndTemplateInfos(ctInfos);
+//        settlement.setCouponAndTemplateIds(ctInfos.stream().map(CouponTemplateSDK::getId).collect(Collectors.toList()));
         settlement.setCost(retain2Decimals(Math.max(targetSum, minCost())));
 
         log.debug("Use ManJian And ZheKou Coupon Make Goods Cost From {} To {}", goodsSum, settlement.getCost());
@@ -127,20 +130,20 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
      * 当前的两张优惠券是否可以共用
      * 即校验 TemplateRule 中的 weight 是否满足条件
      */
-    
-    private boolean
-    isTemplateCanShared(SettlementInfo.CouponAndTemplateInfo manJian, SettlementInfo.CouponAndTemplateInfo zheKou) {
 
-        String manjianKey = manJian.getTemplate().getKey() + String.format("%04d", manJian.getTemplate().getId());
-        String zhekouKey = zheKou.getTemplate().getKey() + String.format("%04d", zheKou.getTemplate().getId());
+    private boolean
+    isTemplateCanShared(CouponTemplateSDK manJian, CouponTemplateSDK zheKou) {
+
+        String manjianKey = manJian.getKey() + String.format("%04d", manJian.getId());
+        String zhekouKey = zheKou.getKey() + String.format("%04d", zheKou.getId());
 
         List<String> allSharedKeysForManjian = new ArrayList<>();
         allSharedKeysForManjian.add(manjianKey);
-        allSharedKeysForManjian.addAll(JSON.parseObject(manJian.getTemplate().getRule().getWeight(), List.class));
+        allSharedKeysForManjian.addAll(JSON.parseObject(manJian.getRule().getWeight(), List.class));
 
         List<String> allSharedKeysForZhekou = new ArrayList<>();
         allSharedKeysForZhekou.add(zhekouKey);
-        allSharedKeysForZhekou.addAll(JSON.parseObject(zheKou.getTemplate().getRule().getWeight(), List.class));
+        allSharedKeysForZhekou.addAll(JSON.parseObject(zheKou.getRule().getWeight(), List.class));
 
         return CollectionUtils.isSubCollection(Arrays.asList(manjianKey, zhekouKey), allSharedKeysForManjian)
                 || CollectionUtils.isSubCollection(Arrays.asList(manjianKey, zhekouKey), allSharedKeysForZhekou);
