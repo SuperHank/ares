@@ -30,18 +30,18 @@ public class CouponDistributionController {
      * 根据用户 id 和优惠券状态查找用户优惠券记录
      */
     @GetMapping("/coupons")
-    public List<Coupon> findCouponsByStatus(@RequestParam("userId") Integer userId, @RequestParam("status") Integer status) throws CouponException {
-        log.info("Find Coupons By Status: {}, {}", userId, status);
-        return couponService.findCouponsByStatus(userId, status);
+    public List<Coupon> findCouponsByStatus(@RequestParam("memberCode") String memberCode, @RequestParam("status") Integer status) throws CouponException {
+        log.info("Find Coupons By Status: {}, {}", memberCode, status);
+        return couponService.findCouponsByStatus(memberCode, status);
     }
 
     /**
      * 根据用户 id 查找当前可以领取的优惠券模板
      */
     @GetMapping("/template")
-    public List<CouponTemplateDto> findAvailableTemplate(@RequestParam("userId") Integer userId) throws CouponException {
-        log.info("Find Available Template: {}", userId);
-        return couponService.findAvailableTemplate(userId);
+    public List<CouponTemplateDto> findAvailableTemplate(@RequestParam("memberCode") String memberCode) throws CouponException {
+        log.info("Find Available Template: {}", memberCode);
+        return couponService.findAvailableTemplate(memberCode);
     }
 
     /**
@@ -62,9 +62,9 @@ public class CouponDistributionController {
         return couponService.settlement(info);
     }
 
-    @GetMapping("/get/{userId}")
-    public List<CouponDto> getTemplateInfo(@PathVariable("userId") Integer userId) {
-        log.info("Find Coupons By UserID :{}", userId);
-        return couponService.getByUserId(userId);
+    @GetMapping("/get/{memberCode}")
+    public List<CouponDto> getTemplateInfo(@PathVariable("memberCode") String memberCode) {
+        log.info("Find Coupons By MemberCode :{}", memberCode);
+        return couponService.getByUserId(memberCode);
     }
 }

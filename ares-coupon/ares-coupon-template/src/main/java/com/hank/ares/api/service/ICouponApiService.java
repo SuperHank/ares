@@ -12,5 +12,5 @@ public interface ICouponApiService {
      * @param userId
      * @return
      */
-    List<CouponDto> getAllCouponByUserId(Integer userId);
+    List<CouponDto> getAllCouponByUserId(String memberCode);
 }

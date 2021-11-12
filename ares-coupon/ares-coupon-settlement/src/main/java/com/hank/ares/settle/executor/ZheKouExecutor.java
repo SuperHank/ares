@@ -42,7 +42,7 @@ public class ZheKouExecutor extends AbstractExecutor implements RuleExecutor {
         }
 
         // 折扣优惠券可以直接使用, 没有门槛
-        CouponTemplateDto couponTemplateDto = cuoponTemplateClient.getById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
+        CouponTemplateDto couponTemplateDto = cuoponTemplateClient.getTemplateById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
         double quota = (double) couponTemplateDto.getRule().getDiscount().getQuota();
 
         // 计算使用优惠券之后的价格

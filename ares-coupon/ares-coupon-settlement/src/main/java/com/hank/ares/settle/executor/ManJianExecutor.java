@@ -44,7 +44,7 @@ public class ManJianExecutor extends AbstractExecutor implements RuleExecutor {
         }
 
         // 判断满减是否符合折扣标准
-        CouponTemplateDto templateSDK = cuoponTemplateClient.getById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
+        CouponTemplateDto templateSDK = cuoponTemplateClient.getTemplateById(settlement.getCouponAndTemplateIds().get(0).getTemplateId());
         double base = (double) templateSDK.getRule().getDiscount().getBase();
         double quota = (double) templateSDK.getRule().getDiscount().getQuota();
 

@@ -13,5 +13,5 @@ public interface CouponDao extends JpaRepository<Coupon, Long> {
      * 根据模板名称查询模板
      * where name = ...
      */
-    List<Coupon> findByUserId(Integer userId);
+    List<Coupon> findByMemberCode(String memberCode);
 }

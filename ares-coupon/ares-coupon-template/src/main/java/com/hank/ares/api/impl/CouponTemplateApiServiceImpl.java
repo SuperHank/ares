@@ -8,6 +8,7 @@ import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -67,6 +68,7 @@ public class CouponTemplateApiServiceImpl implements ICouponTemplateApiService {
 
         return new CouponTemplateDto(
                 template.getId(),
+                template.getTemplateCode(),
                 template.getName(),
                 template.getLogo(),
                 template.getIntro(),
@@ -76,5 +78,30 @@ public class CouponTemplateApiServiceImpl implements ICouponTemplateApiService {
                 template.getTarget().getCode(),
                 template.getRule()
         );
+    }
+
+    /**
+     * 根据模版编号查询模版信息
+     *
+     * @param templateCode
+     * @return
+     */
+    @Override
+    public CouponTemplateDto getByTemplateCode(String templateCode) {
+        CouponTemplate template = couponTemplateDao.findByTemplateCode(templateCode);
+        return template2TemplateSDK(template);
+    }
+
+    /**
+     * 批量查询模版信息
+     *
+     * @param templateCodes
+     * @return
+     */
+    @Override
+    public Map<String, CouponTemplateDto> getByTemplateCodes(Collection<String> templateCodes) {
+
+        List<CouponTemplate> templates = couponTemplateDao.findAllByTemplateCode(templateCodes);
+        return templates.stream().map(this::template2TemplateSDK).collect(Collectors.toMap(CouponTemplateDto::getTemplateCode, Function.identity()));
     }
 }

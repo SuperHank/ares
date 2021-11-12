@@ -20,12 +20,12 @@ class ThyCouponInfo {
     /**
      * 关联优惠券模板的主键
      */
-    private Integer templateId;
+    private String templateCode;
 
     /**
      * 领取用户
      */
-    private Integer userId;
+    private String memberCode;
 
     /**
      * 优惠券码
@@ -49,8 +49,8 @@ class ThyCouponInfo {
 
         ThyCouponInfo info = new ThyCouponInfo();
         info.setId(coupon.getId());
-        info.setTemplateId(coupon.getTemplateId());
-        info.setUserId(coupon.getUserId());
+        info.setTemplateCode(coupon.getTemplateCode());
+        info.setMemberCode(coupon.getMemberCode());
         info.setCouponCode(coupon.getCouponCode());
         info.setAssignTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 .format(coupon.getAssignTime()));

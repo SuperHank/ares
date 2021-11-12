@@ -27,12 +27,12 @@ public class Coupon {
     private Integer Id;
 
     @ApiModelProperty(value = "优惠券模版ID")
-    @Column(name = "template_id", nullable = false)
-    private Integer templateId;
+    @Column(name = "template_code", nullable = false)
+    private String templateCode;
 
     @ApiModelProperty(value = "用户ID")
-    @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    @Column(name = "member_code", nullable = false)
+    private String memberCode;
 
     @ApiModelProperty(value = "优惠券编号")
     @Column(name = "coupon_code", nullable = false)

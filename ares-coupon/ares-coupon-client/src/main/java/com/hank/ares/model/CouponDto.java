@@ -12,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class CouponDto implements Serializable {
     private Integer id;
-    private Integer templateId;
-    private Integer userId;
+    private String templateCode;
+    private String memberCode;
     private String couponCode;
     private Date assignTime;
     private Integer status;

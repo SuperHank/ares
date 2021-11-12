@@ -52,7 +52,7 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
         List<Integer> templateGoodsType = new ArrayList<>();
 
         settlement.getCouponAndTemplateIds().forEach(ct -> {
-            CouponTemplateDto couponTemplateDto = cuoponTemplateClient.getById(ct.getTemplateId());
+            CouponTemplateDto couponTemplateDto = cuoponTemplateClient.getTemplateById(ct.getTemplateId());
             templateGoodsType.addAll(JSON.parseObject(couponTemplateDto.getRule().getUsage().getGoodsType(), List.class));
         });
 
@@ -81,7 +81,7 @@ public class ManJianZheKouExecutor extends AbstractExecutor implements RuleExecu
         CouponTemplateDto zheKou = null;
 
         for (SettlementDto.CouponAndTemplateId ct : settlement.getCouponAndTemplateIds()) {
-            CouponTemplateDto templateSDK = cuoponTemplateClient.getById(ct.getTemplateId());
+            CouponTemplateDto templateSDK = cuoponTemplateClient.getTemplateById(ct.getTemplateId());
             if (CouponCategoryEnum.of(templateSDK.getCategory()) == CouponCategoryEnum.MANJIAN) {
                 manJian = templateSDK;
             } else {

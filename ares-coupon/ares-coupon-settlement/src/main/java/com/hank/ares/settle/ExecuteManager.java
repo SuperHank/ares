@@ -39,7 +39,7 @@ public class ExecuteManager implements BeanPostProcessor {
      */
     public SettlementDto computeRule(SettlementDto settlement) {
         List<Integer> templateIds = settlement.getCouponAndTemplateIds().stream().map(SettlementDto.CouponAndTemplateId::getTemplateId).collect(Collectors.toList());
-        Map<Integer, CouponTemplateDto> idMapCoupontemplateSDK = cuoponTemplateClient.getByIds(templateIds);
+        Map<Integer, CouponTemplateDto> idMapCoupontemplateSDK = cuoponTemplateClient.getTemplateByIds(templateIds);
         // 优惠券模版类型
         List<CouponCategoryEnum> categories = idMapCoupontemplateSDK.values().stream().map(i -> CouponCategoryEnum.of(i.getCategory())).collect(Collectors.toList());
 

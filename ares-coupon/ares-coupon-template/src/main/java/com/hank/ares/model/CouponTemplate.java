@@ -42,6 +42,11 @@ public class CouponTemplate {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @ApiModelProperty(value = "模版编号")
+    // 模版编号
+    @Column(name = "template_code", nullable = false)
+    private String templateCode;
+
     @ApiModelProperty(value = "是否是可用状态; true: 可用, false: 不可用")
     // 提前关闭优惠券领取
     @Column(name = "available", nullable = false)
@@ -104,10 +109,11 @@ public class CouponTemplate {
     /**
      * 自定义构造函数
      */
-    public CouponTemplate(String name, String logo, String intro, String category,
+    public CouponTemplate(String templateCode, String name, String logo, String intro, String category,
                           Integer productLine, Integer couponCount, Integer userId,
                           Integer target, TemplateRuleDto rule) {
 
+        this.templateCode = templateCode;
         this.available = false;
         this.expired = false;
         this.name = name;

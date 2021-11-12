@@ -63,15 +63,15 @@ public class ThyDistributionController {
     /**
      * 用户可以领取的优惠券模板
      */
-    @GetMapping("/template/{userId}")
-    public String template(@PathVariable Integer userId, ModelMap map) throws CouponException {
+    @GetMapping("/template/{memberCode}")
+    public String template(@PathVariable String memberCode, ModelMap map) throws CouponException {
 
-        log.info("view user: {} can acquire template.", userId);
+        log.info("view user: {} can acquire template.", memberCode);
 
-        List<CouponTemplateDto> templateSDKS = couponService.findAvailableTemplate(userId);
+        List<CouponTemplateDto> templateSDKS = couponService.findAvailableTemplate(memberCode);
         List<ThyTemplateInfo> infos = templateSDKS.stream()
                 .map(ThyTemplateInfo::to).collect(Collectors.toList());
-        infos.forEach(i -> i.setUserId(userId));
+        infos.forEach(i -> i.setMemberCode(memberCode));
 
         map.addAttribute("templates", infos);
 
@@ -79,15 +79,15 @@ public class ThyDistributionController {
     }
 
     @GetMapping("/template/info")
-    public String templateInfo(@RequestParam Integer uid, @RequestParam Integer id, ModelMap map) {
+    public String templateInfo(@RequestParam String memberCode, @RequestParam Integer id, ModelMap map) {
 
-        log.info("user view template info: {} -> {}", uid, id);
+        log.info("user view template info: {} -> {}", memberCode, id);
 
-        Map<Integer, CouponTemplateDto> id2Template = templateClient.getByIds(Collections.singletonList(id));
+        Map<Integer, CouponTemplateDto> id2Template = templateClient.getTemplateByIds(Collections.singletonList(id));
 
         if (MapUtils.isNotEmpty(id2Template)) {
             ThyTemplateInfo info = ThyTemplateInfo.to(id2Template.get(id));
-            info.setUserId(uid);
+            info.setMemberCode(memberCode);
             map.addAttribute("template", info);
         }
 
@@ -95,17 +95,16 @@ public class ThyDistributionController {
     }
 
     @GetMapping("/acquire")
-    public String acquire(@RequestParam Integer uid, @RequestParam Integer tid) throws CouponException {
+    public String acquire(@RequestParam String memberCode, @RequestParam String templateCode) throws CouponException {
 
-        log.info("user {} acquire template {}.", uid, tid);
+        log.info("user {} acquire template {}.", memberCode, templateCode);
 
-        Map<Integer, CouponTemplateDto> id2Template = templateClient.getByIds(Collections.singletonList(tid));
-        if (MapUtils.isNotEmpty(id2Template)) {
+        CouponTemplateDto id2Template = templateClient.getTemplateByTemplateCode(templateCode);
+        if (id2Template == null) {
             log.info("user acquire coupon: {}", JSON.toJSONString(couponService.acquireTemplate(
-                    new AcquireTemplateReqDto(uid, tid)
-            )));
+                    new AcquireTemplateReqDto(memberCode, templateCode))));
         }
 
-        return "redirect:/distribution/thy/user/" + uid;
+        return "redirect:/distribution/thy/user/" + memberCode;
     }
 }

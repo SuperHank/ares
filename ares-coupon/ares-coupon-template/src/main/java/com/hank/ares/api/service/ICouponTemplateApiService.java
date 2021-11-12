@@ -17,6 +17,14 @@ public interface ICouponTemplateApiService {
     CouponTemplateDto getById(Integer id);
 
     /**
+     * 获取模板 ids 到 CouponTemplateSDK 的映射
+     *
+     * @param ids 模板 ids
+     * @return Map<key: 模板 id ， value: CouponTemplateSDK>
+     */
+    Map<Integer, CouponTemplateDto> getByIds(Collection<Integer> ids);
+
+    /**
      * 查找所有可用的优惠券模板
      *
      * @return {@link CouponTemplateDto}s
@@ -24,10 +32,19 @@ public interface ICouponTemplateApiService {
     List<CouponTemplateDto> getAllUsableTemplate();
 
     /**
-     * 获取模板 ids 到 CouponTemplateSDK 的映射
+     * 根据优惠券编号查询模版信息
      *
-     * @param ids 模板 ids
-     * @return Map<key: 模板 id ， value: CouponTemplateSDK>
+     * @param templateCode
+     * @return
      */
-    Map<Integer, CouponTemplateDto> getByIds(Collection<Integer> ids);
+    CouponTemplateDto getByTemplateCode(String templateCode);
+
+    /**
+     * 批量查询模版信息
+     *
+     * @param templateCodes
+     * @return
+     */
+    Map<String, CouponTemplateDto> getByTemplateCodes(Collection<String> templateCodes);
+
 }

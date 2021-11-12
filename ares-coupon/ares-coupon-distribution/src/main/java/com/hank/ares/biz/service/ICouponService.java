@@ -25,19 +25,19 @@ public interface ICouponService extends IService<Coupon> {
     /**
      * 根据用户 id 和状态查询优惠券记录
      *
-     * @param userId 用户 id
+     * @param memberCode 用户 id
      * @param status 优惠券状态
      * @return {@link Coupon}s
      */
-    List<Coupon> findCouponsByStatus(Integer userId, Integer status) throws CouponException;
+    List<Coupon> findCouponsByStatus(String memberCode, Integer status) throws CouponException;
 
     /**
      * 根据用户 id 查找当前可以领取的优惠券模板
      *
-     * @param userId 用户 id
+     * @param memberCode 用户 id
      * @return {@link CouponTemplateDto}s
      */
-    List<CouponTemplateDto> findAvailableTemplate(Integer userId) throws CouponException;
+    List<CouponTemplateDto> findAvailableTemplate(String memberCode) throws CouponException;
 
     /**
      * 结算(核销)优惠券
@@ -50,8 +50,8 @@ public interface ICouponService extends IService<Coupon> {
     /**
      * 查询用户所有的优惠券
      *
-     * @param userId
+     * @param memberCode
      * @return
      */
-    List<CouponDto> getByUserId(Integer userId);
+    List<CouponDto> getByUserId(String memberCode);
 }

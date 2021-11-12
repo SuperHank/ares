@@ -29,9 +29,9 @@ public class RedisServiceImpl implements IRedisService {
     private StringRedisTemplate redisTemplate;
 
     @Override
-    public List<Coupon> getCachedCoupons(Integer userId, Integer status) {
-        log.info("Get Coupons From Cache:{},{}", userId, status);
-        String key = status2RedisKey(userId, status);
+    public List<Coupon> getCachedCoupons(String memberCode, Integer status) {
+        log.info("Get Coupons From Cache:{},{}", memberCode, status);
+        String key = status2RedisKey(memberCode, status);
 
         List<String> couponStrs = redisTemplate.opsForHash().values(key)
                 .stream()
@@ -39,7 +39,7 @@ public class RedisServiceImpl implements IRedisService {
                 .collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(couponStrs)) {
-            saveEmptyCouponListToCache(userId, Collections.singletonList(status));
+            saveEmptyCouponListToCache(memberCode, Collections.singletonList(status));
             return Collections.emptyList();
         }
 
@@ -47,8 +47,8 @@ public class RedisServiceImpl implements IRedisService {
     }
 
     @Override
-    public void saveEmptyCouponListToCache(Integer userId, List<Integer> status) {
-        log.info("Save Empty List To Cache For User:{},Status:{}", userId, JSON.toJSONString(Coupon.invalidCoupon()));
+    public void saveEmptyCouponListToCache(String memberCode, List<Integer> status) {
+        log.info("Save Empty List To Cache For User:{},Status:{}", memberCode, JSON.toJSONString(Coupon.invalidCoupon()));
 
         HashMap<String, String> invalidCouponMap = new HashMap<>();
         invalidCouponMap.put("-1", JSON.toJSONString(Coupon.invalidCoupon()));
@@ -57,7 +57,7 @@ public class RedisServiceImpl implements IRedisService {
             @Override
             public Object execute(RedisOperations redisOperations) throws DataAccessException {
                 status.forEach(s -> {
-                    redisOperations.opsForHash().putAll(status2RedisKey(userId, s), invalidCouponMap);
+                    redisOperations.opsForHash().putAll(status2RedisKey(memberCode, s), invalidCouponMap);
                 });
                 return null;
             }
@@ -76,19 +76,19 @@ public class RedisServiceImpl implements IRedisService {
     }
 
     @Override
-    public void addCouponToCache(Integer userId, List<Coupon> coupons, Integer status) throws CouponException {
-        log.info("Add Coupon To Cache:{},{},{}", userId, JSON.toJSONString(coupons), status);
+    public void addCouponToCache(String memberCode, List<Coupon> coupons, Integer status) throws CouponException {
+        log.info("Add Coupon To Cache:{},{},{}", memberCode, JSON.toJSONString(coupons), status);
 
         CouponStatusEnum couponStatusEnum = CouponStatusEnum.of(status);
         switch (couponStatusEnum) {
             case USABLE:
-                addCouponToCacheForUsable(userId, coupons);
+                addCouponToCacheForUsable(memberCode, coupons);
                 break;
             case USED:
-                addCouponToCacheForUsed(userId, coupons);
+                addCouponToCacheForUsed(memberCode, coupons);
                 break;
             case EXPIRED:
-                addCouponToCacheForExpired(userId, coupons);
+                addCouponToCacheForExpired(memberCode, coupons);
                 break;
         }
     }
@@ -96,14 +96,14 @@ public class RedisServiceImpl implements IRedisService {
     /**
      * 根据 status 获取到对应的 Redis Key
      */
-    private String status2RedisKey(Integer userId, Integer status) {
-        return String.format("%s_%s", CouponStatusEnum.of(status), userId);
+    private String status2RedisKey(String memberCode, Integer status) {
+        return String.format("%s_%s", CouponStatusEnum.of(status), memberCode);
     }
 
     /**
      * 新增加优惠券到 Cache 中
      */
-    private void addCouponToCacheForUsable(Integer userId, List<Coupon> coupons) {
+    private void addCouponToCacheForUsable(String memberCode, List<Coupon> coupons) {
 
         // 如果 status 是 USABLE, 代表是新增加的优惠券
         // 只会影响一个 Cache: USER_COUPON_USABLE(新增)
@@ -112,9 +112,9 @@ public class RedisServiceImpl implements IRedisService {
         Map<String, String> needCachedObject = new HashMap<>();
         coupons.forEach(coupon -> needCachedObject.put(String.valueOf(coupon.getId()), JSON.toJSONString(coupon)));
 
-        String redisKey = status2RedisKey(userId, CouponStatusEnum.USABLE.getStatus());
+        String redisKey = status2RedisKey(memberCode, CouponStatusEnum.USABLE.getStatus());
         redisTemplate.opsForHash().putAll(redisKey, needCachedObject);
-        log.info("Add {} Coupons To Cache: {}, {}", needCachedObject.size(), userId, redisKey);
+        log.info("Add {} Coupons To Cache: {}, {}", needCachedObject.size(), memberCode, redisKey);
 
         redisTemplate.expire(redisKey, getRandomExpirationTime(1, 2), TimeUnit.SECONDS);
 
@@ -125,7 +125,7 @@ public class RedisServiceImpl implements IRedisService {
      * 将已使用的优惠券加入到 Cache 中
      */
 
-    private void addCouponToCacheForUsed(Integer userId, List<Coupon> coupons) throws CouponException {
+    private void addCouponToCacheForUsed(String memberCode, List<Coupon> coupons) throws CouponException {
 
         // 如果 status 是 USED, 代表用户操作是使用当前的优惠券, 影响到两个 Cache
         // USABLE（删除）, USED（新增）
@@ -134,11 +134,11 @@ public class RedisServiceImpl implements IRedisService {
 
         Map<String, String> needCachedForUsed = new HashMap<>(coupons.size());
 
-        String redisKeyForUsable = status2RedisKey(userId, CouponStatusEnum.USABLE.getStatus());
-        String redisKeyForUsed = status2RedisKey(userId, CouponStatusEnum.USED.getStatus());
+        String redisKeyForUsable = status2RedisKey(memberCode, CouponStatusEnum.USABLE.getStatus());
+        String redisKeyForUsed = status2RedisKey(memberCode, CouponStatusEnum.USED.getStatus());
 
         // 获取当前用户可用的优惠券
-        List<Coupon> curUsableCoupons = getCachedCoupons(userId, CouponStatusEnum.USABLE.getStatus());
+        List<Coupon> curUsableCoupons = getCachedCoupons(memberCode, CouponStatusEnum.USABLE.getStatus());
         // 当前可用的优惠券个数一定是大于已使用优惠券个数的
         assert curUsableCoupons.size() > coupons.size();
 
@@ -149,7 +149,7 @@ public class RedisServiceImpl implements IRedisService {
         List<Integer> needCleanIds = coupons.stream().map(Coupon::getId).collect(Collectors.toList());
 
         if (!CollectionUtils.isSubCollection(needCleanIds, curUsableIds)) {
-            log.error("CurCoupons Is Not Equal ToCache: {}, {}, {}", userId, JSON.toJSONString(curUsableIds), JSON.toJSONString(needCleanIds));
+            log.error("CurCoupons Is Not Equal ToCache: {}, {}, {}", memberCode, JSON.toJSONString(curUsableIds), JSON.toJSONString(needCleanIds));
             throw new CouponException("CurCoupons Is Not Equal To Cache!");
         }
 
@@ -176,7 +176,7 @@ public class RedisServiceImpl implements IRedisService {
     /**
      * 将过期优惠券加入到 Cache 中
      */
-    private void addCouponToCacheForExpired(Integer userId, List<Coupon> coupons) throws CouponException {
+    private void addCouponToCacheForExpired(String memberCode, List<Coupon> coupons) throws CouponException {
 
         // status 是 EXPIRED, 代表是已有的优惠券过期了, 影响到两个 Cache
         // USABLE（删除）, EXPIRED（新增）
@@ -186,10 +186,10 @@ public class RedisServiceImpl implements IRedisService {
         // 最终需要保存的 Cache
         Map<String, String> needCachedForExpired = new HashMap<>(coupons.size());
 
-        String redisKeyForUsable = status2RedisKey(userId, CouponStatusEnum.USABLE.getStatus());
-        String redisKeyForExpired = status2RedisKey(userId, CouponStatusEnum.EXPIRED.getStatus());
+        String redisKeyForUsable = status2RedisKey(memberCode, CouponStatusEnum.USABLE.getStatus());
+        String redisKeyForExpired = status2RedisKey(memberCode, CouponStatusEnum.EXPIRED.getStatus());
 
-        List<Coupon> curUsableCoupons = getCachedCoupons(userId, CouponStatusEnum.USABLE.getStatus());
+        List<Coupon> curUsableCoupons = getCachedCoupons(memberCode, CouponStatusEnum.USABLE.getStatus());
 
         // 当前可用的优惠券个数一定是大于1的
         assert curUsableCoupons.size() > coupons.size();
@@ -200,7 +200,7 @@ public class RedisServiceImpl implements IRedisService {
         List<Integer> curUsableIds = curUsableCoupons.stream().map(Coupon::getId).collect(Collectors.toList());
         List<Integer> paramIds = coupons.stream().map(Coupon::getId).collect(Collectors.toList());
         if (!CollectionUtils.isSubCollection(paramIds, curUsableIds)) {
-            log.error("CurCoupons Is Not Equal To Cache: {}, {}, {}", userId, JSON.toJSONString(curUsableIds), JSON.toJSONString(paramIds));
+            log.error("CurCoupons Is Not Equal To Cache: {}, {}, {}", memberCode, JSON.toJSONString(curUsableIds), JSON.toJSONString(paramIds));
             throw new CouponException("CurCoupon Is Not Equal To Cache.");
         }
 

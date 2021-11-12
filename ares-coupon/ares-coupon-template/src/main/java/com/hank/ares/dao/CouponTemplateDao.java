@@ -2,7 +2,9 @@ package com.hank.ares.dao;
 
 import com.hank.ares.model.CouponTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,4 +29,22 @@ public interface CouponTemplateDao extends JpaRepository<CouponTemplate, Integer
      * where expired = ...
      */
     List<CouponTemplate> findAllByExpired(Boolean expired);
+
+    /**
+     * 根据 templateCode 查询模版
+     *
+     * @param templateCode
+     * @return
+     */
+    CouponTemplate findByTemplateCode(String templateCode);
+
+
+    /**
+     * 批量查询模版
+     *
+     * @param templateCodes
+     * @return
+     */
+    @Query(value = "select * from coupon_template where template_code in (:templateCodes)", nativeQuery = true)
+    List<CouponTemplate> findAllByTemplateCode(Collection<String> templateCodes);
 }

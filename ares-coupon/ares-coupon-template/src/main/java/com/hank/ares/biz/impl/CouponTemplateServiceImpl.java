@@ -1,11 +1,12 @@
 package com.hank.ares.biz.impl;
 
+import com.hank.ares.biz.service.IAsyncService;
+import com.hank.ares.biz.service.ICouponTemplateService;
 import com.hank.ares.dao.CouponTemplateDao;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;
-import com.hank.ares.biz.service.IAsyncService;
-import com.hank.ares.biz.service.ICouponTemplateService;
+import com.hank.ares.util.CommonUtil;
 import com.hank.ares.util.ExceptionThen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class CouponTemplateServiceImpl implements ICouponTemplateService {
     private CouponTemplate requestToTemplate(CreateTemplateReqDto reqDto) {
 
         return new CouponTemplate(
+                CommonUtil.getRandomStrCode(16),
                 reqDto.getName(),
                 reqDto.getLogo(),
                 reqDto.getDesc(),

@@ -20,8 +20,8 @@ public class CouponApiServiceImpl implements ICouponApiService {
 
 
     @Override
-    public List<CouponDto> getAllCouponByUserId(Integer userId) {
-        List<Coupon> coupons = couponDao.findByUserId(userId);
+    public List<CouponDto> getAllCouponByUserId(String  memberCode) {
+        List<Coupon> coupons = couponDao.findByMemberCode(memberCode);
         return coupons.stream().map(this::coupon2CouponDto).collect(Collectors.toList());
     }
 
@@ -31,8 +31,8 @@ public class CouponApiServiceImpl implements ICouponApiService {
     private CouponDto coupon2CouponDto(Coupon coupon) {
         return new CouponDto(
                 coupon.getId(),
-                coupon.getTemplateId(),
-                coupon.getUserId(),
+                coupon.getTemplateCode(),
+                coupon.getMemberCode(),
                 coupon.getCouponCode(),
                 coupon.getAssignTime(),
                 coupon.getStatus()

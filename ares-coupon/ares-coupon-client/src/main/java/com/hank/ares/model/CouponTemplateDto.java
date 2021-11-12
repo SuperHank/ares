@@ -21,6 +21,11 @@ public class CouponTemplateDto implements Serializable {
     private Integer id;
 
     /**
+     * 优惠券模版编号
+     */
+    private String templateCode;
+
+    /**
      * 优惠券模板名称
      */
     private String name;

@@ -34,10 +34,10 @@ public class Coupon extends Model {
     private Integer id;
 
     @ApiModelProperty(value = "关联优惠券模板的主键")
-    private Integer templateId;
+    private String templateCode;
 
     @ApiModelProperty(value = "领取用户")
-    private Integer userId;
+    private String memberCode;
 
     @ApiModelProperty(value = "优惠券码")
     private String couponCode;
@@ -65,9 +65,9 @@ public class Coupon extends Model {
     /**
      * 构造优惠券
      */
-    public Coupon(Integer templateId, Integer userId, String couponCode, CouponStatusEnum status) {
-        this.templateId = templateId;
-        this.userId = userId;
+    public Coupon(String templateCode, String memberCode, String couponCode, CouponStatusEnum status) {
+        this.templateCode = templateCode;
+        this.memberCode = memberCode;
         this.couponCode = couponCode;
         this.status = status.getStatus();
     }

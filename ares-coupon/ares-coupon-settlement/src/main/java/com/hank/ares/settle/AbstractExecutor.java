@@ -54,7 +54,7 @@ public abstract class AbstractExecutor {
         List<Integer> templateGoodsType = new ArrayList<>();
 
         settlement.getCouponAndTemplateIds().forEach(ct -> {
-            CouponTemplateDto couponTemplateDto = cuoponTemplateClient.getById(ct.getTemplateId());
+            CouponTemplateDto couponTemplateDto = cuoponTemplateClient.getTemplateById(ct.getTemplateId());
             templateGoodsType.add(JSON.parseObject(couponTemplateDto.getRule().getUsage().getGoodsType(), Integer.class));
         });
 

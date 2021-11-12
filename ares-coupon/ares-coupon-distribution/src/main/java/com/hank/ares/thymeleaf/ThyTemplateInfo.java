@@ -29,7 +29,7 @@ class ThyTemplateInfo {
     /**
      * 用户 id (不是创建优惠券模板的用户, 是当前的查看用户)
      */
-    private Integer userId;
+    private String memberCode;
 
     /**
      * 自增主键

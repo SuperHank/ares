@@ -11,10 +11,10 @@ public class AcquireTemplateReqDto {
     /**
      * 用户 id
      */
-    private Integer userId;
+    private String memberCode;
 
     /**
      * 优惠券模板信息
      */
-    private Integer templateSDKId;
+    private String templateCode;
 }

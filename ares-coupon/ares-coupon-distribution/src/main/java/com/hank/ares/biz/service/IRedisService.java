@@ -16,20 +16,20 @@ public interface IRedisService {
     /**
      * 根据userId和状态查询缓存的优惠券列表数据
      *
-     * @param userId 用户ID
+     * @param memberCode 用户ID
      * @param status 优惠券状态 {@link CouponStatusEnum}
      * @return {@link Coupon}s 注意，可能会返回null，代表从没有过记录
      */
-    List<Coupon> getCachedCoupons(Integer userId, Integer status);
+    List<Coupon> getCachedCoupons(String memberCode, Integer status);
 
     /**
      * 保存空的优惠券列表到缓存中
      * 防止缓存穿透
      *
-     * @param userId 用户 id
+     * @param memberCode 用户 id
      * @param status 优惠券状态列表
      */
-    void saveEmptyCouponListToCache(Integer userId, List<Integer> status);
+    void saveEmptyCouponListToCache(String memberCode, List<Integer> status);
 
     /**
      * 尝试从 Cache 中获取一个优惠券码
@@ -42,10 +42,10 @@ public interface IRedisService {
     /**
      * 将优惠券保存到 Cache 中
      *
-     * @param userId  用户 id
+     * @param memberCode  用户 id
      * @param coupons {@link Coupon}s
      * @param status  优惠券状态
      * @return 保存成功的个数
      */
-    void addCouponToCache(Integer userId, List<Coupon> coupons, Integer status) throws CouponException;
+    void addCouponToCache(String memberCode, List<Coupon> coupons, Integer status) throws CouponException;
 }

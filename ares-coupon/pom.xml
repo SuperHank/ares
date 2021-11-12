@@ -15,7 +15,7 @@
         <module>ares-coupon-distribution</module>
         <module>ares-coupon-common</module>
         <module>ares-coupon-gateway</module>
-        <module>ares-coupon-permission-sdk</module>
+        <module>ares-coupon-permission-api</module>
         <module>ares-coupon-permission-service</module>
         <module>ares-coupon-permission-detector</module>
         <module>ares-coupon-client</module>
