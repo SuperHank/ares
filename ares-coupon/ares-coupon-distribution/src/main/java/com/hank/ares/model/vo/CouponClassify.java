@@ -1,7 +1,7 @@
 package com.hank.ares.model.vo;
 
-import com.hank.ares.enums.coupon.CouponStatusEnum;
-import com.hank.ares.enums.coupon.PeriodTypeEnum;
+import com.hank.ares.enums.biz.coupon.CouponStatusEnum;
+import com.hank.ares.enums.biz.coupon.PeriodTypeEnum;
 import com.hank.ares.model.Coupon;
 import lombok.AllArgsConstructor;
 import lombok.Data;

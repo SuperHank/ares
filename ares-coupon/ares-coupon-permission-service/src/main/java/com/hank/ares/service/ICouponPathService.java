@@ -2,9 +2,7 @@ package com.hank.ares.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hank.ares.model.CouponPath;
-import com.hank.ares.model.dto.CreatePathReqDto;
-
-import java.util.List;
+import com.hank.ares.model.coupon.permission.CreatePathReqDto;
 
 /**
  * 路径信息表 服务类

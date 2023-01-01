@@ -1,6 +1,6 @@
 package com.hank.ares.settle;
 
-import com.hank.ares.enums.permission.RuleFlagEnum;
+import com.hank.ares.enums.biz.permission.RuleFlagEnum;
 import com.hank.ares.model.settlement.SettlementDto;
 
 /**

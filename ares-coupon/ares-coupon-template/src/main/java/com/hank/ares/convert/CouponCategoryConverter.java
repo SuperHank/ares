@@ -1,6 +1,6 @@
 package com.hank.ares.convert;
 
-import com.hank.ares.enums.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.biz.coupon.CouponCategoryEnum;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

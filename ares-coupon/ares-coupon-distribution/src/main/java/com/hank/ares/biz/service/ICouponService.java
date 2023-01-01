@@ -3,8 +3,8 @@ package com.hank.ares.biz.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.CouponDto;
-import com.hank.ares.model.CouponTemplateDto;
+import com.hank.ares.model.coupon.template.CouponDto;
+import com.hank.ares.model.coupon.template.CouponTemplateDto;
 import com.hank.ares.model.dto.req.AcquireTemplateReqDto;
 import com.hank.ares.model.settlement.SettlementDto;
 

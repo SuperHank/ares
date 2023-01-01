@@ -1,8 +1,8 @@
 package com.hank.ares.model.dto.req;
 
-import com.hank.ares.enums.coupon.CouponCategoryEnum;
-import com.hank.ares.enums.coupon.DistributeTargetEnum;
-import com.hank.ares.enums.coupon.ProductLineEnum;
+import com.hank.ares.enums.biz.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.biz.coupon.DistributeTargetEnum;
+import com.hank.ares.enums.biz.coupon.ProductLineEnum;
 import com.hank.ares.enums.common.ResultCode;
 import com.hank.ares.model.BaseReqDto;
 import com.hank.ares.model.coupon.TemplateRuleDto;

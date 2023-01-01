@@ -2,14 +2,15 @@ package com.hank.ares.biz.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.hank.ares.biz.service.ICouponTemplateService;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;
-import com.hank.ares.biz.service.ICouponTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
+@RequestMapping("/template")
 public class CouponTemplateController {
 
     @Autowired
@@ -25,7 +27,7 @@ public class CouponTemplateController {
     /**
      * 构造优惠券模版
      */
-    @PostMapping("/template/build")
+    @PostMapping("/build")
     public CouponTemplate buildTemplate(@RequestBody CreateTemplateReqDto reqDto) throws CouponException {
         reqDto.validate();
 

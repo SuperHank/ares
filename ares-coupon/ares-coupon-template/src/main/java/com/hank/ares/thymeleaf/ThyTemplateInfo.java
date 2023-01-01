@@ -1,8 +1,8 @@
 package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.enums.coupon.GoodsTypeEnum;
-import com.hank.ares.enums.coupon.PeriodTypeEnum;
+import com.hank.ares.enums.biz.coupon.GoodsTypeEnum;
+import com.hank.ares.enums.biz.coupon.PeriodTypeEnum;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.coupon.TemplateRuleDto;
 import lombok.AllArgsConstructor;

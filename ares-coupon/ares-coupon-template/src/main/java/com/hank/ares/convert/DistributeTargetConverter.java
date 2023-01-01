@@ -1,6 +1,6 @@
 package com.hank.ares.convert;
 
-import com.hank.ares.enums.coupon.DistributeTargetEnum;
+import com.hank.ares.enums.biz.coupon.DistributeTargetEnum;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

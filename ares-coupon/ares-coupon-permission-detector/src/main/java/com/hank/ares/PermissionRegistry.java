@@ -1,6 +1,6 @@
 package com.hank.ares;
 
-import com.hank.ares.enums.permission.OperationModeEnum;
+import com.hank.ares.enums.biz.permission.OperationModeEnum;
 import com.hank.ares.feign.IPermissionServiceFeignClient;
 import com.hank.ares.model.CommonResponse;
 import com.hank.ares.model.dto.CreatePathReqDto;

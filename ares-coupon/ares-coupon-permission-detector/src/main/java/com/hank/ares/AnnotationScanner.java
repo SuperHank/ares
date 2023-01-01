@@ -2,7 +2,7 @@ package com.hank.ares;
 
 import com.hank.ares.annotation.AresCouponPermission;
 import com.hank.ares.annotation.IgnorePermission;
-import com.hank.ares.enums.permission.HttpMethodEnum;
+import com.hank.ares.enums.biz.permission.HttpMethodEnum;
 import com.hank.ares.model.dto.PermissionInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

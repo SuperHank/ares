@@ -15,6 +15,7 @@
         <module>ares-common-enum</module>
         <module>ares-common-model</module>
         <module>ares-common-util</module>
+        <module>ares-common-api</module>
     </modules>
 
     <properties>

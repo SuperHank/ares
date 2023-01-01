@@ -1,8 +1,8 @@
 package com.hank.ares.kafka.listener;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.constant.KafkaTopicConstants;
-import com.hank.ares.enums.coupon.CouponStatusEnum;
+import com.hank.ares.constants.KafkaTopicConstants;
+import com.hank.ares.enums.biz.coupon.CouponStatusEnum;
 import com.hank.ares.mapper.CouponMapper;
 import com.hank.ares.model.Coupon;
 import com.hank.ares.model.kafka.CouponKafkaMsg;

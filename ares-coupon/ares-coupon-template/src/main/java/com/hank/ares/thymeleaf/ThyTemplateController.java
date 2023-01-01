@@ -2,7 +2,11 @@ package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
 import com.hank.ares.dao.CouponTemplateDao;
-import com.hank.ares.enums.coupon.*;
+import com.hank.ares.enums.biz.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.biz.coupon.DistributeTargetEnum;
+import com.hank.ares.enums.biz.coupon.GoodsTypeEnum;
+import com.hank.ares.enums.biz.coupon.PeriodTypeEnum;
+import com.hank.ares.enums.biz.coupon.ProductLineEnum;
 import com.hank.ares.model.CouponTemplate;
 import com.hank.ares.model.coupon.TemplateRuleDto;
 import com.hank.ares.model.dto.req.CreateTemplateReqDto;

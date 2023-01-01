@@ -1,6 +1,6 @@
 package com.hank.ares.convert;
 
-import com.hank.ares.enums.coupon.ProductLineEnum;
+import com.hank.ares.enums.biz.coupon.ProductLineEnum;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

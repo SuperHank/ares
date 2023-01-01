@@ -22,6 +22,10 @@ spring:
           uri: lb://ARES-SETTLEMENT
           predicates:
             - Path=/settlement/**
+        - id: ares-template
+          uri: lb://ARES-COUPON-TEMPLATE
+          predicates:
+            - Path=/coupon-template/**
 
   redis:
     port: 6379

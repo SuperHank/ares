@@ -3,7 +3,7 @@ package com.hank.ares.api.impl;
 import com.hank.ares.api.service.ICouponApiService;
 import com.hank.ares.dao.CouponDao;
 import com.hank.ares.model.Coupon;
-import com.hank.ares.model.CouponDto;
+import com.hank.ares.model.coupon.template.CouponDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class CouponApiServiceImpl implements ICouponApiService {
 
 
     @Override
-    public List<CouponDto> getAllCouponByUserId(String  memberCode) {
+    public List<CouponDto> getAllCouponByUserId(String memberCode) {
         List<Coupon> coupons = couponDao.findByMemberCode(memberCode);
         return coupons.stream().map(this::coupon2CouponDto).collect(Collectors.toList());
     }

@@ -1,7 +1,7 @@
 package com.hank.ares.api.controller;
 
 import com.hank.ares.api.service.ICouponApiService;
-import com.hank.ares.model.CouponDto;
+import com.hank.ares.model.coupon.template.CouponDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

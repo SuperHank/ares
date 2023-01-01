@@ -1,7 +1,7 @@
 package com.hank.ares.api.service;
 
-import com.hank.ares.model.Coupon;
-import com.hank.ares.model.CouponDto;
+
+import com.hank.ares.model.coupon.template.CouponDto;
 
 import java.util.List;
 

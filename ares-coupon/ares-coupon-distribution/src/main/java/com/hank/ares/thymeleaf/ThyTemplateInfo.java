@@ -1,12 +1,12 @@
 package com.hank.ares.thymeleaf;
 
 import com.alibaba.fastjson.JSON;
-import com.hank.ares.enums.coupon.CouponCategoryEnum;
-import com.hank.ares.enums.coupon.GoodsTypeEnum;
-import com.hank.ares.enums.coupon.PeriodTypeEnum;
-import com.hank.ares.enums.coupon.ProductLineEnum;
-import com.hank.ares.model.CouponTemplateDto;
+import com.hank.ares.enums.biz.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.biz.coupon.GoodsTypeEnum;
+import com.hank.ares.enums.biz.coupon.PeriodTypeEnum;
+import com.hank.ares.enums.biz.coupon.ProductLineEnum;
 import com.hank.ares.model.coupon.TemplateRuleDto;
+import com.hank.ares.model.coupon.template.CouponTemplateDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -112,7 +112,7 @@ class ThyTemplateInfo {
     /**
      * 使用条件描述
      */
-    
+
     private static String buildUsage(TemplateRuleDto.Usage usage) {
 
         List<Integer> goodTypesI = JSON.parseObject(usage.getGoodsType(), List.class);

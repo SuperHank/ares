@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hank.ares.mapper.CouponPathMapper;
 import com.hank.ares.model.CouponPath;
-import com.hank.ares.model.dto.CreatePathReqDto;
+import com.hank.ares.model.coupon.permission.CreatePathReqDto;
 import com.hank.ares.service.ICouponPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

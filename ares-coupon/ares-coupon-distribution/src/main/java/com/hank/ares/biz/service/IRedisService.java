@@ -1,6 +1,6 @@
 package com.hank.ares.biz.service;
 
-import com.hank.ares.enums.coupon.CouponStatusEnum;
+import com.hank.ares.enums.biz.coupon.CouponStatusEnum;
 import com.hank.ares.exception.CouponException;
 import com.hank.ares.model.Coupon;
 

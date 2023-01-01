@@ -2,8 +2,8 @@ package com.hank.ares.settle;
 
 import com.hank.ares.client.coupon.CuoponTemplateClient;
 import com.hank.ares.enums.common.ResultCode;
-import com.hank.ares.enums.coupon.CouponCategoryEnum;
-import com.hank.ares.enums.permission.RuleFlagEnum;
+import com.hank.ares.enums.biz.coupon.CouponCategoryEnum;
+import com.hank.ares.enums.biz.permission.RuleFlagEnum;
 import com.hank.ares.model.CouponTemplateDto;
 import com.hank.ares.model.settlement.SettlementDto;
 import com.hank.ares.util.ExceptionThen;

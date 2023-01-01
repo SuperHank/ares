@@ -1,7 +1,7 @@
 package com.hank.ares.controller;
 
 
-import com.hank.ares.model.dto.CreatePathReqDto;
+import com.hank.ares.model.coupon.permission.CreatePathReqDto;
 import com.hank.ares.service.impl.CouponPathServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
