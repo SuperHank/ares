@@ -7,3 +7,5 @@ docker run -d --restart=always --name zookeeper -p 2181:2181 -t wurstmeister/zoo
 docker run -d --restart=always --name kafka0 -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=192.168.5.105:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.5.105:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -t wurstmeister/kafka
 docker run -d --restart=always --name kafka1 -p 9093:9093 -e KAFKA_BROKER_ID=1 -e KAFKA_ZOOKEEPER_CONNECT=192.168.5.105:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.5.105:9093 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9093 -t wurstmeister/kafka
 docker run -d --restart=always --name kafka2 -p 9094:9094 -e KAFKA_BROKER_ID=2 -e KAFKA_ZOOKEEPER_CONNECT=192.168.5.105:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.5.105:9094 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9094 -t wurstmeister/kafka
+
+-- kafka地址更新成实际地址
