@@ -4,7 +4,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Root1234
+    password: 123456
     url: jdbc:mysql://localhost:3306/ares_coupon?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
   jpa:
     show-sql: true
@@ -14,6 +14,7 @@ spring:
       hibernate.show_sql: true
       hibernate.format_sql: true
     open-in-view: false
+    database-platform: org.hibernate.dialect.MySQLDialect
   redis:
     port: 6379
     database: 0
