@@ -1,6 +1,6 @@
 package com.hank.ares;
 
-import com.hank.ares.feign.IPermissionServiceFeignClient;
+import com.hank.ares.feign.client.coupon.permission.PermissionServiceClient;
 import com.hank.ares.model.dto.PermissionInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -63,7 +63,7 @@ public class PermissionDetectListener implements ApplicationListener<Application
 
         log.info("*************** permission register start ***************");
 
-        IPermissionServiceFeignClient permissionClient = ctx.getBean(IPermissionServiceFeignClient.class);
+        PermissionServiceClient permissionClient = ctx.getBean(PermissionServiceClient.class);
         if (permissionClient == null) {
             log.error("no permissionClient bean found");
             return;

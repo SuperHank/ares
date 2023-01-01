@@ -1,9 +1,9 @@
 package com.hank.ares;
 
 import com.hank.ares.enums.biz.permission.OperationModeEnum;
-import com.hank.ares.feign.IPermissionServiceFeignClient;
+import com.hank.ares.feign.client.coupon.permission.PermissionServiceClient;
 import com.hank.ares.model.CommonResponse;
-import com.hank.ares.model.dto.CreatePathReqDto;
+import com.hank.ares.model.coupon.permission.CreatePathReqDto;
 import com.hank.ares.model.dto.PermissionInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PermissionRegistry {
 
-    private final IPermissionServiceFeignClient permissionClient;
+    private final PermissionServiceClient permissionClient;
 
     private final String serviceName;
 
